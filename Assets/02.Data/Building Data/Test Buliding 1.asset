@@ -18,7 +18,7 @@ MonoBehaviour:
   buildingIcon: {fileID: 0}
   isUnlocked: 1
   unlockCost: 0
-  treeCost: 0
-  rockCost: 0
+  treeCost: 1
+  rockCost: 1
   sizeWidth: 2
   sizeHeight: 2
