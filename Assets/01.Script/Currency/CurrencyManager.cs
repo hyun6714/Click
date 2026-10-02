@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
 {
+    [Header("Click Limit Settings")]
+    [SerializeField] private int maxClickLimit = 40;
+
     public static CurrencyManager instance { get; private set; }
 
     private Dictionary<CurrencyType, int> currentCurrencies = new Dictionary<CurrencyType, int>();
@@ -28,12 +31,16 @@ public class CurrencyManager : MonoBehaviour
     {
         EventManager.OnCurrencyAdded += AddCurrency;
         EventManager.OnCurrencyUsed += UseCurrency;
+        EventManager.OnRequestCurrencyValue += SendCurrentValue;
+        EventManager.OnCheckCurrency += CheckHasEnoughCurrency;
     }
 
     private void OnDisable()
     {
         EventManager.OnCurrencyAdded -= AddCurrency;
         EventManager.OnCurrencyUsed -= UseCurrency;
+        EventManager.OnRequestCurrencyValue -= SendCurrentValue;
+        EventManager.OnCheckCurrency -= CheckHasEnoughCurrency;
     }
 
     private void InitializeCurrencies()
@@ -103,5 +110,25 @@ public class CurrencyManager : MonoBehaviour
         currentCurrencies[type] = amount;
 
         EventManager.CurrencyChanged(type, currentCurrencies[type]);
+    }
+
+    private void SendCurrentValue(CurrencyType type)
+    {
+        EventManager.CurrencyChanged(type, GetAmount(type));
+    }
+
+    public int GetMaxClick()
+    {
+        return maxClickLimit;
+    }
+
+    public void AddMaxClick(int amount)
+    {
+        maxClickLimit += amount;
+    }
+
+    private bool CheckHasEnoughCurrency(CurrencyType type, int value)
+    {
+        return GetAmount(type) >= value;
     }
 }
