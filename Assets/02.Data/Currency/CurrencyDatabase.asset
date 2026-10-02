@@ -20,11 +20,11 @@ MonoBehaviour:
   - type: 1
     currencyName: "\uB098\uBB34"
     icon: {fileID: 6853316077166303748, guid: c0382eca0835cce479c25110d4d7a40d, type: 3}
-    initialAmount: 10
+    initialAmount: 0
   - type: 2
     currencyName: "\uB3CC"
     icon: {fileID: -6960903314270103029, guid: fad7dafaefb85c04ba5c1c4ee1c1566e, type: 3}
-    initialAmount: 10
+    initialAmount: 0
   - type: 3
     currencyName: "\uD074\uB9AD"
     icon: {fileID: 5534413525631299974, guid: 11324441b477ebe4694af7db47cc31da, type: 3}
