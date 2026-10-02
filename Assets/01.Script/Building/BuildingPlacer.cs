@@ -26,12 +26,12 @@ public class BuildingPlacer : MonoBehaviour
 
     private void OnEnable()
     {
-        StaticEventManager.OnBuildingSelected += HandleBuildingSelected;
+        EventManager.OnBuildingSelected += HandleBuildingSelected;
     }
 
     private void OnDisable()
     {
-        StaticEventManager.OnBuildingSelected -= HandleBuildingSelected;
+        EventManager.OnBuildingSelected -= HandleBuildingSelected;
     }
 
     void Start()
@@ -100,6 +100,17 @@ public class BuildingPlacer : MonoBehaviour
         if (!CheckCanBuildAt(cellPos))
         {
             Debug.Log("이곳에는 건물을 지을 수 없습니다!");
+            return;
+        }
+
+        int treeCost = currentBuildingToPlace.treeCost;
+        int rockCost = currentBuildingToPlace.rockCost;
+
+        bool success = EventManager.RequestUseCurrency(CurrencyType.Tree, treeCost) &&
+                       EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
+
+        if (!success)
+        {
             return;
         }
 
