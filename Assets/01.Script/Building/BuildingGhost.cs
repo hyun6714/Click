@@ -26,19 +26,17 @@ public class BuildingGhost : MonoBehaviour
     public Tilemap rangeTilemap; 
     public Tile ofRangeTile;
 
-    private bool hasMainBuilding = false;
-
     private BuildingData currentBuilding;
     private Vector3Int lastCellPos = new Vector3Int(-999, -999, -999); 
 
     private void OnEnable()
     {
-        StaticEventManager.OnBuildingSelected += HandleBuildingSelected;
+        EventManager.OnBuildingSelected += HandleBuildingSelected;
     }
 
     private void OnDisable()
     {
-        StaticEventManager.OnBuildingSelected -= HandleBuildingSelected;
+        EventManager.OnBuildingSelected -= HandleBuildingSelected;
         ClearGhost();
     }
 

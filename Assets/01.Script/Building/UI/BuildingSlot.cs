@@ -47,6 +47,6 @@ public class BuildingSlot : MonoBehaviour
     {
         Debug.Log($"선택된 건물: {assignedBuilding.buildingName} (인덱스: {buildingIndex})");
 
-        StaticEventManager.TriggerBuildingSelected(assignedBuilding);
+        EventManager.TriggerBuildingSelected(assignedBuilding);
     }
 }
