@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -24,14 +23,18 @@ public class BuildingPlacer : MonoBehaviour
     public TileBase transparentBlockingTile;
     private BuildingData currentBuildingToPlace;
 
+    private Dictionary<Vector3Int, BuildingData> placedBuildingData = new Dictionary<Vector3Int, BuildingData>();
+
     private void OnEnable()
     {
         EventManager.OnBuildingSelected += HandleBuildingSelected;
+        EventManager.OnDemolishButtonClicked += CancelPlacing;
     }
 
     private void OnDisable()
     {
         EventManager.OnBuildingSelected -= HandleBuildingSelected;
+        EventManager.OnDemolishButtonClicked -= CancelPlacing;
     }
 
     void Start()
@@ -106,16 +109,22 @@ public class BuildingPlacer : MonoBehaviour
         int treeCost = currentBuildingToPlace.treeCost;
         int rockCost = currentBuildingToPlace.rockCost;
 
-        bool success = EventManager.RequestUseCurrency(CurrencyType.Tree, treeCost) &&
-                       EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
+        bool success = EventManager.RequestCheckCurrency(CurrencyType.Tree, treeCost) &&
+                       EventManager.RequestCheckCurrency(CurrencyType.Rock, rockCost);
 
         if (!success)
         {
             return;
         }
 
+        EventManager.RequestUseCurrency(CurrencyType.Tree, treeCost);
+        EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
+
         // 최종 설치 성공
         buildingTilemap.SetTile(cellPos, currentBuildingToPlace.buildingTile);
+
+        placedBuildingData[cellPos] = currentBuildingToPlace;
+
         Debug.Log($"{currentBuildingToPlace.buildingName} 설치 완료! 좌표: {cellPos}");
 
         hasMainBuilding = true;
@@ -179,7 +188,26 @@ public class BuildingPlacer : MonoBehaviour
         return true;
     }
 
-    void CancelPlacing()
+    //특정 좌표 건물 데이터 가져옴
+    public BuildingData GetBuildingDataAt(Vector3Int cellPos)
+    {
+        if (placedBuildingData.TryGetValue(cellPos, out BuildingData data))
+        {
+            return data;
+        }
+        return null;
+    }
+
+    //건물 철거 후 딕셔너리에 건물 데이터 삭제
+    public void RemoveBuildingData(Vector3Int cellPos)
+    {
+        if (placedBuildingData.ContainsKey(cellPos))
+        {
+            placedBuildingData.Remove(cellPos);
+        }
+    }
+       
+    public void CancelPlacing()
     {
         currentBuildingToPlace = null;
         Debug.Log("설치 모드 해제됨");

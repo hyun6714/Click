@@ -32,11 +32,13 @@ public class BuildingGhost : MonoBehaviour
     private void OnEnable()
     {
         EventManager.OnBuildingSelected += HandleBuildingSelected;
+        EventManager.OnDemolishButtonClicked += ClearGhost;
     }
 
     private void OnDisable()
     {
         EventManager.OnBuildingSelected -= HandleBuildingSelected;
+        EventManager.OnDemolishButtonClicked -= ClearGhost;
         ClearGhost();
     }
 
