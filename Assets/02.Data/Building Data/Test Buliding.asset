@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: Test
   buildingTile: {fileID: 11400000, guid: 297d4590f3504b347b5e847be6561a50, type: 2}
-  category: 1
+  category: 0
   buildingIcon: {fileID: 0}
   isUnlocked: 1
   unlockCost: 0
-  treeCost: 0
-  rockCost: 0
+  treeCost: 1
+  rockCost: 1
   sizeWidth: 2
   sizeHeight: 2

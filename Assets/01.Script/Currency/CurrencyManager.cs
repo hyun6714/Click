@@ -47,6 +47,8 @@ public class CurrencyManager : MonoBehaviour
         foreach (CurrencyData info in currencyDatabase.currencies)
         {
             currentCurrencies[info.type] = info.initialAmount;
+
+            EventManager.CurrencyChanged(info.type, info.initialAmount);
         }
     }
 
