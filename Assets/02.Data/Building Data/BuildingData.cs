@@ -2,9 +2,10 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 public enum BuildingCategory
 {
+    Main, //메인
     Resource, // 자원
-    Attack,   // 공격
-    Trap      // 함정
+    Attack, // 공격
+    Trap // 함정
 }
 
 [CreateAssetMenu(fileName = "NewBuilding", menuName = "Game/Building Data")]
@@ -27,4 +28,8 @@ public class BuildingData : ScriptableObject
     [Header("설치 설정")]
     public int sizeWidth = 2;         // 건물이 차지하는 가로 칸 수
     public int sizeHeight = 2;        // 건물이 차지하는 세로 칸 수
-}
+
+    [Header("건물 HP/ATKPower")]
+    public int buildingHp = 1;
+    public int buildingAtk = 0;
+ }

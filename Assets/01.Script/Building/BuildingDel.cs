@@ -58,16 +58,13 @@ public class BuildingDel : MonoBehaviour
             Vector3Int cellPos = buildingTilemap.WorldToCell(mouseWorldPos);
             cellPos.z = 0;
 
-            // 자동 연결된 buildingPlacer에게 데이터 조회 후 철거 시도
-            if (buildingPlacer != null)
+            if (!buildingTilemap.HasTile(cellPos))
             {
-                BuildingData targetData = buildingPlacer.GetBuildingDataAt(cellPos);
-                TryDemolishAt(cellPos, targetData);
+                Debug.Log("철거할 건물이 없습니다.");
+                return;
             }
-            else
-            {
-                Debug.LogWarning("BuildingPlacer가 할당되지 않았습니다!");
-            }
+
+            EventManager.TriggerRequestDemolish(cellPos);
         }
     }
 
@@ -79,33 +76,6 @@ public class BuildingDel : MonoBehaviour
         if (!isDemolishMode)
         {
             EventManager.TriggerBuildMenuPopupToggle();
-        }
-    }
-
-    public void TryDemolishAt(Vector3Int cellPos, BuildingData buildingData)
-    {
-        if (!buildingTilemap.HasTile(cellPos))
-        {
-            Debug.Log("철거할 건물이 없습니다.");
-            return;
-        }
-
-        if (buildingData != null)
-        {
-            int refundWood = Mathf.FloorToInt(buildingData.treeCost * refundRate);
-            int refundStone = Mathf.FloorToInt(buildingData.rockCost * refundRate);
-
-            if (refundWood > 0) EventManager.CurrencyAdded(CurrencyType.Tree, refundWood);
-            if (refundStone > 0) EventManager.CurrencyAdded(CurrencyType.Rock, refundStone);
-
-            Debug.Log("건물 철거 성공 및 비용 환급 완료!");
-        }
-
-        buildingTilemap.SetTile(cellPos, null);
-
-        if (buildingPlacer != null)
-        {
-            buildingPlacer.RemoveBuildingData(cellPos);
         }
     }
 
