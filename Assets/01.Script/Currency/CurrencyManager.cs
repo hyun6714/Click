@@ -6,25 +6,13 @@ public class CurrencyManager : MonoBehaviour
     [Header("Click Limit Settings")]
     [SerializeField] private int maxClickLimit = 40;
 
-    public static CurrencyManager instance { get; private set; }
-
     private Dictionary<CurrencyType, int> currentCurrencies = new Dictionary<CurrencyType, int>();
 
     [SerializeField] private CurrencyDatabase currencyDatabase;
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-
-            InitializeCurrencies();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
+        InitializeCurrencies();
     }
 
     private void OnEnable()
