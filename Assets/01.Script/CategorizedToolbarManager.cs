@@ -51,7 +51,7 @@ public class CategorizedToolbarManager : MonoBehaviour
 
             if (targetParent == null)
             {
-                Debug.LogWarning($"[Toolbar] 카테고리 부모가 연결되지 않음: {building.buildingName}"); // <-- 3번: Content 부모 연결이 비어있는지 확인
+                Debug.LogWarning($"[Toolbar] 카테고리 부모가 연결되지 않음: {building.buildingName}");
                 continue;
             }
 

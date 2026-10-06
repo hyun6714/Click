@@ -1,16 +1,31 @@
+ï»¿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class BuildUIManager : MonoBehaviour
 {
-    [Header("UI ÄÄÆ÷³ÍÆ® ¿¬°á")]
+    [Header("UI ì»´í¬ë„ŒíŠ¸ ì—°ê²°")]
     public Button demolishButton;
 
-    public GameObject buildDelPopup; //Ã¶°Å ÆË¾÷
+    public GameObject buildDelPopup; //ì² ê±° íŒì—…
 
     private void Awake()
     {
-        buildDelPopup.SetActive(false);
+        if (buildDelPopup != null)
+        {
+            buildDelPopup.SetActive(false);
+        }
+    }
+
+    private void OnEnable()
+    {
+        EventManager.OnBuildMenuPopupToggle += TogglePopup;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnBuildMenuPopupToggle -= TogglePopup;
     }
 
     void Start()
@@ -27,22 +42,11 @@ public class BuildUIManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("BuildUIManager: Ã¶°Å ¹öÆ°À» Ã£Áö ¸øÇß½À´Ï´Ù!");
+            Debug.LogWarning("ì² ê±° ë²„íŠ¼ null");
         }
     }
 
-    private void OnEnable()
-    {
-        EventManager.OnBuildMenuPopupToggle += TogglePopup;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.OnBuildMenuPopupToggle -= TogglePopup;
-    }
-
-
-    // Ã¶°Å ¹öÆ°À» ´­·¶À» ¶§ ½ÇÇàµÇ´Â ÇÔ¼ö
+    // ì² ê±° ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ ì‹¤í–‰ë˜ëŠ” í•¨ìˆ˜
     void OnDemolishButtonClicked()
     {
         EventManager.TriggerDemolishButtonClicked();
