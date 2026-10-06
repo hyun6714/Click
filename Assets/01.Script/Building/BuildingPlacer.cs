@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
+using UnityEngine.EventSystems;
 
 public class BuildingPlacer : MonoBehaviour
 {
@@ -22,8 +23,6 @@ public class BuildingPlacer : MonoBehaviour
 
     public TileBase transparentBlockingTile;
     private BuildingData currentBuildingToPlace;
-
-    private Dictionary<Vector3Int, BuildingData> placedBuildingData = new Dictionary<Vector3Int, BuildingData>();
 
     private void OnEnable()
     {
@@ -59,15 +58,41 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Mouse.current == null || currentBuildingToPlace == null)
+        {
+            return;
+        }
+
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
+
+        if (currentBuildingToPlace == null)
+        {
+            Debug.Log("설치모드 OFF");
+        }
+
+            // 마우스 좌클릭 시 설치 시도
+        if (Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            TryPlaceBuilding();
+        }
+
+    }
+
     private void HandleBuildingSelected(BuildingData selectedBuilding)
     {
         currentBuildingToPlace = selectedBuilding;
-        Debug.Log($"[Placer] 설치 대기 중: {currentBuildingToPlace.buildingName}");
+        Debug.Log($"설치 대기 중: {currentBuildingToPlace.buildingName}");
     }
 
+    //몇번째 건물 인식
     public void SelectBuildingToPlace(int index)
     {
-        if(availableBuildings == null || index < 0 || index >= availableBuildings.Count)
+        if (availableBuildings == null || index < 0 || index >= availableBuildings.Count)
         {
             Debug.LogWarning("잘못된 건물 인덱스입니다!");
             currentBuildingToPlace = null;
@@ -78,23 +103,10 @@ public class BuildingPlacer : MonoBehaviour
         Debug.Log($"건물 선택됨: {currentBuildingToPlace.buildingName} (인덱스: {index})");
     }
 
-    void Update()
-    {
-        if (Mouse.current == null || currentBuildingToPlace == null)
-        {
-            return;
-        }
-
-        // 마우스 좌클릭 시 설치 시도
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            TryPlaceBuilding();
-        }
-
-    }
-
     void TryPlaceBuilding()
     {
+        Debug.Log("설치모드 ON");
+
         Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         Vector3Int cellPos = buildingTilemap.WorldToCell(mouseWorldPos);
@@ -114,21 +126,18 @@ public class BuildingPlacer : MonoBehaviour
 
         if (!success)
         {
+            Debug.Log("자원 부족");
             return;
         }
 
         EventManager.RequestUseCurrency(CurrencyType.Tree, treeCost);
         EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
+        EventManager.TriggerRequestPlaceBuilding(cellPos, currentBuildingToPlace);
 
-        // 최종 설치 성공
-        buildingTilemap.SetTile(cellPos, currentBuildingToPlace.buildingTile);
-
-        placedBuildingData[cellPos] = currentBuildingToPlace;
-
-        Debug.Log($"{currentBuildingToPlace.buildingName} 설치 완료! 좌표: {cellPos}");
+        Debug.Log($"[설치 완료] 좌표 {cellPos} | 건물: {currentBuildingToPlace.buildingName}");
 
         hasMainBuilding = true;
-
+        currentBuildingToPlace = null;
     }
 
     private bool CheckCanBuildAt(Vector3Int cellPos)
@@ -187,29 +196,15 @@ public class BuildingPlacer : MonoBehaviour
 
         return true;
     }
-
-    //특정 좌표 건물 데이터 가져옴
-    public BuildingData GetBuildingDataAt(Vector3Int cellPos)
-    {
-        if (placedBuildingData.TryGetValue(cellPos, out BuildingData data))
-        {
-            return data;
-        }
-        return null;
-    }
-
-    //건물 철거 후 딕셔너리에 건물 데이터 삭제
-    public void RemoveBuildingData(Vector3Int cellPos)
-    {
-        if (placedBuildingData.ContainsKey(cellPos))
-        {
-            placedBuildingData.Remove(cellPos);
-        }
-    }
        
     public void CancelPlacing()
     {
         currentBuildingToPlace = null;
-        Debug.Log("설치 모드 해제됨");
+        Debug.Log("설치 모드 OFF");
+    }
+
+    public void ConfirmBuild(Vector3Int cellPos, BuildingData data)
+    {
+        EventManager.TriggerRequestPlaceBuilding(cellPos, data);
     }
 }
