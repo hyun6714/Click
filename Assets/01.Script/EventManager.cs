@@ -26,8 +26,11 @@ public static class EventManager
     //Ã¶°Å ¹öÆ° ´©¸¦ ¶§
     public static event Action OnDemolishButtonClicked;
 
-    //Ã¶°Å ÆË¾÷
+    //°Ç¹° Ã¶°Å ÆË¾÷
     public static event Action OnBuildMenuPopupToggle;
+
+    //°Ç¹° ¼³Ä¡ ÆË¾÷
+    public static event Action<bool> OnBuilAddPopupToggle;
 
     //Æ¯Á¤ ÁÂÇ¥ °Ç¹° Ã¶°Å 
     public delegate void RequestDemolishHandler(Vector3Int cellPosition);
@@ -58,8 +61,8 @@ public static class EventManager
     public static void TriggerRequestPlaceBuilding(Vector3Int cellPosition, BuildingData buildingData) => OnRequestPlaceBuilding?.Invoke(cellPosition, buildingData);
     public static void TriggerDemolishButtonClicked() => OnDemolishButtonClicked?.Invoke();
     public static void TriggerBuildMenuPopupToggle() => OnBuildMenuPopupToggle?.Invoke();
+    public static void TriggerBuildAddPopupToggle(bool isOpen) => OnBuilAddPopupToggle?.Invoke(isOpen);
     public static void TriggerRequestDemolish(Vector3Int cellPosition) => OnRequestDemolish?.Invoke(cellPosition);
-    
     public static void TriggerDayChanged(int day) => OnDayChanged?.Invoke(day);
     public static void TriggerTimeDetailedChanged(int day, float hour, float minute, float second) => OnTimeDetailedChanged?.Invoke(day, hour, minute, second);
     public static void TriggerSkipButtonClicked() => OnSkipButtonClicked?.Invoke();

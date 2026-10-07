@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
 {
-    [Header("Click Limit Settings")]
+    [Header("클릭 최대 횟수")] 
     [SerializeField] private int maxClickLimit = 40;
 
     private Dictionary<CurrencyType, int> currentCurrencies = new Dictionary<CurrencyType, int>();

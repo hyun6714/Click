@@ -10,7 +10,7 @@ public class TimeUIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (skipButton == null)
+        if (skipButton == null) //정적이벤트로 연결 후 Find 삭제 
         {
             GameObject btnObj = GameObject.Find("SkipButton");
             if (btnObj != null)
