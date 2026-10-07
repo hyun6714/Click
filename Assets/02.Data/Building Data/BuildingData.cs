@@ -17,6 +17,9 @@ public class BuildingData : ScriptableObject
     public BuildingCategory category;
     public Sprite buildingIcon;
 
+    [Header("프리팹 설정")]
+    public GameObject buildingPrefab; // 각 스크립트가 붙은 빈오브젝트 
+
     [Header("해금 설정")]
     public bool isUnlocked = false;
     public int unlockCost;
