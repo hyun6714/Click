@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ public class BuildUIManager : MonoBehaviour
     public Button demolishButton;
 
     public GameObject buildDelPopup; //철거 팝업
+    public GameObject buildAddPopup; //설치 팝업
 
     private void Awake()
     {
@@ -16,16 +18,23 @@ public class BuildUIManager : MonoBehaviour
         {
             buildDelPopup.SetActive(false);
         }
+
+        if (buildAddPopup != null)
+        {
+            buildAddPopup.SetActive(false);
+        }
     }
 
     private void OnEnable()
     {
-        EventManager.OnBuildMenuPopupToggle += TogglePopup;
+        EventManager.OnBuildMenuPopupToggle += ToggleBuildDelPopup;
+        EventManager.OnBuilAddPopupToggle += ToggleBuildAddPopup;
     }
 
     private void OnDisable()
     {
-        EventManager.OnBuildMenuPopupToggle -= TogglePopup;
+        EventManager.OnBuildMenuPopupToggle -= ToggleBuildDelPopup;
+        EventManager.OnBuilAddPopupToggle -= ToggleBuildAddPopup;
     }
 
     void Start()
@@ -54,12 +63,20 @@ public class BuildUIManager : MonoBehaviour
         EventManager.TriggerBuildMenuPopupToggle();
     }
 
-    private void TogglePopup()
+    private void ToggleBuildDelPopup()
     {
         if (buildDelPopup != null)
         {
             bool isActive = buildDelPopup.activeSelf;
             buildDelPopup.SetActive(!isActive); 
+        }
+    }
+
+    private void ToggleBuildAddPopup(bool isOpen)
+    {
+        if (buildAddPopup != null)
+        {
+            buildAddPopup.SetActive(isOpen);
         }
     }
 }

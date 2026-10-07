@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.EventSystems;
 
+
 public class BuildingPlacer : MonoBehaviour
 {
     [Header("타일맵 연결")]
@@ -60,6 +61,11 @@ public class BuildingPlacer : MonoBehaviour
 
     void Update()
     {
+        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            CancelPlacing();
+            return;
+        }
         if (Mouse.current == null || currentBuildingToPlace == null)
         {
             return;
@@ -87,6 +93,7 @@ public class BuildingPlacer : MonoBehaviour
     {
         currentBuildingToPlace = selectedBuilding;
         Debug.Log($"설치 대기 중: {currentBuildingToPlace.buildingName}");
+        EventManager.TriggerBuildAddPopupToggle(true);
     }
 
     //몇번째 건물 인식
@@ -137,7 +144,6 @@ public class BuildingPlacer : MonoBehaviour
         Debug.Log($"[설치 완료] 좌표 {cellPos} | 건물: {currentBuildingToPlace.buildingName}");
 
         hasMainBuilding = true;
-        currentBuildingToPlace = null;
     }
 
     private bool CheckCanBuildAt(Vector3Int cellPos)
@@ -201,6 +207,7 @@ public class BuildingPlacer : MonoBehaviour
     {
         currentBuildingToPlace = null;
         Debug.Log("설치 모드 OFF");
+        EventManager.TriggerBuildAddPopupToggle(false);
     }
 
     public void ConfirmBuild(Vector3Int cellPos, BuildingData data)
