@@ -139,49 +139,26 @@ public class BuildingGhost : MonoBehaviour
 
         if (buildingTilemap != null)
         {
-            bool isMapEmpty = true;
+            bool isNearAnyBuilding = false;
+
             foreach (var pos in buildingTilemap.cellBounds.allPositionsWithin)
             {
                 if (buildingTilemap.HasTile(pos))
                 {
-                    isMapEmpty = false;
-                    break;
-                }
-            }
+                    // 투명 블로킹 타일 등 예외 처리가 필요하다면 여기에 추가 가능
+                    int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y - pos.y);
 
-            if (!isMapEmpty)
-            {
-                bool hasBuildingNearby = false;
-                int range = requiredBuildingRange;
-
-                for (int x = -range; x <= range; x++)
-                {
-                    for (int y = -range; y <= range; y++)
+                    if (distance <= requiredBuildingRange)
                     {
-                        if (Mathf.Abs(x) + Mathf.Abs(y) > range)
-                        {
-                            continue;
-                        }
-
-                        Vector3Int checkPos = cellPos + new Vector3Int(x, y, 0);
-
-                        if (buildingTilemap.HasTile(checkPos))
-                        {
-                            hasBuildingNearby = true;
-                            break;
-                        }
-                    }
-
-                    if (hasBuildingNearby)
-                    {
+                        isNearAnyBuilding = true;
                         break;
                     }
                 }
+            }
 
-                if (!hasBuildingNearby)
-                {
-                    return false;
-                }
+            if (!isNearAnyBuilding)
+            {
+                return false;
             }
         }
 
@@ -189,7 +166,7 @@ public class BuildingGhost : MonoBehaviour
     }
 
     public void ClearGhost()
-    {
+    {   
         currentBuilding = null;
         lastCellPos = new Vector3Int(-999, -999, -999);
 
