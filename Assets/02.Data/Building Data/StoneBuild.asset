@@ -9,18 +9,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2efdf5dec78563b43b3eb1b9fa0cbd49, type: 3}
-  m_Name: Test Buliding
-  m_EditorClassIdentifier: Assembly-CSharp::BuildingData
-  buildingName: Test
+  m_Script: {fileID: 11500000, guid: cc0e3cd809a96a74f90b2c41e27b6b53, type: 3}
+  m_Name: StoneBuild
+  m_EditorClassIdentifier: Assembly-CSharp::ProductionBuildingData
+  buildingName: "\uCC44\uC11D\uC7A5"
   buildingTile: {fileID: 11400000, guid: 297d4590f3504b347b5e847be6561a50, type: 2}
-  category: 2
+  category: 1
   buildingIcon: {fileID: 0}
   isUnlocked: 1
   unlockCost: 0
-  treeCost: 2
-  rockCost: 2
+  treeCost: 5
+  rockCost: 5
   sizeWidth: 2
   sizeHeight: 2
-  buildingHp: 1
-  buildingAtk: 0
+  buildingHp: 100
+  targetResourceType: 1
+  gatherInterval: 2
+  gatherRange: 5
+  productionPrefab: {fileID: 2598363814112138791, guid: 7afb6156b31d7cb42ba04e44baf789e3, type: 3}

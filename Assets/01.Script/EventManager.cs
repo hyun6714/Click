@@ -51,6 +51,12 @@ public static class EventManager
     public delegate void SkipButtonClickHandler();
     public static event SkipButtonClickHandler OnSkipButtonClicked;
 
+    //자원 건물 생성
+    public static event Action<Vector3Int, ProductionBuildingData> OnRequestSpawnResourceBuilding;
+
+    //공격 건물 생성
+    public static event Action<Vector3Int, AttackBuildingData> OnRequestSpawnTower;
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -66,8 +72,9 @@ public static class EventManager
     public static void TriggerDayChanged(int day) => OnDayChanged?.Invoke(day);
     public static void TriggerTimeDetailedChanged(int day, float hour, float minute, float second) => OnTimeDetailedChanged?.Invoke(day, hour, minute, second);
     public static void TriggerSkipButtonClicked() => OnSkipButtonClicked?.Invoke();
-
-
+    public static void TriggerRequestSpawnTower(Vector3Int cellPos, AttackBuildingData attackData) => OnRequestSpawnTower?.Invoke(cellPos, attackData);
+    public static void TriggerRequestSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData) => OnRequestSpawnResourceBuilding?.Invoke(cellPos, prodData);
+    
     //건물 비용차감 
     public static bool RequestUseCurrency(CurrencyType type, int value)
     {
