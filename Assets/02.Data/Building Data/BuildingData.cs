@@ -17,9 +17,6 @@ public class BuildingData : ScriptableObject
     public BuildingCategory category;
     public Sprite buildingIcon;
 
-    [Header("프리팹 설정")]
-    public GameObject buildingPrefab; // 각 스크립트가 붙은 빈오브젝트 
-
     [Header("해금 설정")]
     public bool isUnlocked = false;
     public int unlockCost;
@@ -32,7 +29,6 @@ public class BuildingData : ScriptableObject
     public int sizeWidth = 2;         // 건물이 차지하는 가로 칸 수
     public int sizeHeight = 2;        // 건물이 차지하는 세로 칸 수
 
-    [Header("건물 HP/ATKPower")]
+    [Header("건물 HP")]
     public int buildingHp = 1;
-    public int buildingAtk = 0;
  }

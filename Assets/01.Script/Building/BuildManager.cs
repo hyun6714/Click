@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class BuildingManager : MonoBehaviour
 {
-    [Header("건물타일맵 참조")]
+    [Header("건물 타일맵 참조")]
     public Tilemap buildingTilemap;
 
     private Dictionary<Vector3Int, int> buildingHpDictionary = new Dictionary<Vector3Int, int>();
@@ -63,6 +64,16 @@ public class BuildingManager : MonoBehaviour
         buildingDataDictionary[cellPosition] = data;
 
         Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {data.buildingHp}");
+
+        if (data is AttackBuildingData attackData)
+        {
+            EventManager.TriggerRequestSpawnTower(cellPosition, attackData);
+        }
+
+        else if (data is ProductionBuildingData prodData)
+        {
+            EventManager.TriggerRequestSpawnResourceBuilding(cellPosition, prodData);
+        }
     }
 
     //건물 공격 받을 시 
