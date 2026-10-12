@@ -29,6 +29,12 @@ public class CategorizedToolbarManager : MonoBehaviour
         {
             BuildingData building = allBuildings[i];
 
+            if (building == null)
+            {
+                Debug.LogWarning($"[Toolbar] {i}번째 건물 데이터가 비어있습니다 (null).");
+                continue;
+            }
+
             if (!building.isUnlocked)
             {
                 Debug.Log($"[Toolbar] 잠겨서 스킵된 건물: {building.buildingName}");
