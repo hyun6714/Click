@@ -21,6 +21,7 @@ public class BuildingPlacer : MonoBehaviour
 
     [Header("메인 건물 설치 여부 (자동 관리)")]
     private bool hasMainBuilding = false;
+    private Vector3Int mainBuildingCellPos;
 
     public TileBase transparentBlockingTile;
     private BuildingData currentBuildingToPlace;
@@ -54,6 +55,8 @@ public class BuildingPlacer : MonoBehaviour
             if (buildingTilemap.HasTile(pos))
             {
                 hasMainBuilding = true;
+                mainBuildingCellPos = pos;
+
                 break;
             }
         }
@@ -141,8 +144,6 @@ public class BuildingPlacer : MonoBehaviour
         EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
         EventManager.TriggerRequestPlaceBuilding(cellPos, currentBuildingToPlace);
 
-        Debug.Log($"[설치 완료] 좌표 {cellPos} | 건물: {currentBuildingToPlace.buildingName}");
-
         hasMainBuilding = true;
     }
 
@@ -170,35 +171,28 @@ public class BuildingPlacer : MonoBehaviour
 
         if (buildingTilemap != null)
         {
-            Vector3Int? mainBuildingPos = null;
+            bool isNearAnyBuilding = false;
 
             foreach (var pos in buildingTilemap.cellBounds.allPositionsWithin)
             {
                 if (buildingTilemap.HasTile(pos))
                 {
-                    TileBase tile = buildingTilemap.GetTile(pos);
+                    // 투명 블로킹 타일 등 예외 처리가 필요하다면 여기에 추가 가능
+                    int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y - pos.y);
 
-                    if (transparentBlockingTile != null && tile == transparentBlockingTile)
+                    if (distance <= requiredBuildingRange)
                     {
-                        continue; 
+                        isNearAnyBuilding = true;
+                        break;
                     }
-
-                    mainBuildingPos = pos;
-                    break;
                 }
             }
 
-            if (mainBuildingPos.HasValue)
+            if (!isNearAnyBuilding)
             {
-                int distance = Mathf.Abs(cellPos.x - mainBuildingPos.Value.x) + Mathf.Abs(cellPos.y - mainBuildingPos.Value.y);
-
-                if (distance > requiredBuildingRange)
-                {
-                    return false;
-                }
+                return false;
             }
         }
-
 
         return true;
     }
