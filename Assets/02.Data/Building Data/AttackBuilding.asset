@@ -22,8 +22,9 @@ MonoBehaviour:
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
-  buildingHp: 1
+  maxBuildingHp: 1
   attackRange: 3
   attackDamage: 10
   attackSpeed: 1
-  projectilePrefab: {fileID: 3752268226886733323, guid: 5c34e31e538e26a439786c60c3235c14, type: 3}
+  projectilePrefab: {fileID: 0}
+  towerPrefab: {fileID: 3752268226886733323, guid: 5c34e31e538e26a439786c60c3235c14, type: 3}

@@ -57,6 +57,12 @@ public static class EventManager
     //공격 건물 생성
     public static event Action<Vector3Int, AttackBuildingData> OnRequestSpawnTower;
 
+    //함정 생성
+    public static event Action<Vector3Int, TrapBuildingData> OnRequestSpawnTrapBuilding;
+
+    //메인성 생성
+    public static event Action<Vector3Int, BuildingData> OnRequestSpawnMainCastle;
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -74,7 +80,8 @@ public static class EventManager
     public static void TriggerSkipButtonClicked() => OnSkipButtonClicked?.Invoke();
     public static void TriggerRequestSpawnTower(Vector3Int cellPos, AttackBuildingData attackData) => OnRequestSpawnTower?.Invoke(cellPos, attackData);
     public static void TriggerRequestSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData) => OnRequestSpawnResourceBuilding?.Invoke(cellPos, prodData);
-    
+    public static void TriggerRequestSpawnTrapBuilding(Vector3Int cellPos, TrapBuildingData trapData) => OnRequestSpawnTrapBuilding?.Invoke(cellPos, trapData);
+    public static void TriggerRequestSpawnMainCastle(Vector3Int cellPos, BuildingData mainData) => OnRequestSpawnMainCastle?.Invoke(cellPos, mainData);
     //건물 비용차감 
     public static bool RequestUseCurrency(CurrencyType type, int value)
     {
