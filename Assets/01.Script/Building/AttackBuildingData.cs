@@ -8,5 +8,7 @@ public class AttackBuildingData : BuildingData
     public float attackDamage = 10f; // 공격력
     public float attackSpeed = 1.0f; // 공격 속도
 
+    [Header("타워 프리팹")]
     public GameObject projectilePrefab; // 발사체
+    public GameObject towerPrefab;
 }

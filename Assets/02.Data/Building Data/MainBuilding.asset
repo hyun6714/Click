@@ -22,5 +22,4 @@ MonoBehaviour:
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
-  buildingHp: 500
-  buildingAtk: 0
+  maxBuildingHp: 500

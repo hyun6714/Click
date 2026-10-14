@@ -44,8 +44,10 @@ public class BuildingDel : MonoBehaviour
             return;
         }
 
-        if (!isDemolishMode) return;
-
+        if (!isDemolishMode)
+        {
+            return;
+        }
         ProcessDemolishInput();
     }
 
