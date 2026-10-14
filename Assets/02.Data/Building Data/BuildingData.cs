@@ -30,5 +30,5 @@ public class BuildingData : ScriptableObject
     public int sizeHeight = 2;        // 건물이 차지하는 세로 칸 수
 
     [Header("건물 HP")]
-    public int buildingHp = 1;
+    public int maxBuildingHp = 1;
  }

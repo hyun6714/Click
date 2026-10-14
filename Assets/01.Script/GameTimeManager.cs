@@ -81,7 +81,10 @@ public class GameTimeManager : MonoBehaviour
 
     public void SkipToNextDay()
     {
-        if (isSkipping) return;
+        if (isSkipping)
+        {
+            return;
+        }
 
         StartCoroutine(SkipTimeRoutine());
     }
