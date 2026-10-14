@@ -59,6 +59,7 @@ public class CurrencyManager : MonoBehaviour
         {
             return amount;
         }
+
         return 0;
     }
 
@@ -66,7 +67,9 @@ public class CurrencyManager : MonoBehaviour
     public void AddCurrency(CurrencyType type, int amount)
     {
         if (amount <= 0)
+        {
             return;
+        }
 
         currentCurrencies[type] = GetAmount(type) + amount;
 
@@ -76,7 +79,10 @@ public class CurrencyManager : MonoBehaviour
     //재화 차감 
     public bool UseCurrency(CurrencyType type, int amount)
     {
-        if (amount <= 0) return false;
+        if (amount <= 0)
+        {
+            return false;
+        }
 
         int current = GetAmount(type);
         if (current < amount)
