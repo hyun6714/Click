@@ -178,7 +178,7 @@ public class BuildingPlacer : MonoBehaviour
                 if (buildingTilemap.HasTile(pos))
                 {
                     // 투명 블로킹 타일 등 예외 처리가 필요하다면 여기에 추가 가능
-                    int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y - pos.y);
+                    int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y  - pos.y);
 
                     if (distance <= requiredBuildingRange)
                     {

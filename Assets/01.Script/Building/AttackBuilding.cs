@@ -1,18 +1,27 @@
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
-public class AttakBuild : MonoBehaviour
+public class AttackBuilding : MonoBehaviour, IDamageable
 {
     private AttackBuildingData towerData;
+    private Vector3Int cellPosition;
+    private int currentHealth;
+
     private float cooldown = 0f;
 
-    public void Initialize(AttackBuildingData data)
+    public void Initialize(AttackBuildingData data, Vector3Int pos)
     {
         towerData = data;
+        cellPosition = pos;
+        currentHealth = towerData.maxBuildingHp;
     }
 
     void Update()
     {
-        if (towerData == null) return;
+        if (towerData == null)
+        {
+            return;
+        }
 
         if (cooldown > 0f)
         {
@@ -20,7 +29,6 @@ public class AttakBuild : MonoBehaviour
             return;
         }
 
-        // AttackBuildingData에 있는 사거리 사용
         Transform target = FindNearestEnemy(towerData.attackRange);
         if (target != null)
         {
@@ -50,7 +58,33 @@ public class AttakBuild : MonoBehaviour
     void Attack(Transform target)
     {
         Debug.Log($"{towerData.buildingName} 공격! 데미지: {towerData.attackDamage}");
-        //적 체력 감소 
+
+        if (target.TryGetComponent<IDamageable>(out var damageableTarget))
+        {
+            damageableTarget.TakeDamage(Mathf.RoundToInt(towerData.attackDamage));
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        currentHealth = Mathf.Max(currentHealth, 0);
+
+        Debug.Log($"[타워 피격] {towerData.buildingName} 남은 체력: {currentHealth} / {towerData.maxBuildingHp}");
+
+        if (currentHealth <= 0)
+        {
+            DestroyTower();
+        }
+    }
+
+    private void DestroyTower()
+    {
+        Debug.Log($"[타워 파괴] {towerData.buildingName} 파괴 및 타일 제거");
+
+        EventManager.TriggerRequestDemolish(cellPosition);
+
+        Destroy(gameObject);
     }
 
     void OnDrawGizmosSelected()

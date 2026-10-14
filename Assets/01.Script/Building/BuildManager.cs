@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -46,10 +45,12 @@ public class BuildingManager : MonoBehaviour
             {
                 if (!buildingHpDictionary.ContainsKey(pos))
                 {
-                    buildingHpDictionary[pos] = mainBuildingData.buildingHp;
+                    buildingHpDictionary[pos] = mainBuildingData.maxBuildingHp;
                     buildingDataDictionary[pos] = mainBuildingData;
 
-                    Debug.Log($"[초기 메인 건물 등록] 좌표 {pos} | 건물: {mainBuildingData.buildingName} | HP: {mainBuildingData.buildingHp}");
+                    Debug.Log($"[초기 메인 건물 등록] 좌표 {pos} | 건물: {mainBuildingData.buildingName} | HP: {mainBuildingData.maxBuildingHp}");
+
+                    EventManager.TriggerRequestSpawnMainCastle(pos, mainBuildingData);
                 }
             }
         }
@@ -60,12 +61,16 @@ public class BuildingManager : MonoBehaviour
     {
         buildingTilemap.SetTile(cellPosition, data.buildingTile);
 
-        buildingHpDictionary[cellPosition] = data.buildingHp;
+        buildingHpDictionary[cellPosition] = data.maxBuildingHp;
         buildingDataDictionary[cellPosition] = data;
 
-        Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {data.buildingHp}");
+        Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {data.maxBuildingHp}");
 
-        if (data is AttackBuildingData attackData)
+        if (data.category == BuildingCategory.Main)
+        {
+            EventManager.TriggerRequestSpawnMainCastle(cellPosition, data);
+        }
+        else if (data is AttackBuildingData attackData)
         {
             EventManager.TriggerRequestSpawnTower(cellPosition, attackData);
         }
@@ -73,6 +78,11 @@ public class BuildingManager : MonoBehaviour
         else if (data is ProductionBuildingData prodData)
         {
             EventManager.TriggerRequestSpawnResourceBuilding(cellPosition, prodData);
+        }
+
+        else if (data is TrapBuildingData trapData)
+        {
+            EventManager.TriggerRequestSpawnTrapBuilding(cellPosition, trapData);
         }
     }
 
@@ -101,11 +111,20 @@ public class BuildingManager : MonoBehaviour
         {
             BuildingData data = buildingDataDictionary[cellPosition];
 
-            int refundWood = Mathf.FloorToInt(data.treeCost * 0.5f);
-            int refundStone = Mathf.FloorToInt(data.rockCost * 0.5f);
+            if (data.category == BuildingCategory.Main)
+            {
+                Debug.Log("[게임 오버] 메인 성이 파괴되었습니다!");
+                // TODO: 게임 오버 UI 팝업 띄우기 또는 게임 일시정지 등 처리
+            }
 
-            if (refundWood > 0) EventManager.CurrencyAdded(CurrencyType.Tree, refundWood);
-            if (refundStone > 0) EventManager.CurrencyAdded(CurrencyType.Rock, refundStone);
+            else
+            {
+                int refundWood = Mathf.FloorToInt(data.treeCost * 0.5f);
+                int refundStone = Mathf.FloorToInt(data.rockCost * 0.5f);
+
+                if (refundWood > 0) EventManager.CurrencyAdded(CurrencyType.Tree, refundWood);
+                if (refundStone > 0) EventManager.CurrencyAdded(CurrencyType.Rock, refundStone);
+            }
 
             buildingTilemap.SetTile(cellPosition, null);
 

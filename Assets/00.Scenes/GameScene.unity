@@ -205,8 +205,11 @@ GameObject:
   m_Component:
   - component: {fileID: 97340366}
   - component: {fileID: 97340365}
+  - component: {fileID: 97340367}
+  - component: {fileID: 97340368}
+  - component: {fileID: 97340369}
   m_Layer: 0
-  m_Name: ResourceBuildingSpawner
+  m_Name: BuildingSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -242,6 +245,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &97340367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97340364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0837a54e2c9f6284782e3fe173113a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrapBuildingSpawner
+  buildingTilemap: {fileID: 906542252}
+--- !u!114 &97340368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97340364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a41ffd0073ce648b8ed343695949c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MainCastleSpawner
+  buildingTilemap: {fileID: 906542252}
+  mainCastlePrefab: {fileID: 8093262969258765543, guid: ffb7f4b2c63711941977ddb1fdc3b80e, type: 3}
+--- !u!114 &97340369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97340364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f8a37dfce96ec84883c37302d700e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackBuildingSpawner
+  buildingTilemap: {fileID: 906542252}
 --- !u!1 &195848131
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,6 +702,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd4faf867175c1043b017cf0adf8941a, type: 2}
   - {fileID: 11400000, guid: 462e4d4cad4b4af4dabcfed3d5915157, type: 2}
   - {fileID: 11400000, guid: d6cac76cefa2d5b4cac1fcc1dc548db5, type: 2}
+  - {fileID: 11400000, guid: c8268e945b38c4f478147c23df53d236, type: 2}
+  - {fileID: 11400000, guid: 4c9ee066335b18049a8c8f923f436fd7, type: 2}
+  - {fileID: 11400000, guid: 662f8c0108782d94f97fcda211699893, type: 2}
   transparentBlockingTile: {fileID: 0}
 --- !u!4 &331502954
 Transform:
@@ -726,8 +772,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8711a514be226541b180596349fdbcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingManager
-  treeTilemap: {fileID: 0}
-  stoneTilemap: {fileID: 0}
   buildingTilemap: {fileID: 906542252}
   mainBuildingData: {fileID: 11400000, guid: 00be10d7ae567764981916616f0b8cb8, type: 2}
 --- !u!1 &389122450
@@ -2245,6 +2289,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: dd4faf867175c1043b017cf0adf8941a, type: 2}
   - {fileID: 11400000, guid: 462e4d4cad4b4af4dabcfed3d5915157, type: 2}
   - {fileID: 11400000, guid: d6cac76cefa2d5b4cac1fcc1dc548db5, type: 2}
+  - {fileID: 11400000, guid: c8268e945b38c4f478147c23df53d236, type: 2}
+  - {fileID: 11400000, guid: 4c9ee066335b18049a8c8f923f436fd7, type: 2}
+  - {fileID: 11400000, guid: 662f8c0108782d94f97fcda211699893, type: 2}
 --- !u!4 &491016155
 Transform:
   m_ObjectHideFlags: 0
@@ -2275,6 +2322,10 @@ MonoBehaviour:
   demolishButton: {fileID: 683069924}
   buildDelPopup: {fileID: 1528187326}
   buildAddPopup: {fileID: 240265439}
+  mainCastlePrefab: {fileID: 0}
+  attackTowerPrefab: {fileID: 0}
+  resourceBuildingPrefab: {fileID: 0}
+  barricadePrefab: {fileID: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -4374,6 +4425,7 @@ MonoBehaviour:
   treeTile: {fileID: 11400000, guid: 4e5d120a765dd224b9558de21652a1c8, type: 2}
   mainBuildingTile: {fileID: 11400000, guid: 0fbe9475a08f61c4ca099eded4856d5d, type: 2}
   mainBuildingCellPos: {x: 0, y: 0, z: 0}
+  mainBuildingData: {fileID: 0}
   rangeLeft: 4
   rangeRight: 1
   rangeUp: 1

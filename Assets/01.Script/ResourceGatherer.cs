@@ -34,7 +34,10 @@ public class ResourceGatherer : MonoBehaviour
         bool hasTree = treeTilemap.HasTile(cellPos);
         bool hasStone = stoneTilemap.HasTile(cellPos);
 
-        if (!hasTree && !hasStone) return;
+        if (!hasTree && !hasStone)
+        {
+            return;
+        }
 
         bool canUseClick = EventManager.RequestUseCurrency(CurrencyType.Click, clickCost);
 
