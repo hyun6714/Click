@@ -20,6 +20,7 @@ public class MapCreat : MonoBehaviour
 
     [Header("메인 성 설정")]
     public Vector3Int mainBuildingCellPos = Vector3Int.zero;
+    public BuildingData mainBuildingData;
 
     [Header("건물 차단 영역 오프셋 (비율 조절)")]
     public int rangeLeft = 2;
@@ -100,6 +101,11 @@ public class MapCreat : MonoBehaviour
                         if (mainBuildingTile != null)
                         {
                             buildingTilemap.SetTile(targetPos, mainBuildingTile);
+
+                            if (mainBuildingData != null)
+                            {
+                                EventManager.TriggerRequestPlaceBuilding(targetPos, mainBuildingData);
+                            }
                         }
                     }
                     else
@@ -112,6 +118,7 @@ public class MapCreat : MonoBehaviour
                 }
             }
         }
+
 
         //돌 심기
         HashSet<Vector3Int> stonePositions = new HashSet<Vector3Int>(); //돌 설치 구간 저장

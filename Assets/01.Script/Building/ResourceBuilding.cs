@@ -2,23 +2,37 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class ResourceBuilding : MonoBehaviour
+public class ResourceBuilding : MonoBehaviour, IDamageable
 {
     private ProductionBuildingData buildingData;
     private Vector3Int cellPosition;
     private Tilemap treeTilemap;
     private Tilemap stoneTilemap;
 
+    private int currentHealth;
+
     public void Initialize(ProductionBuildingData data, Vector3Int pos, Tilemap treeMap, Tilemap stoneMap)
     {
         buildingData = data;
         cellPosition = pos;
-
+        currentHealth = buildingData.maxBuildingHp;
+        
         treeTilemap = treeMap;
         stoneTilemap = stoneMap;
 
         // 채집 루프 시작
         StartCoroutine(GatherRoutine());
+    }
+
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+        Debug.Log($"[채집 건물 피격] {buildingData.buildingName} 남은 체력: {currentHealth} / {buildingData.maxBuildingHp}");
+
+        if (currentHealth <= 0)
+        {
+            DestroyBuilding();
+        }
     }
 
     private IEnumerator GatherRoutine()
@@ -60,7 +74,7 @@ public class ResourceBuilding : MonoBehaviour
 
         if (targetTilemap == null)
         {
-            Debug.LogWarning("채집할 타일맵을 찾지 못했습니다!");
+            Debug.LogWarning("채집할 타일맵이 없음");
             return;
         }
 
@@ -77,11 +91,20 @@ public class ResourceBuilding : MonoBehaviour
                     targetTilemap.SetTile(targetPos, null);
 
                     EventManager.CurrencyAdded(rewardType, 1);
-                    Debug.Log($"[{buildingData.buildingName}] 채집 성공! 좌표: {targetPos} (+1 {rewardType})");
+                    Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} (+1 {rewardType})");
 
                     return;
                 }
             }
         }
+    }
+
+    private void DestroyBuilding()
+    {
+        Debug.Log($"[채집 건물 파괴] {buildingData.buildingName} 파괴 및 타일 제거");
+
+        EventManager.TriggerRequestDemolish(cellPosition);
+
+        Destroy(gameObject);
     }
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50143ef92b9585e4f97cbed833916690, type: 3}
+  m_Name: TrapData
+  m_EditorClassIdentifier: Assembly-CSharp::TrapBuildingData
+  buildingName: "\uAC00\uC2DC"
+  buildingTile: {fileID: 0}
+  category: 3
+  buildingIcon: {fileID: 0}
+  isUnlocked: 0
+  unlockCost: 0
+  treeCost: 0
+  rockCost: 0
+  sizeWidth: 2
+  sizeHeight: 2
+  maxBuildingHp: 1
+  damage: 30
+  triggerRange: 3
+  trapPrefab: {fileID: 9222285491078736110, guid: d08510aedc4759c4a8a266b601c465b1, type: 3}
