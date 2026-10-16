@@ -108,3 +108,6 @@ InitTestScene*.unity*
 Plaintext
 # 깃허브 업로드 제외 대상 에셋
 Assets/03.Sprites/
+
+*.ttf
+*.otf
