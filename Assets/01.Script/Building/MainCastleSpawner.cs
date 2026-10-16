@@ -9,6 +9,8 @@ public class MainCastleSpawner : MonoBehaviour
     [Header("메인 성 프리팹 연결")]
     public GameObject mainCastlePrefab;
 
+    [SerializeField] private EnemySpawner enemySpawner;
+
     private void OnEnable()
     {
         EventManager.OnRequestPlaceBuilding += HandleSpawnMainCastle;
@@ -40,6 +42,11 @@ public class MainCastleSpawner : MonoBehaviour
         {
             controller.Initialize(data, cellPos);
             Debug.Log($"[메인 성 생성 완료] 위치: {cellPos}");
+        }
+
+        if (enemySpawner != null)
+        {
+            enemySpawner.SetMainCastleTarget(spawnedObj.transform);
         }
     }
 }

@@ -17,17 +17,25 @@ public class BuildingManager : MonoBehaviour
     {
         EventManager.OnRequestDemolish += HandleDemolishRequest;
         EventManager.OnRequestPlaceBuilding += HandlePlaceBuildingRequest;
+        EventManager.OnRequestDamageBuilding += HandleDamageBuildingRequest;
     }
 
     private void OnDisable()
     {
         EventManager.OnRequestDemolish -= HandleDemolishRequest;
         EventManager.OnRequestPlaceBuilding -= HandlePlaceBuildingRequest;
+        EventManager.OnRequestDamageBuilding -= HandleDamageBuildingRequest;
     }
 
     void Start()
     {
+        EventManager.TriggerBuildingManagerReady(buildingTilemap);
         RegisterInitialBuildings();
+    }
+
+    public List<Vector3Int> GetAllBuildingPositions()
+    {
+        return new List<Vector3Int>(buildingHpDictionary.Keys);
     }
 
     // 게임 시작 시 메인 건물 자동 등록
@@ -87,7 +95,7 @@ public class BuildingManager : MonoBehaviour
     }
 
     //건물 공격 받을 시 
-    public void DamageBuilding(Vector3Int cellPosition, int damage)
+    private void HandleDamageBuildingRequest(Vector3Int cellPosition, int damage)
     {
         if (buildingHpDictionary.ContainsKey(cellPosition))
         {
@@ -96,7 +104,6 @@ public class BuildingManager : MonoBehaviour
 
             Debug.Log($"[건물 피격] 좌표 {cellPosition} | 남은 HP: {currentHp}");
 
-            // 체력이 0 이하가 되면 철거(파괴)
             if (currentHp <= 0)
             {
                 HandleDemolishRequest(cellPosition);
@@ -113,8 +120,8 @@ public class BuildingManager : MonoBehaviour
 
             if (data.category == BuildingCategory.Main)
             {
-                Debug.Log("[게임 오버] 메인 성이 파괴되었습니다!");
-                // TODO: 게임 오버 UI 팝업 띄우기 또는 게임 일시정지 등 처리
+                Debug.Log("[게임 오버] 메인 성이 파괴");
+
             }
 
             else
