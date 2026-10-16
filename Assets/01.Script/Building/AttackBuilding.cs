@@ -1,23 +1,28 @@
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class AttackBuilding : MonoBehaviour, IDamageable
 {
     private AttackBuildingData towerData;
     private Vector3Int cellPosition;
     private int currentHealth;
-
     private float cooldown = 0f;
+
+    private bool isInitialized = false;
 
     public void Initialize(AttackBuildingData data, Vector3Int pos)
     {
         towerData = data;
         cellPosition = pos;
         currentHealth = towerData.maxBuildingHp;
+        isInitialized = true;
     }
 
     void Update()
     {
+        if (!isInitialized || towerData == null)
+        {
+            return;
+        }
         if (towerData == null)
         {
             return;

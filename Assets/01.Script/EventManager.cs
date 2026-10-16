@@ -87,6 +87,9 @@ public static class EventManager
     public delegate void BuildingManagerReadyHandler(Tilemap tilemap);
     public static event BuildingManagerReadyHandler OnBuildingManagerReady;
 
+    //동기화 용
+    public static event Action OnRequestSyncBuildings;
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -112,7 +115,7 @@ public static class EventManager
     public static void TriggerBuildingRegistered(Vector3Int cellPosition) => OnBuildingRegistered?.Invoke(cellPosition);
     public static void TriggerBuildingUnregistered(Vector3Int cellPosition) => OnBuildingUnregistered?.Invoke(cellPosition);
     public static void TriggerBuildingManagerReady(Tilemap tilemap) => OnBuildingManagerReady?.Invoke(tilemap);
-
+    public static void TriggerRequestSyncBuildings() => OnRequestSyncBuildings?.Invoke();
 
 
     //건물 비용차감 

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Nor
   enemyType: 0
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 1245033993223060760, guid: 3ff9eedcec4c7164a8676f9da075ceb3, type: 3}
   maxHp: 50
   moveSpeed: 1
   attackDamage: 10

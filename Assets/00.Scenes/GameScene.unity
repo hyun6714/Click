@@ -837,6 +837,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &386888752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 386888753}
+  m_Layer: 0
+  m_Name: Main Castle Target
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &386888753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386888752}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &389122450
 GameObject:
   m_ObjectHideFlags: 0
@@ -4321,7 +4352,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -6960903314270103029, guid: 07d560c8321f8d24abafdfe1176dc428, type: 3}
+  m_Sprite: {fileID: -6960903314270103029, guid: e0568493eacadea4db9d5c701140db53, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4624,7 +4655,7 @@ GameObject:
   - component: {fileID: 906542250}
   - component: {fileID: 906542252}
   - component: {fileID: 906542251}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Building Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5720,9 +5751,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743b3aaa6a13d774dba85ca16ef777da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  mainCastleTarget: {fileID: 0}
+  mainCastleTarget: {fileID: 386888753}
   enemyPool: {fileID: 444101828}
-  buildingManager: {fileID: 0}
   waveDataList:
   - {fileID: 11400000, guid: 7c2b409cf50850648a7679f56301e81d, type: 2}
   - {fileID: 11400000, guid: 0e8902edb50b20e408f659d33ed21981, type: 2}
@@ -7730,7 +7760,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 5534413525631299974, guid: 11324441b477ebe4694af7db47cc31da, type: 3}
+  m_Sprite: {fileID: 5534413525631299974, guid: 0952ee24017b69e47bf3abbc66e0c9c6, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -7847,3 +7877,4 @@ SceneRoots:
   - {fileID: 367690989}
   - {fileID: 368639046}
   - {fileID: 1992636657}
+  - {fileID: 386888753}

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Tan
   enemyType: 3
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 4158019548717687167, guid: b620648ebb136ed4c92cfa70dcd6d83e, type: 3}
   maxHp: 500
   moveSpeed: 1
   attackDamage: 5
