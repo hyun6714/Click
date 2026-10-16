@@ -22,5 +22,5 @@ MonoBehaviour:
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
-  buildingHp: 1
-  maxHealth: 100
+  maxBuildingHp: 500
+  maxHealth: 500

@@ -18,6 +18,7 @@ public class BuildingManager : MonoBehaviour
         EventManager.OnRequestDemolish += HandleDemolishRequest;
         EventManager.OnRequestPlaceBuilding += HandlePlaceBuildingRequest;
         EventManager.OnRequestDamageBuilding += HandleDamageBuildingRequest;
+        EventManager.OnRequestSyncBuildings += HandleSyncBuildings;
     }
 
     private void OnDisable()
@@ -25,6 +26,7 @@ public class BuildingManager : MonoBehaviour
         EventManager.OnRequestDemolish -= HandleDemolishRequest;
         EventManager.OnRequestPlaceBuilding -= HandlePlaceBuildingRequest;
         EventManager.OnRequestDamageBuilding -= HandleDamageBuildingRequest;
+        EventManager.OnRequestSyncBuildings -= HandleSyncBuildings;
     }
 
     void Start()
@@ -59,6 +61,7 @@ public class BuildingManager : MonoBehaviour
                     Debug.Log($"[초기 메인 건물 등록] 좌표 {pos} | 건물: {mainBuildingData.buildingName} | HP: {mainBuildingData.maxBuildingHp}");
 
                     EventManager.TriggerRequestSpawnMainCastle(pos, mainBuildingData);
+                    EventManager.TriggerBuildingRegistered(pos);
                 }
             }
         }
@@ -71,6 +74,8 @@ public class BuildingManager : MonoBehaviour
 
         buildingHpDictionary[cellPosition] = data.maxBuildingHp;
         buildingDataDictionary[cellPosition] = data;
+
+        EventManager.TriggerBuildingRegistered(cellPosition);
 
         Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {data.maxBuildingHp}");
 
@@ -137,12 +142,41 @@ public class BuildingManager : MonoBehaviour
 
             buildingHpDictionary.Remove(cellPosition);
             buildingDataDictionary.Remove(cellPosition);
+            EventManager.TriggerBuildingUnregistered(cellPosition);
 
             Debug.Log($"[건물 철거 성공] 좌표 {cellPosition} 철거 및 데이터 삭제 완료");
         }
         else
         {
             Debug.Log("철거할 건물의 데이터가 존재하지 않습니다.");
+        }
+    }
+
+    private void HandleSyncBuildings()
+    {
+        if (buildingTilemap != null)
+        {
+            EventManager.TriggerBuildingManagerReady(buildingTilemap);
+        }
+
+        foreach (var pos in buildingHpDictionary.Keys)
+        {
+            EventManager.TriggerBuildingRegistered(pos);
+        }
+
+        foreach (var kvp in buildingDataDictionary)
+        {
+            Vector3Int pos = kvp.Key;
+            BuildingData data = kvp.Value;
+
+            if (data is AttackBuildingData attackData)
+            {
+                EventManager.TriggerRequestSpawnTower(pos, attackData);
+            }
+            else if (data.category == BuildingCategory.Main)
+            {
+                EventManager.TriggerRequestSpawnMainCastle(pos, data);
+            }
         }
     }
 }

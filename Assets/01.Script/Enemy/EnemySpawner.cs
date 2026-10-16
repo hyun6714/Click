@@ -8,7 +8,6 @@ public class EnemySpawner : MonoBehaviour
     [Header("참조 설정")]
     [SerializeField] private Transform mainCastleTarget; // 최종 목적지인 메인 성
     [SerializeField] private EnemyObjectPool enemyPool;  // 오브젝트 풀 매니저 참조
-    [SerializeField] private BuildingManager buildingManager;
 
     [Header("웨이브 및 스폰 설정")]
     [SerializeField] private List<WaveData> waveDataList; // 웨이브 목록

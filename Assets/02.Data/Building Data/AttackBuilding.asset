@@ -22,8 +22,8 @@ MonoBehaviour:
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
-  maxBuildingHp: 1
-  attackRange: 3
+  maxBuildingHp: 100
+  attackRange: 5
   attackDamage: 10
   attackSpeed: 1
   projectilePrefab: {fileID: 0}

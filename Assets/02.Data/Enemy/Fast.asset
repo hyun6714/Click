@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Fast
   enemyType: 2
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 7625555156563882916, guid: 6614a4f41ac7b2c4c9e6fcf75f07caee, type: 3}
   maxHp: 50
   moveSpeed: 2
   attackDamage: 10

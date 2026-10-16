@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   enemyName: Boss
   enemyType: 5
-  enemyPrefab: {fileID: 0}
+  enemyPrefab: {fileID: 1557501106946874412, guid: bf69ae66ce9678f46a4994b2c76236e4, type: 3}
   maxHp: 50
   moveSpeed: 2
   attackDamage: 10

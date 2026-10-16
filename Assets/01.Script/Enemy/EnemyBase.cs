@@ -22,12 +22,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         EventManager.OnBuildingRegistered += HandleBuildingRegistered;
         EventManager.OnBuildingUnregistered += HandleBuildingUnregistered;
+        EventManager.OnBuildingManagerReady += HandleBuildingManagerReady;
     }
 
     private void OnDisable()
     {
         EventManager.OnBuildingRegistered -= HandleBuildingRegistered;
         EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
+        EventManager.OnBuildingManagerReady -= HandleBuildingManagerReady;
+    }
+
+    private void HandleBuildingManagerReady(Tilemap tilemap)
+    {
+        sharedBuildingTilemap = tilemap;
     }
 
     private void HandleBuildingRegistered(Vector3Int pos)
@@ -58,6 +65,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         hasBuildingTarget = false;
 
         gameObject.SetActive(true);
+
+
+        EventManager.TriggerRequestSyncBuildings();
     }
 
     protected virtual void Update()
@@ -139,6 +149,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             currentBuildingCell = nearestPos;
             hasBuildingTarget = true;
+            Debug.Log($"[타겟 발견] 가장 가까운 건물 좌표: {currentBuildingCell} | 거리: {shortestDistance}");
         }
         else
         {
