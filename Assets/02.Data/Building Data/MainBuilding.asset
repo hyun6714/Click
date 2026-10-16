@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MainBuilding
   m_EditorClassIdentifier: Assembly-CSharp::BuildingData
   buildingName: "\uBA54\uC778 "
-  buildingTile: {fileID: 11400000, guid: 0fbe9475a08f61c4ca099eded4856d5d, type: 2}
+  buildingTile: {fileID: 11400000, guid: 14e3b6d9c77c3624091c5b0fed502cff, type: 2}
   category: 0
   buildingIcon: {fileID: 0}
   isUnlocked: 1
