@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ff985d2afb8a43449fd0aa76708c6c3, type: 3}
+  m_Name: WaveDay 30
+  m_EditorClassIdentifier: Assembly-CSharp::WaveData
+  targetDay: 30
+  spawnInfoList:
+  - enemyData: {fileID: 11400000, guid: c429e18f06f4a034fad92e4623b087ec, type: 2}
+    spawnCount: 20
+  - enemyData: {fileID: 11400000, guid: 4bf3236068cc95f40878e49a155fe95f, type: 2}
+    spawnCount: 5
+  - enemyData: {fileID: 11400000, guid: 4fefcb23101c3b4499f0a2803bc15113, type: 2}
+    spawnCount: 10
+  - enemyData: {fileID: 11400000, guid: 40989210727e8cf4d987e6d1fef2005b, type: 2}
+    spawnCount: 5
+  - enemyData: {fileID: 11400000, guid: 6d54e94f4febb514898eca59543ec031, type: 2}
+    spawnCount: 5
+  isBossWave: 1
+  bossEnemy: {fileID: 11400000, guid: d6552360cd3710f469a4c58188f67501, type: 2}

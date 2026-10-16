@@ -104,3 +104,7 @@ InitTestScene*.unity*
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+Plaintext
+# 깃허브 업로드 제외 대상 에셋
+Assets/03.Sprites/
