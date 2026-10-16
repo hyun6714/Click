@@ -109,5 +109,6 @@ Plaintext
 # 깃허브 업로드 제외 대상 에셋
 Assets/03.Sprites/
 
-git add .gitignore
-git commit -m "fix: 폰트 파일 깃 추적 제외 설정"
+# 폰트 폴더 업로드 차단
+/Assets/05.Font/
+Assets/05.Font/
