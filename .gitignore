@@ -109,5 +109,5 @@ Plaintext
 # 깃허브 업로드 제외 대상 에셋
 Assets/03.Sprites/
 
-*.ttf
-*.otf
+git add .gitignore
+git commit -m "fix: 폰트 파일 깃 추적 제외 설정"
