@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public static class EventManager
 {
@@ -63,6 +64,29 @@ public static class EventManager
     //메인성 생성
     public static event Action<Vector3Int, BuildingData> OnRequestSpawnMainCastle;
 
+    //몬스터 사망시
+    public static event Action<EnemyType, GameObject> OnRequestReturnPool;
+
+    //투사체 풀에 반납 
+    public static event Action<GameObject, GameObject> OnRequestReturnProjectile;
+
+    //투사체 생성 or 풀에서 꺼내기 
+    public static event Func<GameObject, Vector3, Transform, int, float, GameObject> OnRequestSpawnProjectile;
+
+    //건물 피격시
+    public delegate void RequestDamageBuildingHandler(Vector3Int cellPosition, int damage);
+    public static event RequestDamageBuildingHandler OnRequestDamageBuilding;
+
+    //건물 등록 알림
+    public static event Action<Vector3Int> OnBuildingRegistered;
+
+    //건물 파괴시
+    public static event Action<Vector3Int> OnBuildingUnregistered;
+
+    //타일맵 참조
+    public delegate void BuildingManagerReadyHandler(Tilemap tilemap);
+    public static event BuildingManagerReadyHandler OnBuildingManagerReady;
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -82,6 +106,15 @@ public static class EventManager
     public static void TriggerRequestSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData) => OnRequestSpawnResourceBuilding?.Invoke(cellPos, prodData);
     public static void TriggerRequestSpawnTrapBuilding(Vector3Int cellPos, TrapBuildingData trapData) => OnRequestSpawnTrapBuilding?.Invoke(cellPos, trapData);
     public static void TriggerRequestSpawnMainCastle(Vector3Int cellPos, BuildingData mainData) => OnRequestSpawnMainCastle?.Invoke(cellPos, mainData);
+    public static void TriggerRequestReturnPool(EnemyType type, GameObject enemyObj) =>OnRequestReturnPool?.Invoke(type, enemyObj);
+    public static void TriggerRequestReturnProjectile(GameObject prefabRef, GameObject projectileObj) => OnRequestReturnProjectile?.Invoke(prefabRef, projectileObj);
+    public static void TriggerRequestDamageBuilding(Vector3Int cellPosition, int damage) => OnRequestDamageBuilding?.Invoke(cellPosition, damage);
+    public static void TriggerBuildingRegistered(Vector3Int cellPosition) => OnBuildingRegistered?.Invoke(cellPosition);
+    public static void TriggerBuildingUnregistered(Vector3Int cellPosition) => OnBuildingUnregistered?.Invoke(cellPosition);
+    public static void TriggerBuildingManagerReady(Tilemap tilemap) => OnBuildingManagerReady?.Invoke(tilemap);
+
+
+
     //건물 비용차감 
     public static bool RequestUseCurrency(CurrencyType type, int value)
     {
@@ -101,5 +134,9 @@ public static class EventManager
         return false;
     }
 
+    public static GameObject TriggerRequestSpawnProjectile(GameObject prefab, Vector3 spawnPos, Transform target, int damage, float speed)
+    {
+        return OnRequestSpawnProjectile?.Invoke(prefab, spawnPos, target, damage, speed);
+    }
 }
 
