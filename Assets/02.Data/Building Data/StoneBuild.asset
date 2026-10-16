@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StoneBuild
   m_EditorClassIdentifier: Assembly-CSharp::ProductionBuildingData
   buildingName: "\uCC44\uC11D\uC7A5"
-  buildingTile: {fileID: 11400000, guid: 297d4590f3504b347b5e847be6561a50, type: 2}
+  buildingTile: {fileID: 11400000, guid: 897a50ac9525e1f459fdfbda9c4bd508, type: 2}
   category: 1
   buildingIcon: {fileID: 0}
   isUnlocked: 1
@@ -22,7 +22,7 @@ MonoBehaviour:
   rockCost: 5
   sizeWidth: 2
   sizeHeight: 2
-  buildingHp: 100
+  maxBuildingHp: 1
   targetResourceType: 1
   gatherInterval: 2
   gatherRange: 5
