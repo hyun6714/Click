@@ -15,7 +15,6 @@ MonoBehaviour:
   buildingName: "\uACF5\uACA9\uD14C\uC2A4\uD2B8"
   buildingTile: {fileID: 11400000, guid: 0697a6ea931983142acbca21b50fd3e5, type: 2}
   category: 2
-  buildingIcon: {fileID: 0}
   isUnlocked: 1
   unlockCost: 0
   treeCost: 0
@@ -24,7 +23,7 @@ MonoBehaviour:
   sizeHeight: 2
   maxBuildingHp: 100
   attackRange: 5
-  attackDamage: 10
+  attackDamage: 50
   attackSpeed: 1
   projectilePrefab: {fileID: 0}
   towerPrefab: {fileID: 3752268226886733323, guid: 5c34e31e538e26a439786c60c3235c14, type: 3}

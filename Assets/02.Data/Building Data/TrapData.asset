@@ -15,7 +15,6 @@ MonoBehaviour:
   buildingName: "\uAC00\uC2DC"
   buildingTile: {fileID: 0}
   category: 3
-  buildingIcon: {fileID: 0}
   isUnlocked: 0
   unlockCost: 0
   treeCost: 0
@@ -23,6 +22,6 @@ MonoBehaviour:
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 1
-  damage: 30
+  damage: 50
   triggerRange: 3
   trapPrefab: {fileID: 9222285491078736110, guid: d08510aedc4759c4a8a266b601c465b1, type: 3}

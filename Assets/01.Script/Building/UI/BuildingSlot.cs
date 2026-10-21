@@ -30,11 +30,6 @@ public class BuildingSlot : MonoBehaviour
             costText.text = $"자원: 나무 {data.treeCost}개/ 돌 {data.rockCost}개";
         }
             
-        if (iconImage != null && data.buildingTile != null)
-        {
-            iconImage.sprite = data.buildingIcon;
-        }
-
         if (slotButton != null)
         {
             slotButton.onClick.RemoveAllListeners();

@@ -15,7 +15,13 @@ public class WaveData : ScriptableObject
 
     public List<EnemySpawnInfo> spawnInfoList;
 
+    [Header("웨이브 보상")]
+    public int rewardGold = 100;
+
     [Header("보스 설정")]
     public bool isBossWave;
     public EnemyData bossEnemy;
+
+    [Header("클리어 설정")]
+    public bool isClearWave;
 }

@@ -26,3 +26,4 @@ MonoBehaviour:
     spawnCount: 5
   isBossWave: 1
   bossEnemy: {fileID: 11400000, guid: d6552360cd3710f469a4c58188f67501, type: 2}
+  isClearWave: 1

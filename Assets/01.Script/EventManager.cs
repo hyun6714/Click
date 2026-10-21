@@ -61,11 +61,11 @@ public static class EventManager
     //함정 생성
     public static event Action<Vector3Int, TrapBuildingData> OnRequestSpawnTrapBuilding;
 
-    //메인성 생성
-    public static event Action<Vector3Int, BuildingData> OnRequestSpawnMainCastle;
-
-    //몬스터 사망시
+    //몬스터 사망 시
     public static event Action<EnemyType, GameObject> OnRequestReturnPool;
+
+    //웨이브 클리어 시
+    public static Action<WaveData> OnWaveCleared;
 
     //투사체 풀에 반납 
     public static event Action<GameObject, GameObject> OnRequestReturnProjectile;
@@ -73,14 +73,14 @@ public static class EventManager
     //투사체 생성 or 풀에서 꺼내기 
     public static event Func<GameObject, Vector3, Transform, int, float, GameObject> OnRequestSpawnProjectile;
 
-    //건물 피격시
+    //건물 피격 시
     public delegate void RequestDamageBuildingHandler(Vector3Int cellPosition, int damage);
     public static event RequestDamageBuildingHandler OnRequestDamageBuilding;
 
     //건물 등록 알림
     public static event Action<Vector3Int> OnBuildingRegistered;
 
-    //건물 파괴시
+    //건물 파괴 시
     public static event Action<Vector3Int> OnBuildingUnregistered;
 
     //타일맵 참조
@@ -89,6 +89,13 @@ public static class EventManager
 
     //동기화 용
     public static event Action OnRequestSyncBuildings;
+
+    //게임 오버
+    public static event Action OnCastleDestroyed;
+
+    //게임 클리어
+    public static event Action OnGameCleared;
+
 
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
@@ -108,7 +115,6 @@ public static class EventManager
     public static void TriggerRequestSpawnTower(Vector3Int cellPos, AttackBuildingData attackData) => OnRequestSpawnTower?.Invoke(cellPos, attackData);
     public static void TriggerRequestSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData) => OnRequestSpawnResourceBuilding?.Invoke(cellPos, prodData);
     public static void TriggerRequestSpawnTrapBuilding(Vector3Int cellPos, TrapBuildingData trapData) => OnRequestSpawnTrapBuilding?.Invoke(cellPos, trapData);
-    public static void TriggerRequestSpawnMainCastle(Vector3Int cellPos, BuildingData mainData) => OnRequestSpawnMainCastle?.Invoke(cellPos, mainData);
     public static void TriggerRequestReturnPool(EnemyType type, GameObject enemyObj) =>OnRequestReturnPool?.Invoke(type, enemyObj);
     public static void TriggerRequestReturnProjectile(GameObject prefabRef, GameObject projectileObj) => OnRequestReturnProjectile?.Invoke(prefabRef, projectileObj);
     public static void TriggerRequestDamageBuilding(Vector3Int cellPosition, int damage) => OnRequestDamageBuilding?.Invoke(cellPosition, damage);
@@ -116,6 +122,8 @@ public static class EventManager
     public static void TriggerBuildingUnregistered(Vector3Int cellPosition) => OnBuildingUnregistered?.Invoke(cellPosition);
     public static void TriggerBuildingManagerReady(Tilemap tilemap) => OnBuildingManagerReady?.Invoke(tilemap);
     public static void TriggerRequestSyncBuildings() => OnRequestSyncBuildings?.Invoke();
+    public static void TriggerCastleDestroyed() => OnCastleDestroyed?.Invoke();
+    public static void TriggerGameCleared() => OnGameCleared?.Invoke();
 
 
     //건물 비용차감 

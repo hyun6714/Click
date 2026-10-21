@@ -15,12 +15,11 @@ MonoBehaviour:
   buildingName: "\uBC14\uB9AC\uAC8C\uC774\uD2B8"
   buildingTile: {fileID: 0}
   category: 1
-  buildingIcon: {fileID: 0}
   isUnlocked: 0
   unlockCost: 0
   treeCost: 0
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
-  maxBuildingHp: 500
-  maxHealth: 500
+  maxBuildingHp: 1000
+  maxHealth: 1000

@@ -149,7 +149,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             currentBuildingCell = nearestPos;
             hasBuildingTarget = true;
-            Debug.Log($"[타겟 발견] 가장 가까운 건물 좌표: {currentBuildingCell} | 거리: {shortestDistance}");
         }
         else
         {
@@ -193,9 +192,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     protected virtual void Die()
     {
         EventManager.CurrencyAdded(CurrencyType.Gold, enemyData.rewardGold);
+        EventManager.TriggerRequestReturnPool(enemyData.enemyType, gameObject);
 
         gameObject.SetActive(false);
-
-        EventManager.TriggerRequestReturnPool(enemyData.enemyType, gameObject);
     }
 }

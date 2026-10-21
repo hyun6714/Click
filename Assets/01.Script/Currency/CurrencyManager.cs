@@ -71,7 +71,15 @@ public class CurrencyManager : MonoBehaviour
             return;
         }
 
-        currentCurrencies[type] = GetAmount(type) + amount;
+        int current = GetAmount(type);
+        int newAmount = current + amount;
+
+        if (type == CurrencyType.Click)
+        {
+            newAmount = Mathf.Min(newAmount, maxClickLimit);
+        }
+
+        currentCurrencies[type] = newAmount;
 
         EventManager.CurrencyChanged(type, currentCurrencies[type]);
     }

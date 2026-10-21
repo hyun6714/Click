@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyName: Boss
   enemyType: 5
   enemyPrefab: {fileID: 1557501106946874412, guid: bf69ae66ce9678f46a4994b2c76236e4, type: 3}
-  maxHp: 50
-  moveSpeed: 2
-  attackDamage: 10
+  maxHp: 1000
+  moveSpeed: 0.5
+  attackDamage: 50
   attackSpeed: 1
-  attackRange: 0.5
+  attackRange: 5
   rewardGold: 10
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10
