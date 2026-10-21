@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -13,14 +12,20 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private List<WaveData> waveDataList; // 웨이브 목록
     [SerializeField] private Transform[] spawnPoints;
 
+    private int remainingEnemyCount = 0;
+    private WaveData currentActiveWave;
+    private bool isWaveInProgress = false;
+
     private void OnEnable()
     {
         EventManager.OnDayChanged += HandleDayChanged;
+        EventManager.OnRequestReturnPool += HandleEnemyReturnPool;
     }
 
     private void OnDisable()
     {
         EventManager.OnDayChanged -= HandleDayChanged;
+        EventManager.OnRequestReturnPool -= HandleEnemyReturnPool;
     }
 
     private void HandleDayChanged(int day)
@@ -41,6 +46,25 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator SpawnSpecificWaveRoutine(WaveData wave)
     {
+        isWaveInProgress = true;
+        currentActiveWave = wave;
+
+        int totalSpawnCount = 0;
+        if (wave.spawnInfoList != null)
+        {
+            foreach (var info in wave.spawnInfoList)
+            {
+                totalSpawnCount += info.spawnCount;
+            }
+        }
+
+        if (wave.isBossWave && wave.bossEnemy != null)
+        {
+            totalSpawnCount += 1;
+        }
+
+        remainingEnemyCount = totalSpawnCount;
+
         Debug.Log($"[스포너] {wave.targetDay}일차 웨이브 시작");
 
         //일반 
@@ -78,11 +102,46 @@ public class EnemySpawner : MonoBehaviour
             Vector3 spawnPos = spawnPoints[randomSpawnIndex].position;
 
             GameObject bossObj = enemyPool.GetEnemy(wave.bossEnemy, spawnPos, mainCastleTarget);
-            if (bossObj.TryGetComponent<EnemyBase>(out var enemyScript))
+            if (bossObj.TryGetComponent<BossEnemy>(out var bossScript))
+            {
+                bossScript.InitializeBoss(wave.bossEnemy, spawnPos, mainCastleTarget);
+                Debug.Log($"[스포너] 보스 [{wave.bossEnemy.enemyName}] 출현 (클리어 보스 여부: {wave.isClearWave})");
+            }
+            else if (bossObj.TryGetComponent<EnemyBase>(out var enemyScript))
             {
                 enemyScript.Initialize(wave.bossEnemy, spawnPos, mainCastleTarget);
                 Debug.Log($"[스포너] 보스 [{wave.bossEnemy.enemyName}] 출현");
             }
+        }
+    }
+
+    private void HandleEnemyReturnPool(EnemyType enemyType, GameObject enemyObj)
+    {
+        if (!isWaveInProgress)
+        {
+            return;
+        }
+
+        remainingEnemyCount--;
+        Debug.Log($"[스포너] 적 처치(풀 반환)! 남은 적: {remainingEnemyCount}마리");
+
+        if (remainingEnemyCount <= 0)
+        {
+            CompleteCurrentWave();
+        }
+    }
+
+    private void CompleteCurrentWave()
+    {
+        isWaveInProgress = false;
+        Debug.Log($"[스포너] {currentActiveWave.targetDay}일차 웨이브 클리어 보상 골드: {currentActiveWave.rewardGold}");
+
+        EventManager.OnWaveCleared?.Invoke(currentActiveWave);
+
+        if (currentActiveWave.isClearWave)
+        {
+            Debug.Log("[스포너] 최종 클리어 웨이브 달성");
+            EventManager.TriggerGameCleared();
         }
     }
 

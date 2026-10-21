@@ -19,6 +19,7 @@ public class BuildingManager : MonoBehaviour
         EventManager.OnRequestPlaceBuilding += HandlePlaceBuildingRequest;
         EventManager.OnRequestDamageBuilding += HandleDamageBuildingRequest;
         EventManager.OnRequestSyncBuildings += HandleSyncBuildings;
+        EventManager.OnCastleDestroyed += HandleCastleDestroyed;
     }
 
     private void OnDisable()
@@ -27,12 +28,12 @@ public class BuildingManager : MonoBehaviour
         EventManager.OnRequestPlaceBuilding -= HandlePlaceBuildingRequest;
         EventManager.OnRequestDamageBuilding -= HandleDamageBuildingRequest;
         EventManager.OnRequestSyncBuildings -= HandleSyncBuildings;
+        EventManager.OnCastleDestroyed -= HandleCastleDestroyed;
     }
 
     void Start()
     {
         EventManager.TriggerBuildingManagerReady(buildingTilemap);
-        RegisterInitialBuildings();
     }
 
     public List<Vector3Int> GetAllBuildingPositions()
@@ -40,32 +41,6 @@ public class BuildingManager : MonoBehaviour
         return new List<Vector3Int>(buildingHpDictionary.Keys);
     }
 
-    // 게임 시작 시 메인 건물 자동 등록
-    private void RegisterInitialBuildings()
-    {
-        if (buildingTilemap == null || mainBuildingData == null)
-        {
-            Debug.LogWarning("타일맵 or 메인건물 데이터 null");
-            return;
-        }
-
-        foreach (var pos in buildingTilemap.cellBounds.allPositionsWithin)
-        {
-            if (buildingTilemap.HasTile(pos))
-            {
-                if (!buildingHpDictionary.ContainsKey(pos))
-                {
-                    buildingHpDictionary[pos] = mainBuildingData.maxBuildingHp;
-                    buildingDataDictionary[pos] = mainBuildingData;
-
-                    Debug.Log($"[초기 메인 건물 등록] 좌표 {pos} | 건물: {mainBuildingData.buildingName} | HP: {mainBuildingData.maxBuildingHp}");
-
-                    EventManager.TriggerRequestSpawnMainCastle(pos, mainBuildingData);
-                    EventManager.TriggerBuildingRegistered(pos);
-                }
-            }
-        }
-    }
 
     //건물 설치 신호 받을 시 설치 
     private void HandlePlaceBuildingRequest(Vector3Int cellPosition, BuildingData data)
@@ -79,11 +54,7 @@ public class BuildingManager : MonoBehaviour
 
         Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {data.maxBuildingHp}");
 
-        if (data.category == BuildingCategory.Main)
-        {
-            EventManager.TriggerRequestSpawnMainCastle(cellPosition, data);
-        }
-        else if (data is AttackBuildingData attackData)
+        if (data is AttackBuildingData attackData)
         {
             EventManager.TriggerRequestSpawnTower(cellPosition, attackData);
         }
@@ -127,6 +98,7 @@ public class BuildingManager : MonoBehaviour
             {
                 Debug.Log("[게임 오버] 메인 성이 파괴");
 
+                EventManager.TriggerCastleDestroyed();
             }
 
             else
@@ -173,10 +145,17 @@ public class BuildingManager : MonoBehaviour
             {
                 EventManager.TriggerRequestSpawnTower(pos, attackData);
             }
-            else if (data.category == BuildingCategory.Main)
-            {
-                EventManager.TriggerRequestSpawnMainCastle(pos, data);
-            }
+        }
+    }
+
+    private void HandleCastleDestroyed()
+    {
+        buildingHpDictionary.Clear();
+        buildingDataDictionary.Clear();
+
+        if (buildingTilemap != null)
+        {
+            buildingTilemap.ClearAllTiles();
         }
     }
 }

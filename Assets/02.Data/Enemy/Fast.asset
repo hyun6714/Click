@@ -15,10 +15,10 @@ MonoBehaviour:
   enemyName: Fast
   enemyType: 2
   enemyPrefab: {fileID: 7625555156563882916, guid: 6614a4f41ac7b2c4c9e6fcf75f07caee, type: 3}
-  maxHp: 50
+  maxHp: 150
   moveSpeed: 2
   attackDamage: 10
-  attackSpeed: 1
+  attackSpeed: 1.5
   attackRange: 0.5
   rewardGold: 10
   projectilePrefab: {fileID: 0}

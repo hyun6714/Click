@@ -15,7 +15,7 @@ MonoBehaviour:
   enemyName: Des
   enemyType: 4
   enemyPrefab: {fileID: 7696659978494140014, guid: abda389003c397643b414709c2ae8a68, type: 3}
-  maxHp: 50
+  maxHp: 300
   moveSpeed: 2
   attackDamage: 10
   attackSpeed: 1

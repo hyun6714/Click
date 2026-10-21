@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyName: Nor
   enemyType: 0
   enemyPrefab: {fileID: 1245033993223060760, guid: 3ff9eedcec4c7164a8676f9da075ceb3, type: 3}
-  maxHp: 50
-  moveSpeed: 1
+  maxHp: 200
+  moveSpeed: 2
   attackDamage: 10
   attackSpeed: 1
-  attackRange: 0.5
+  attackRange: 1
   rewardGold: 10
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10

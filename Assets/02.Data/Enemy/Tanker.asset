@@ -16,10 +16,10 @@ MonoBehaviour:
   enemyType: 3
   enemyPrefab: {fileID: 4158019548717687167, guid: b620648ebb136ed4c92cfa70dcd6d83e, type: 3}
   maxHp: 500
-  moveSpeed: 1
+  moveSpeed: 2
   attackDamage: 5
   attackSpeed: 1
-  attackRange: 1
+  attackRange: 0.5
   rewardGold: 10
   projectilePrefab: {fileID: 0}
   projectileSpeed: 10

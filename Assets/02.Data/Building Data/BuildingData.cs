@@ -15,7 +15,6 @@ public class BuildingData : ScriptableObject
     public string buildingName;       // 건물의 이름
     public TileBase buildingTile;     // 타일맵 에셋
     public BuildingCategory category;
-    public Sprite buildingIcon;
 
     [Header("해금 설정")]
     public bool isUnlocked = false;
