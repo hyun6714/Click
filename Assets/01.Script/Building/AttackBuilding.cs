@@ -9,6 +9,10 @@ public class AttackBuilding : MonoBehaviour, IDamageable
 
     private bool isInitialized = false;
 
+    public AttackBuildingData TowerData => towerData;
+    public int CurrentHealth => currentHealth;
+    public Vector3Int CellPosition => cellPosition;
+
     public void Initialize(AttackBuildingData data, Vector3Int pos)
     {
         towerData = data;

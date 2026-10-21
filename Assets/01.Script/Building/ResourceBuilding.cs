@@ -11,12 +11,16 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
     private int currentHealth;
 
+    public ProductionBuildingData BuildingData => buildingData;
+    public int CurrentHealth => currentHealth;
+    public Vector3Int CellPosition => cellPosition;
+
     public void Initialize(ProductionBuildingData data, Vector3Int pos, Tilemap treeMap, Tilemap stoneMap)
     {
         buildingData = data;
         cellPosition = pos;
         currentHealth = buildingData.maxBuildingHp;
-        
+
         treeTilemap = treeMap;
         stoneTilemap = stoneMap;
 
@@ -78,22 +82,33 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
             return;
         }
 
-        // 주변 범위(range) 안을 탐색
-        for (int x = -range; x <= range; x++)
+        Vector3 buildingCenterWorld = targetTilemap.GetCellCenterWorld(cellPosition);
+        int searchRange = Mathf.CeilToInt(range * 2f);
+
+        for (int x = -searchRange; x <= searchRange; x++)
         {
-            for (int y = -range; y <= range; y++)
+            for (int y = -searchRange; y <= searchRange; y++)
             {
                 Vector3Int targetPos = cellPosition + new Vector3Int(x, y, 0);
 
-                // 해당 위치에 자원 타일이 존재하면 파괴하고 자원 획득
                 if (targetTilemap.HasTile(targetPos))
                 {
-                    targetTilemap.SetTile(targetPos, null);
+                    Vector3 targetCenterWorld = targetTilemap.GetCellCenterWorld(targetPos);
 
-                    EventManager.CurrencyAdded(rewardType, 1);
-                    Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} (+1 {rewardType})");
+                    float dx = targetCenterWorld.x - buildingCenterWorld.x;
+                    float dy = targetCenterWorld.y - buildingCenterWorld.y;
 
-                    return;
+                    float ellipticalValue = (dx * dx) / (range * range) + (dy * dy) / ((range * 0.5f) * (range * 0.5f));
+
+                    if (ellipticalValue <= 1.0f)
+                    {
+                        targetTilemap.SetTile(targetPos, null);
+
+                        EventManager.CurrencyAdded(rewardType, 1);
+                        Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} (+1 {rewardType})");
+
+                        return;
+                    }
                 }
             }
         }

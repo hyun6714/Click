@@ -13,6 +13,8 @@ public class ProductionBuildingData : BuildingData
     public TargetResourceType targetResourceType; // 자원 종류
     public float gatherInterval = 2f; // 채집 주기 (초)
     public int gatherRange = 5; // 채집 범위 (칸)
+    private Vector3Int cellPosition;
+    private int currentHealth;
 
     public GameObject productionPrefab;
 }
