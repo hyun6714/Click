@@ -17,13 +17,13 @@ MonoBehaviour:
   category: 2
   isUnlocked: 1
   unlockCost: 0
-  treeCost: 0
-  rockCost: 0
+  treeCost: 5
+  rockCost: 5
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 100
   attackRange: 5
-  attackDamage: 50
+  attackDamage: 10
   attackSpeed: 1
   projectilePrefab: {fileID: 0}
   towerPrefab: {fileID: 3752268226886733323, guid: 5c34e31e538e26a439786c60c3235c14, type: 3}

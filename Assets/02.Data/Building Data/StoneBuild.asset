@@ -17,8 +17,8 @@ MonoBehaviour:
   category: 1
   isUnlocked: 1
   unlockCost: 0
-  treeCost: 1
-  rockCost: 1
+  treeCost: 2
+  rockCost: 2
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 300
