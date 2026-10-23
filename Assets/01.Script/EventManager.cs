@@ -33,6 +33,12 @@ public static class EventManager
     //건물 설치 팝업
     public static event Action<bool> OnBuilAddPopupToggle;
 
+    //건물 해금 시 상점 UI 갱신
+    public static event Action OnBuildingUnlockUpdated;
+
+    //상점 팝업 토클 
+    public static event Action<bool> OnUnlockShopPopupToggle;
+
     //특정 좌표 건물 철거 
     public delegate void RequestDemolishHandler(Vector3Int cellPosition);
     public static event RequestDemolishHandler OnRequestDemolish;
@@ -108,6 +114,8 @@ public static class EventManager
     public static void TriggerDemolishButtonClicked() => OnDemolishButtonClicked?.Invoke();
     public static void TriggerBuildMenuPopupToggle() => OnBuildMenuPopupToggle?.Invoke();
     public static void TriggerBuildAddPopupToggle(bool isOpen) => OnBuilAddPopupToggle?.Invoke(isOpen);
+    public static void TriggerBuildingUnlockUpdated() => OnBuildingUnlockUpdated?.Invoke();
+    public static void TriggerUnlockShopPopupToggle(bool isOpen) => OnUnlockShopPopupToggle?.Invoke(isOpen);
     public static void TriggerRequestDemolish(Vector3Int cellPosition) => OnRequestDemolish?.Invoke(cellPosition);
     public static void TriggerDayChanged(int day) => OnDayChanged?.Invoke(day);
     public static void TriggerTimeDetailedChanged(int day, float hour, float minute, float second) => OnTimeDetailedChanged?.Invoke(day, hour, minute, second);
