@@ -15,13 +15,12 @@ MonoBehaviour:
   buildingName: "\uBC8C\uBAA9\uC7A5"
   buildingTile: {fileID: 11400000, guid: 0697a6ea931983142acbca21b50fd3e5, type: 2}
   category: 1
-  isUnlocked: 1
-  unlockCost: 0
   treeCost: 2
   rockCost: 2
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 300
+  unlockData: {fileID: 11400000, guid: 99f272390aae7c44cb846f61ed56fb68, type: 2}
   targetResourceType: 0
   gatherInterval: 2
   gatherRange: 5
