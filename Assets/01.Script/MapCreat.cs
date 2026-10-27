@@ -9,6 +9,7 @@ public class MapCreat : MonoBehaviour
     public Tilemap stoneTilemap; // 돌 타일맵 연결
     public Tilemap treeTilemap; // 나무 타일맵 연결
     public Tilemap buildingTilemap;
+    public Tilemap fogTilemap;
     public Tile transparentBlockingTile;
 
     [Header("사용할 타일 asset")]
@@ -16,7 +17,10 @@ public class MapCreat : MonoBehaviour
     public TileBase stoneTile; // 사용할 돌 타일
     public TileBase treeTile;
     public TileBase mainBuildingTile;
+    public TileBase fogTile;
 
+    [Header("안개 설정")]
+    public int initialFogRevealRadius = 5;
 
     [Header("메인 성 설정")]
     public Vector3Int mainBuildingCellPos = Vector3Int.zero;
@@ -45,6 +49,7 @@ public class MapCreat : MonoBehaviour
     [Range(0f, 1f)]
     public float treeDensity = 0.0f;
 
+
     void Start()
     {
         GenerateMap();
@@ -56,7 +61,16 @@ public class MapCreat : MonoBehaviour
         groundTilemap.ClearAllTiles();
         stoneTilemap.ClearAllTiles();
         treeTilemap.ClearAllTiles();
-        if (buildingTilemap != null) buildingTilemap.ClearAllTiles();
+
+        if (buildingTilemap != null)
+        {
+            buildingTilemap.ClearAllTiles();
+        }
+
+        if (fogTilemap != null)
+        {
+            fogTilemap.ClearAllTiles();
+        }
 
         int halfW = width / 2;
         int halfH = height / 2;
@@ -67,6 +81,9 @@ public class MapCreat : MonoBehaviour
         TileBase[] groundTiles = new TileBase[totalGroundCount];
         int gIndex = 0;
 
+        List<Vector3Int> fogPositionsList = new List<Vector3Int>();
+        List<TileBase> fogTilesList = new List<TileBase>();
+
         for (int x = -halfW; x <= halfW; x++)
         {
             for (int y = -halfH; y <= halfH; y++)
@@ -74,10 +91,29 @@ public class MapCreat : MonoBehaviour
                 groundPositions[gIndex] = new Vector3Int(x, y, 0);
                 groundTiles[gIndex] = groundTile;
                 gIndex++;
+
+                if (fogTile != null)
+                {
+                    fogPositionsList.Add(new Vector3Int(x, y, 0));
+                    fogTilesList.Add(fogTile);
+                }
             }
         }
         groundTilemap.SetTiles(groundPositions, groundTiles);
 
+        if (fogTilemap != null && fogPositionsList.Count > 0)
+        {
+            fogTilemap.SetTiles(fogPositionsList.ToArray(), fogTilesList.ToArray());
+
+            for (int x = -initialFogRevealRadius; x <= initialFogRevealRadius; x++)
+            {
+                for (int y = -initialFogRevealRadius; y <= initialFogRevealRadius; y++)
+                {
+                    Vector3Int clearPos = new Vector3Int(mainBuildingCellPos.x + x, mainBuildingCellPos.y + y, 0);
+                    fogTilemap.SetTile(clearPos, null);
+                }
+            }
+        }
 
         HashSet<Vector3Int> forbiddenForTrees = new HashSet<Vector3Int>();
 

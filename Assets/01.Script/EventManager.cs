@@ -102,6 +102,10 @@ public static class EventManager
     //°ÔÀÓ Å¬¸®¾î
     public static event Action OnGameCleared;
 
+    //³¯¾¾ ¹Ù²ð ‹š
+    public static event Action<WeatherType> OnWeatherChanged;
+
+    public static Action<GameMode> OnGameModeChanged;
 
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
@@ -156,6 +160,16 @@ public static class EventManager
     public static GameObject TriggerRequestSpawnProjectile(GameObject prefab, Vector3 spawnPos, Transform target, int damage, float speed)
     {
         return OnRequestSpawnProjectile?.Invoke(prefab, spawnPos, target, damage, speed);
+    }
+
+    public static void TriggerWeatherChanged(WeatherType newWeather)
+    {
+        OnWeatherChanged?.Invoke(newWeather);
+    }
+
+    public static void ChangeGameMode(GameMode newMode)
+    {
+        OnGameModeChanged?.Invoke(newMode);
     }
 }
 

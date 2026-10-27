@@ -96,6 +96,9 @@ public class BuildingPlacer : MonoBehaviour
     {
         currentBuildingToPlace = selectedBuilding;
         Debug.Log($"설치 대기 중: {currentBuildingToPlace.buildingName}");
+
+        EventManager.ChangeGameMode(GameMode.Build);
+
         EventManager.TriggerBuildAddPopupToggle(true);
     }
 
@@ -111,6 +114,8 @@ public class BuildingPlacer : MonoBehaviour
 
         currentBuildingToPlace = availableBuildings[index];
         Debug.Log($"건물 선택됨: {currentBuildingToPlace.buildingName} (인덱스: {index})");
+
+        EventManager.ChangeGameMode(GameMode.Build);
     }
 
     void TryPlaceBuilding()
@@ -201,6 +206,8 @@ public class BuildingPlacer : MonoBehaviour
     {
         currentBuildingToPlace = null;
         Debug.Log("설치 모드 OFF");
+
+        EventManager.ChangeGameMode(GameMode.Normal);
         EventManager.TriggerBuildAddPopupToggle(false);
     }
 

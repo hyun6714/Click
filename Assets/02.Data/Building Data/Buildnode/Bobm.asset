@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1745478bc65d5e41bf0f5399769e5d4, type: 3}
+  m_Name: Bobm
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
+  nodeName: "\uD3ED\uD0C4"
+  targetBuildingData: {fileID: 11400000, guid: 662f8c0108782d94f97fcda211699893, type: 2}
+  icon: {fileID: 0}
+  unlockCost: 100
+  isUnlocked: 0
+  isAvailable: 0
+  isDefaultStartNode: 0
+  upNode: {fileID: 11400000, guid: a43d03dff95f2f54da25e5139edd06ad, type: 2}
+  downNode: {fileID: 0}
+  leftNode: {fileID: 0}
+  rightNode: {fileID: 0}

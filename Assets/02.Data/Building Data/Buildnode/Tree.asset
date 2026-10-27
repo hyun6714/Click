@@ -21,5 +21,5 @@ MonoBehaviour:
   isDefaultStartNode: 1
   upNode: {fileID: 11400000, guid: f074021f2977d144b9e5242b68fbd624, type: 2}
   downNode: {fileID: 0}
-  leftNode: {fileID: 0}
+  leftNode: {fileID: 11400000, guid: a43d03dff95f2f54da25e5139edd06ad, type: 2}
   rightNode: {fileID: 11400000, guid: 982b1d78526c5ca4faa30ddfd4168fd0, type: 2}
