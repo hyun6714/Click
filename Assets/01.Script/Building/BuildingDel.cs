@@ -27,12 +27,14 @@ public class BuildingDel : MonoBehaviour
     {
         EventManager.OnDemolishButtonClicked += ToggleDemolishMode;
         EventManager.OnBuildingSelected += HandleBuildingSelected;
+        EventManager.OnGameModeChanged += HandleGameModeChanged;
     }
 
     private void OnDisable()
     {
         EventManager.OnDemolishButtonClicked -= ToggleDemolishMode;
         EventManager.OnBuildingSelected -= HandleBuildingSelected;
+        EventManager.OnGameModeChanged -= HandleGameModeChanged;
     }
 
     void Update()
@@ -75,6 +77,9 @@ public class BuildingDel : MonoBehaviour
         isDemolishMode = !isDemolishMode;
         Debug.Log(isDemolishMode ? "철거 모드 ON" : "철거 모드 OFF");
 
+        GameMode currentMode = isDemolishMode ? GameMode.Del : GameMode.Normal;
+        EventManager.ChangeGameMode(currentMode);
+
         if (!isDemolishMode)
         {
             EventManager.TriggerBuildMenuPopupToggle();
@@ -85,8 +90,18 @@ public class BuildingDel : MonoBehaviour
     {
         if (isDemolishMode)
         {
-            ToggleDemolishMode();
+            isDemolishMode = false;
             Debug.Log("건물 선택으로 인해 철거 모드 해제");
+        }
+    }
+
+    private void HandleGameModeChanged(GameMode newMode)
+    {
+        if (newMode != GameMode.Del && isDemolishMode)
+        {
+            isDemolishMode = false;
+            Debug.Log("모드 전환되어 철거 모드 자동 해제");
+            EventManager.TriggerBuildMenuPopupToggle();
         }
     }
 }

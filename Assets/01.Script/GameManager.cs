@@ -1,11 +1,21 @@
 using UnityEngine;
 
+public enum GameMode
+{
+    Normal,
+    Build,
+    Del
+}
+
+
 public class GameManager : MonoBehaviour
 {
     [Header("UI Popups")]
     [SerializeField] private GameObject gameClearPopup;
     [SerializeField] private GameObject gameOverPopup;
     [SerializeField] private GameObject dimObject;
+
+    public GameMode CurrentMode { get; private set; } = GameMode.Normal;
 
     private void OnEnable()
     {
