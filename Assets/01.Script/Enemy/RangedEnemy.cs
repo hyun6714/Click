@@ -14,11 +14,13 @@ public class RangedEnemy : EnemyBase
 
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
 
+        int finalDamage = GetCurrentAttackDamage();
+
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
             Vector3 buildingWorldPos = sharedBuildingTilemap.CellToWorld(currentBuildingCell) + new Vector3(0.5f, 0.5f, 0f);
 
-            EventManager.TriggerRequestDamageBuilding(currentBuildingCell, enemyData.attackDamage);
+            EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
             Debug.Log($"[{enemyData.enemyName}] 타일 건물 {currentBuildingCell}에 원거리 공격");
         }
 
@@ -26,7 +28,7 @@ public class RangedEnemy : EnemyBase
             enemyData.projectilePrefab,
             spawnPos,
             target,
-            enemyData.attackDamage,
+            finalDamage, 
             enemyData.projectileSpeed
         );
 

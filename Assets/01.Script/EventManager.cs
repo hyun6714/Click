@@ -67,6 +67,9 @@ public static class EventManager
     //함정 생성
     public static event Action<Vector3Int, TrapBuildingData> OnRequestSpawnTrapBuilding;
 
+    //화로 생성
+    public static event Action<Vector3Int, FirepitData> OnRequestSpawnFirepit;
+
     //몬스터 사망 시
     public static event Action<EnemyType, GameObject> OnRequestReturnPool;
 
@@ -107,6 +110,8 @@ public static class EventManager
 
     public static Action<GameMode> OnGameModeChanged;
 
+    public static Func<Vector3, bool> OnCheckPositionFogged;
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -127,6 +132,7 @@ public static class EventManager
     public static void TriggerRequestSpawnTower(Vector3Int cellPos, AttackBuildingData attackData) => OnRequestSpawnTower?.Invoke(cellPos, attackData);
     public static void TriggerRequestSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData) => OnRequestSpawnResourceBuilding?.Invoke(cellPos, prodData);
     public static void TriggerRequestSpawnTrapBuilding(Vector3Int cellPos, TrapBuildingData trapData) => OnRequestSpawnTrapBuilding?.Invoke(cellPos, trapData);
+    public static void TriggerRequestSpawnFirepit(Vector3Int pos, FirepitData data) => OnRequestSpawnFirepit?.Invoke(pos, data);
     public static void TriggerRequestReturnPool(EnemyType type, GameObject enemyObj) =>OnRequestReturnPool?.Invoke(type, enemyObj);
     public static void TriggerRequestReturnProjectile(GameObject prefabRef, GameObject projectileObj) => OnRequestReturnProjectile?.Invoke(prefabRef, projectileObj);
     public static void TriggerRequestDamageBuilding(Vector3Int cellPosition, int damage) => OnRequestDamageBuilding?.Invoke(cellPosition, damage);
@@ -160,6 +166,7 @@ public static class EventManager
     public static GameObject TriggerRequestSpawnProjectile(GameObject prefab, Vector3 spawnPos, Transform target, int damage, float speed)
     {
         return OnRequestSpawnProjectile?.Invoke(prefab, spawnPos, target, damage, speed);
+    
     }
 
     public static void TriggerWeatherChanged(WeatherType newWeather)
@@ -170,6 +177,15 @@ public static class EventManager
     public static void ChangeGameMode(GameMode newMode)
     {
         OnGameModeChanged?.Invoke(newMode);
+    }
+
+    public static bool CheckIfPositionFogged(Vector3 pos)
+    {
+        if (OnCheckPositionFogged != null)
+        {
+            return OnCheckPositionFogged.Invoke(pos);
+        }
+        return false;
     }
 }
 

@@ -11,6 +11,8 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
     private int currentHealth;
 
+    private WeatherType currentWeather = WeatherType.Sunny;
+
     public ProductionBuildingData BuildingData => buildingData;
     public int CurrentHealth => currentHealth;
     public Vector3Int CellPosition => cellPosition;
@@ -26,6 +28,16 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
         // 채집 루프 시작
         StartCoroutine(GatherRoutine());
+    
+    }
+    private void OnEnable()
+    {
+        EventManager.OnWeatherChanged += HandleWeatherChanged;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnWeatherChanged -= HandleWeatherChanged;
     }
 
     public void TakeDamage(int damage)
@@ -104,6 +116,8 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
                     {
                         targetTilemap.SetTile(targetPos, null);
 
+                        int rewardAmount = (currentWeather == WeatherType.Rain) ? 2 : 1;
+
                         EventManager.CurrencyAdded(rewardType, 1);
                         Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} (+1 {rewardType})");
 
@@ -121,5 +135,10 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
         EventManager.TriggerRequestDemolish(cellPosition);
 
         Destroy(gameObject);
+    }
+
+    private void HandleWeatherChanged(WeatherType newWeather)
+    {
+        currentWeather = newWeather;
     }
 }

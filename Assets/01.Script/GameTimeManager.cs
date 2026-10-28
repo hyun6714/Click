@@ -117,7 +117,6 @@ public class GameTimeManager : MonoBehaviour
 
             float lerpMinutes = Mathf.Lerp(currentTotalMinutes, targetTotalMinutes, t);
 
-            currentDay = (lerpMinutes >= 24f * 60f) ? targetDay : currentDay;
             currentHour = Mathf.Floor(lerpMinutes / 60f) % 24f;
             currentMinute = Mathf.Floor(lerpMinutes % 60f);
             currentSecond = 0f; 
