@@ -49,6 +49,17 @@ public class MapCreat : MonoBehaviour
     [Range(0f, 1f)]
     public float treeDensity = 0.0f;
 
+    private void OnEnable()
+    {
+        EventManager.OnCheckPositionFogged += CheckIfFogged;
+    }
+
+    private void OnDisable()
+    {
+        // 등록 해제
+        EventManager.OnCheckPositionFogged -= CheckIfFogged;
+    }
+
 
     void Start()
     {
@@ -267,6 +278,18 @@ public class MapCreat : MonoBehaviour
             treeTilemap.SetTiles(treePositionsList.ToArray(), treeTilesList.ToArray());
         }
     }
-        
-    
+
+    private bool CheckIfFogged(Vector3 pos)
+    {
+        if (fogTilemap == null)
+        {
+            return false;
+        }
+
+        Vector3Int cellPos = fogTilemap.WorldToCell(pos);
+
+        // 해당 좌표에 fogTile이 있다면 true 없다면 false
+        TileBase currentTile = fogTilemap.GetTile(cellPos);
+        return currentTile != null;
+    }
 }

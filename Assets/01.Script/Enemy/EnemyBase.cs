@@ -4,6 +4,8 @@ using UnityEngine.Tilemaps;
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
+    protected WeatherType currentWeather = WeatherType.Sunny;
+
     protected EnemyData enemyData;
     protected int currentHp;
     protected Transform target;
@@ -15,6 +17,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     protected static HashSet<Vector3Int> activeBuildingPositions = new HashSet<Vector3Int>();
     protected Vector3Int currentBuildingCell;
     protected bool hasBuildingTarget = false;
+    protected float baseMoveSpeed;
+    protected float baseAttackSpeed;
+    protected int baseAttackDamage;
 
     protected static Tilemap sharedBuildingTilemap;
 
@@ -23,6 +28,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         EventManager.OnBuildingRegistered += HandleBuildingRegistered;
         EventManager.OnBuildingUnregistered += HandleBuildingUnregistered;
         EventManager.OnBuildingManagerReady += HandleBuildingManagerReady;
+        EventManager.OnWeatherChanged += HandleWeatherChanged;
     }
 
     private void OnDisable()
@@ -30,6 +36,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         EventManager.OnBuildingRegistered -= HandleBuildingRegistered;
         EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
         EventManager.OnBuildingManagerReady -= HandleBuildingManagerReady;
+        EventManager.OnWeatherChanged -= HandleWeatherChanged;
     }
 
     private void HandleBuildingManagerReady(Tilemap tilemap)
@@ -64,9 +71,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         attackCooldown = 0f;
         hasBuildingTarget = false;
 
+        baseMoveSpeed = enemyData.moveSpeed;
+        baseAttackSpeed = enemyData.attackSpeed;
+        baseAttackDamage = enemyData.attackDamage;
+
         gameObject.SetActive(true);
-
-
         EventManager.TriggerRequestSyncBuildings();
     }
 
@@ -111,7 +120,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (attackCooldown <= 0)
             {
                 Attack();
-                attackCooldown = 1f / enemyData.attackSpeed;
+
+                float speedMultiplier = (currentWeather == WeatherType.Storm) ? 1.2f : (currentWeather == WeatherType.Snow ? 0.8f : 1.0f);
+                float currentAttackSpeed = baseAttackSpeed * speedMultiplier;
+
+                attackCooldown = 1f / currentAttackSpeed;
             }
         }
         else
@@ -158,22 +171,25 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Move(Vector3 destPosition)
     {
-        transform.position = Vector3.MoveTowards(transform.position, destPosition, enemyData.moveSpeed * Time.deltaTime);
+        float speed = GetCurrentMoveSpeed();
+        transform.position = Vector3.MoveTowards(transform.position, destPosition, speed * Time.deltaTime);
     }
 
     protected virtual void Attack()
     {
+        int finalDamage = GetCurrentAttackDamage();
+
         if (hasBuildingTarget)
         {
-            EventManager.TriggerRequestDamageBuilding(currentBuildingCell, enemyData.attackDamage);
+            EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
             Debug.Log($"[{enemyData.enemyName}] 타일 건물 {currentBuildingCell} 공격 데미지: {enemyData.attackDamage}");
         }
         else if (target != null)
         {
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
-                damageable.TakeDamage(enemyData.attackDamage);
-                Debug.Log($"[{enemyData.enemyName}] 메인 성 공격 데미지: {enemyData.attackDamage}");
+                damageable.TakeDamage(finalDamage);
+                Debug.Log($"[{enemyData.enemyName}] 메인 성 공격 데미지: {finalDamage}");
             }
         }
     }
@@ -195,5 +211,39 @@ public class EnemyBase : MonoBehaviour, IDamageable
         EventManager.TriggerRequestReturnPool(enemyData.enemyType, gameObject);
 
         gameObject.SetActive(false);
+    }
+
+    private void HandleWeatherChanged(WeatherType newWeather)
+    {
+        currentWeather = newWeather;
+    }
+
+    protected virtual float GetCurrentMoveSpeed()
+    {
+        float multiplier = 1.0f;
+
+        if (currentWeather == WeatherType.Storm)
+        {
+            multiplier = 1.2f;
+        }
+
+        if (currentWeather == WeatherType.Snow)
+        {
+            multiplier = 0.8f;
+        }
+
+        return baseMoveSpeed * multiplier;
+    }
+
+    protected virtual int GetCurrentAttackDamage()
+    {
+        float multiplier = 1.0f;
+
+        if (currentWeather == WeatherType.Storm)
+        {
+            multiplier = 1.2f;
+        }
+
+        return Mathf.RoundToInt(baseAttackDamage * multiplier);
     }
 }

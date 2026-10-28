@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class AttackBuilding : MonoBehaviour, IDamageable
 {
+    private WeatherType currentWeather = WeatherType.Sunny;
     private AttackBuildingData towerData;
     private Vector3Int cellPosition;
     private int currentHealth;
@@ -9,15 +10,32 @@ public class AttackBuilding : MonoBehaviour, IDamageable
 
     private bool isInitialized = false;
 
+    private float baseAttackSpeed;
+    private float baseAttackDamage;
+
     public AttackBuildingData TowerData => towerData;
     public int CurrentHealth => currentHealth;
     public Vector3Int CellPosition => cellPosition;
+
+    private void OnEnable()
+    {
+        EventManager.OnWeatherChanged += HandleWeatherChanged;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnWeatherChanged -= HandleWeatherChanged;
+    }
 
     public void Initialize(AttackBuildingData data, Vector3Int pos)
     {
         towerData = data;
         cellPosition = pos;
         currentHealth = towerData.maxBuildingHp;
+
+        baseAttackSpeed = towerData.attackSpeed;
+        baseAttackDamage = towerData.attackDamage;
+
         isInitialized = true;
     }
 
@@ -42,7 +60,7 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         if (target != null)
         {
             Attack(target);
-            cooldown = 1f / towerData.attackSpeed;
+            cooldown = 1f / GetCurrentAttackSpeed();
         }
     }
 
@@ -66,11 +84,12 @@ public class AttackBuilding : MonoBehaviour, IDamageable
 
     void Attack(Transform target)
     {
-        Debug.Log($"{towerData.buildingName} 공격! 데미지: {towerData.attackDamage}");
+        float finalDamage = GetCurrentAttackDamage();
+        Debug.Log($"{towerData.buildingName} 공격! 데미지: {finalDamage}");
 
         if (target.TryGetComponent<IDamageable>(out var damageableTarget))
         {
-            damageableTarget.TakeDamage(Mathf.RoundToInt(towerData.attackDamage));
+            damageableTarget.TakeDamage(Mathf.RoundToInt(finalDamage));
         }
     }
 
@@ -94,6 +113,37 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         EventManager.TriggerRequestDemolish(cellPosition);
 
         Destroy(gameObject);
+    }
+
+    private float GetCurrentAttackSpeed()
+    {
+        bool isInFirepit = Firepit.IsPositionInAnyFirepitRange(transform.position);
+        float multiplier = 1.0f;
+
+        if (currentWeather == WeatherType.Snow)
+        {
+            multiplier = isInFirepit ? 1.0f : 0.8f; // 화로가 있으면 1.0, 없으면 0.8
+        }
+
+        return baseAttackSpeed * multiplier;
+    }
+
+    private float GetCurrentAttackDamage()
+    {
+        bool isInFirepit = Firepit.IsPositionInAnyFirepitRange(transform.position);
+
+        float multiplier = 1.0f;
+        if (currentWeather == WeatherType.Snow)
+        {
+            multiplier = isInFirepit ? 1.0f : 0.8f;
+        }
+
+        return baseAttackDamage * multiplier;
+    }
+
+    private void HandleWeatherChanged(WeatherType newWeather)
+    {
+        currentWeather = newWeather;
     }
 
     void OnDrawGizmosSelected()

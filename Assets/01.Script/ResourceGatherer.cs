@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 public class ResourceGatherer : MonoBehaviour
 {
     private GameMode currentMode = GameMode.Normal;
+    private WeatherType currentWeather = WeatherType.Sunny;
 
     [Header("Tilemaps")]
     public Tilemap referenceTilemap; // ±âÁØÀÌ µÇ´Â ¹Ù´Ú Å¸ÀÏ¸Ê
@@ -29,11 +30,13 @@ public class ResourceGatherer : MonoBehaviour
     private void OnEnable()
     {
         EventManager.OnGameModeChanged += HandleGameModeChanged;
+        EventManager.OnWeatherChanged += HandleWeatherChanged;
     }
 
     private void OnDisable()
     {
         EventManager.OnGameModeChanged -= HandleGameModeChanged;
+        EventManager.OnWeatherChanged -= HandleWeatherChanged;
     }
 
     private void HandleGameModeChanged(GameMode newMode)
@@ -41,6 +44,10 @@ public class ResourceGatherer : MonoBehaviour
         currentMode = newMode;
     }
 
+    private void HandleWeatherChanged(WeatherType newWeather)
+    {
+        currentWeather = newWeather;
+    }
 
     void Update()
     {
@@ -89,9 +96,11 @@ public class ResourceGatherer : MonoBehaviour
             return;
         }
 
+        int finalHarvestAmount = (currentWeather == WeatherType.Rain) ? harvestAmount * 2 : harvestAmount;
+       
         if (treeTilemap.HasTile(cellPos))
         {
-            EventManager.CurrencyAdded(CurrencyType.Tree, harvestAmount);
+            EventManager.CurrencyAdded(CurrencyType.Tree, finalHarvestAmount);
             Debug.Log("³ª¹« È¹µæ");
 
             treeTilemap.SetTile(cellPos, null);
@@ -100,7 +109,7 @@ public class ResourceGatherer : MonoBehaviour
 
         if (stoneTilemap.HasTile(cellPos))
         {
-            EventManager.CurrencyAdded(CurrencyType.Rock, harvestAmount);
+            EventManager.CurrencyAdded(CurrencyType.Rock, finalHarvestAmount);
             Debug.Log("µ¹ È¹µæ");
 
             stoneTilemap.SetTile(cellPos, null);

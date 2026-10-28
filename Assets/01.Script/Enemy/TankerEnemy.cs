@@ -9,7 +9,7 @@ public class TankerEnemy : EnemyBase
     {
         int finalDamage = Mathf.Max(damage - armor, 1);
 
-        Debug.Log($"[탱커 방어!] {armor} 만큼 데미지 경감 최종 데미지: {finalDamage}");
+        Debug.Log($"[탱커 방어] {armor} 만큼 데미지 경감 최종 데미지: {finalDamage}");
 
         base.TakeDamage(finalDamage);
     }
