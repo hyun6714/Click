@@ -110,7 +110,6 @@ public class GameTimeManager : MonoBehaviour
         currentDay++;
         Debug.Log($"[날짜 변경] 하루 지남 현재 {currentDay}일차");
 
-        EventManager.CurrencyAdded(CurrencyType.Click, 10);
         EventManager.TriggerDayChanged(currentDay);
 
         TriggerSave();
@@ -170,7 +169,6 @@ public class GameTimeManager : MonoBehaviour
 
         Debug.Log($"[날짜 스킵] 현재 {currentDay}일차, 오전 {currentHour}시");
 
-        EventManager.CurrencyAdded(CurrencyType.Click, 10);
         EventManager.TriggerDayChanged(currentDay);
         EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
 

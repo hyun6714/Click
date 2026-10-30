@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Threading.Tasks;
+using static UnityEditor.PlayerSettings;
 
 public class BuildingManager : MonoBehaviour
 {
@@ -69,6 +70,7 @@ public class BuildingManager : MonoBehaviour
         }
 
         EventManager.TriggerBuildingManagerReady(buildingTilemap);
+        EventManager.TriggerRequestSyncBuildings();
 
         isInitialized = true;
         Debug.Log("[BuildingManager] 비동기 지연 로드 및 초기화 완료");
@@ -99,15 +101,29 @@ public class BuildingManager : MonoBehaviour
         {
             EventManager.TriggerRequestSpawnTower(cellPosition, attackData);
         }
-
         else if (data is ProductionBuildingData prodData)
         {
             EventManager.TriggerRequestSpawnResourceBuilding(cellPosition, prodData);
         }
-
         else if (data is TrapBuildingData trapData)
         {
             EventManager.TriggerRequestSpawnTrapBuilding(cellPosition, trapData);
+        }
+        else if (data is FirepitData firepitData)
+        {
+            EventManager.TriggerRequestSpawnFirepit(cellPosition, firepitData);
+        }
+        else if (data is ClickBuildingData clickData)
+        {
+            EventManager.TriggerRequestSpawnBuilding(cellPosition, clickData);
+        }
+        else if (data is ProductionBoostBuildingData clickBoData)
+        {
+            EventManager.TriggerRequestSpawnBuilding(cellPosition, clickBoData);
+        }
+        else if (data is BarricadeBuildingData barricadeData)
+        {
+            EventManager.TriggerRequestSpawnBuilding(cellPosition, barricadeData);
         }
 
     }
@@ -148,8 +164,16 @@ public class BuildingManager : MonoBehaviour
                 int refundWood = Mathf.FloorToInt(data.treeCost * 0.5f);
                 int refundStone = Mathf.FloorToInt(data.rockCost * 0.5f);
 
-                if (refundWood > 0) EventManager.CurrencyAdded(CurrencyType.Tree, refundWood);
-                if (refundStone > 0) EventManager.CurrencyAdded(CurrencyType.Rock, refundStone);
+                if (refundWood > 0)
+                {
+                    EventManager.CurrencyAdded(CurrencyType.Tree, refundWood);
+                }
+
+                if (refundStone > 0)
+                {
+                    EventManager.CurrencyAdded(CurrencyType.Rock, refundStone);
+                }
+
             }
 
             buildingTilemap.SetTile(cellPosition, null);
@@ -188,6 +212,30 @@ public class BuildingManager : MonoBehaviour
             if (data is AttackBuildingData attackData)
             {
                 EventManager.TriggerRequestSpawnTower(pos, attackData);
+            }
+            else if (data is ProductionBuildingData prodData)
+            {
+                EventManager.TriggerRequestSpawnResourceBuilding(pos, prodData);
+            }
+            else if (data is TrapBuildingData trapData)
+            {
+                EventManager.TriggerRequestSpawnTrapBuilding(pos, trapData);
+            }
+            else if (data is FirepitData firepitData)
+            {
+                EventManager.TriggerRequestSpawnFirepit(pos, firepitData);
+            }
+            else if (data is ClickBuildingData clickData)
+            {
+                EventManager.TriggerRequestSpawnBuilding(pos, data);
+            }
+            else if (data is ProductionBoostBuildingData clickBoData)
+            {
+                EventManager.TriggerRequestSpawnBuilding(pos, data);
+            }
+            else if (data is BarricadeBuildingData barricadeData)
+            {
+                EventManager.TriggerRequestSpawnBuilding(pos, barricadeData);
             }
         }
     }
@@ -276,7 +324,6 @@ public class BuildingManager : MonoBehaviour
                     }
                     else
                     {
-                        // 🌟 2. 목록에서 타일 이름을 못 찾았을 때 뜨는 경고
                         Debug.LogWarning($"[타일 찾기 실패] availableBuildings 목록에서 '{entry.tileName}' 이름을 가진 타일을 못 찾았습니다!");
                     }
                 }

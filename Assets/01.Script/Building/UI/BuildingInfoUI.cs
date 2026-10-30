@@ -1,18 +1,18 @@
-using TMPro;
+ï»¿using TMPro;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class BuildingInfoUI : MonoBehaviour
 {
-    [Header("UI ÂüÁ¶")]
+    [Header("UI ì°¸ì¡°")]
     public GameObject infoPanel;
     public TMP_Text nameText;
     public TMP_Text hpText;
-    public TMP_Text detailStatText; // °ø°İ·Â ¹× »ç°Å¸® ¶Ç´Â Ã¤Áı¼Óµµ ¹× ¹üÀ§
+    public TMP_Text detailStatText; // ê³µê²©ë ¥ ë° ì‚¬ê±°ë¦¬ ë˜ëŠ” ì±„ì§‘ì†ë„ ë° ë²”ìœ„
 
-    [Header("»ç°Å¸® ½Ã°¢È­ ÂüÁ¶")]
-    public GameObject rangeIndicatorPrefab; // »ç°Å¸® Ç¥½Ã¿ë ÇÁ¸®ÆÕ
+    [Header("ì‚¬ê±°ë¦¬ ì‹œê°í™” ì°¸ì¡°")]
+    public GameObject rangeIndicatorPrefab; // ì‚¬ê±°ë¦¬ í‘œì‹œìš© í”„ë¦¬íŒ¹
     private GameObject currentRangeIndicator;
     public Tilemap referenceTilemap;
 
@@ -35,32 +35,50 @@ public class BuildingInfoUI : MonoBehaviour
         infoPanel.SetActive(true);
 
         nameText.text = data.buildingName;
-        hpText.text = $"Ã¼·Â: {currentHp} / {data.maxBuildingHp}";
+        hpText.text = $"ì²´ë ¥: {currentHp} / {data.maxBuildingHp}";
 
         float rangeValue = 0f;
 
-        if (data.category == BuildingCategory.Attack)
+        if (data is ClickBuildingData clickData)
         {
-            if (data is AttackBuildingData attackData)
-            {
-                detailStatText.text = $"°ø°İ·Â: {attackData.attackDamage}\n" +
-                                      $"°ø°İ ¼Óµµ: {attackData.attackSpeed}ÃÊ\n" +
-                                      $"»ç°Å¸®: {attackData.attackRange}";
-
-                rangeValue = attackData.attackRange;
-            }
+            detailStatText.text = $"ìµœëŒ€ í´ë¦­ ì¦ê°€: +{clickData.maxClickBonus}";
         }
-        else if (data.category == BuildingCategory.Resource)
+        else if (data is ProductionBoostBuildingData boostData)
         {
-            if (data is ProductionBuildingData prodData)
-            {
-                detailStatText.text = $"Ã¤Áı ´ë»ó: {prodData.targetResourceType}\n" +
-                                      $"Ã¤Áı ÁÖ±â: {prodData.gatherInterval}ÃÊ\n" +
-                                      $"Ã¤Áı ¹üÀ§: {prodData.gatherRange}Å¸ÀÏ";
-
-                rangeValue = prodData.gatherRange;
-            }
+            detailStatText.text = $"ì¼ì¼ ìƒì‚° ë³´ë„ˆìŠ¤: +{boostData.dailyProductionBonus}";
         }
+        else if (data is AttackBuildingData attackData)
+        {
+            detailStatText.text = $"ê³µê²©ë ¥: {attackData.attackDamage}\n" +
+                                  $"ê³µê²© ì†ë„: {attackData.attackSpeed}ì´ˆ\n" +
+                                  $"ì‚¬ê±°ë¦¬: {attackData.attackRange}";
+
+            rangeValue = attackData.attackRange;
+        }
+
+        else if (data is ProductionBuildingData prodData)
+        {
+            detailStatText.text = $"ì±„ì§‘ ëŒ€ìƒ: {prodData.targetResourceType}\n" +
+                                  $"ì±„ì§‘ ì£¼ê¸°: {prodData.gatherInterval}ì´ˆ\n" +
+                                  $"ì±„ì§‘ ë²”ìœ„: {prodData.gatherRange}íƒ€ì¼";
+
+            rangeValue = prodData.gatherRange;
+        }
+        else if (data is TrapBuildingData trapData)
+        {
+            detailStatText.text = $"í”¼í•´ëŸ‰: {trapData.damage}\n" +
+                                  $"í”¼í•´ ë²”ìœ„: {trapData.triggerRange}";
+        }
+        else if (data is BarricadeBuildingData barricadeData)
+        {
+            detailStatText.text = $"ì²´ë ¥: {barricadeData.maxHealth}";
+        }
+        else if (data is FirepitData fireData)
+        {
+            detailStatText.text = $"ì˜¨ê¸° ë²”ìœ„: {fireData.effectRadius}";
+            rangeValue = fireData.effectRadius;
+        }
+
         else
         {
             detailStatText.text = "";

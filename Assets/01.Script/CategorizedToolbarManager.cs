@@ -12,6 +12,16 @@ public class CategorizedToolbarManager : MonoBehaviour
     public GameObject slotPrefab;           // 슬롯 프리팹
     public List<BuildingData> allBuildings; // 전체 건물 리스트
 
+    private void OnEnable()
+    {
+        EventManager.OnBuildingUnlockUpdated += InitCategorizedToolbar;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnBuildingUnlockUpdated -= InitCategorizedToolbar;
+    }
+
     void Start()
     {
         InitCategorizedToolbar();

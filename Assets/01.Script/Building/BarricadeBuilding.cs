@@ -6,6 +6,10 @@ public class BarricadeBuilding : MonoBehaviour, IDamageable
     private Vector3Int cellPosition;
     private int currentHealth;
 
+    public BarricadeBuildingData BarricadeData => barricadeData;
+    public Vector3Int CellPosition => cellPosition;
+    public int CurrentHealth => currentHealth;
+
     public void Initialize(BarricadeBuildingData data, Vector3Int pos)
     {
         barricadeData = data;

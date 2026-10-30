@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewUnlockNode", menuName = "Building/Unlock Node Data")]
@@ -5,9 +6,11 @@ public class BuildingUnlockData : ScriptableObject
 {
     [Header("기본 정보")]
     public string nodeName;
-    public BuildingData targetBuildingData; //노드를 해금하면 건설할 수 있게 될 건물 데이터
     public Sprite icon;
     public int unlockCost = 100; //해금 비용 (골드)
+
+    [Header("노드 해금 시 열리는 건물 목록")]
+    public List<BuildingData> targetBuildingDatas = new List<BuildingData>();
 
     [Header("해금 상태")]
     public bool isUnlocked = false;  // 이미 해금 완료했는지

@@ -1,16 +1,10 @@
 using UnityEngine;
 
-public class ClickBuildingData : MonoBehaviour
+[CreateAssetMenu(fileName = "NewClickBuildingData", menuName = "Building/Click Building Data")]
+public class ClickBuildingData : BuildingData
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [Header("클릭 최대치 증가")]
+    public int maxClickBonus = 10;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject clickMaxPrefab;
 }

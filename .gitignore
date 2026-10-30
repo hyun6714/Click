@@ -105,10 +105,9 @@ InitTestScene*.unity*
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
-Plaintext
+
 # 깃허브 업로드 제외 대상 에셋
-Assets/03.Sprites/
+/Assets/03.Sprites/
 
 # 폰트 폴더 업로드 차단
 /Assets/05.Font/
-Assets/05.Font/

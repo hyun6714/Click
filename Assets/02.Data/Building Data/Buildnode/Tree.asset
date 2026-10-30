@@ -13,13 +13,17 @@ MonoBehaviour:
   m_Name: Tree
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uBC8C\uBAA9\uC7A5"
-  targetBuildingData: {fileID: 11400000, guid: dd4faf867175c1043b017cf0adf8941a, type: 2}
   icon: {fileID: 0}
   unlockCost: 0
+  targetBuildingDatas:
+  - {fileID: 11400000, guid: d6cac76cefa2d5b4cac1fcc1dc548db5, type: 2}
+  - {fileID: 11400000, guid: 662f8c0108782d94f97fcda211699893, type: 2}
+  - {fileID: 11400000, guid: 122c4cf999646ad4fae0995296ff37c9, type: 2}
+  - {fileID: 11400000, guid: dd4faf867175c1043b017cf0adf8941a, type: 2}
   isUnlocked: 1
   isAvailable: 1
   isDefaultStartNode: 1
   upNode: {fileID: 11400000, guid: f074021f2977d144b9e5242b68fbd624, type: 2}
-  downNode: {fileID: 0}
+  downNode: {fileID: 11400000, guid: 3718dd0ce6483d144bf11409338ddd7b, type: 2}
   leftNode: {fileID: 11400000, guid: a43d03dff95f2f54da25e5139edd06ad, type: 2}
   rightNode: {fileID: 11400000, guid: 982b1d78526c5ca4faa30ddfd4168fd0, type: 2}

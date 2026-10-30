@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ed28206818203d46ac8c37b92dbbe7f, type: 3}
   m_Name: AttackBuilding
   m_EditorClassIdentifier: Assembly-CSharp::AttackBuildingData
-  buildingName: "\uACF5\uACA9\uD14C\uC2A4\uD2B8"
+  buildingName: "\uD654\uC0B4\uD0C0\uC6CC"
   buildingTile: {fileID: 11400000, guid: 0697a6ea931983142acbca21b50fd3e5, type: 2}
   category: 2
   treeCost: 0

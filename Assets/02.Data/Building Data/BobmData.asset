@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BobmData
   m_EditorClassIdentifier: Assembly-CSharp::TrapBuildingData
   buildingName: "\uD3ED\uD0C4"
-  buildingTile: {fileID: 0}
+  buildingTile: {fileID: 11400000, guid: 2c43a8b9728a8d04e8b76ef4c02b1bad, type: 2}
   category: 3
   treeCost: 0
   rockCost: 0

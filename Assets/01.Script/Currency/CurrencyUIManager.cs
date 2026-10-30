@@ -10,6 +10,7 @@ public class CurrencyUIManager : MonoBehaviour
     public TextMeshProUGUI goldText;
 
     private int currentMaxClick = 40;
+    private int currentClickAmount = 0;
 
     private void OnEnable()
     {
@@ -36,6 +37,7 @@ public class CurrencyUIManager : MonoBehaviour
         switch (type)
         {
             case CurrencyType.Click:
+                currentClickAmount = currentAmount;
                 if (clickText != null)
                     clickText.text = $"{currentAmount.ToString("N0")}/{currentMaxClick}";
                 break;
@@ -60,5 +62,10 @@ public class CurrencyUIManager : MonoBehaviour
     private void UpdateMaxClickUI(int newMax)
     {
         currentMaxClick = newMax;
+
+        if (clickText != null)
+        {
+            clickText.text = $"{currentClickAmount.ToString("N0")}/{currentMaxClick}";
+        }
     }
 }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Brri
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uBC14\uB9AC\uAC8C\uC774\uD2B8"
-  targetBuildingData: {fileID: 0}
+  targetBuildingData: {fileID: 11400000, guid: c8268e945b38c4f478147c23df53d236, type: 2}
   icon: {fileID: 0}
   unlockCost: 50
   isUnlocked: 0

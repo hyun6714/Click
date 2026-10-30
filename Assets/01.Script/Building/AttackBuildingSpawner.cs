@@ -23,11 +23,6 @@ public class AttackBuildingSpawner : MonoBehaviour
         EventManager.OnBuildingManagerReady -= HandleBuildingManagerReady;
     }
 
-    private void Start()
-    {
-        EventManager.TriggerRequestSyncBuildings();
-    }
-
     private void HandleBuildingManagerReady(Tilemap tilemap)
     {
         buildingTilemap = tilemap;
