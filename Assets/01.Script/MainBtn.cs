@@ -50,13 +50,22 @@ public class MainBtn : MonoBehaviour
 
     public void GameStart()
     {
+        SaveLoadManager.DeleteSaveData();
         SceneManager.LoadScene(gameSceneName);
     }
 
     public void ContinueGame()
     {
-        //임시로 일단 이렇게 
-        SceneManager.LoadScene(gameSceneName);
+        var saveData = SaveLoadManager.LoadGame();
+
+        if (saveData != null)
+        {
+            SceneManager.LoadScene(gameSceneName);
+        }
+        else
+        {
+            //없을 시 UI 
+        }
     }
 
     public void GameExit()

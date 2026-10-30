@@ -1,34 +1,63 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections.Generic;
 
 public class BuildingUnlockManager : MonoBehaviour
 {
-    [Header("¸ğµç Å×Å©Æ®¸® ³ëµå ¸ñ·Ï")]
+    [Header("ëª¨ë“  í…Œí¬íŠ¸ë¦¬ ë…¸ë“œ ëª©ë¡")]
     public List<BuildingUnlockData> allUnlockNodes;
+
+    private GameTimeManager timeMgr;
+    private CurrencyManager currencyMgr;
+    private WeatherManager weatherMgr;
+    private BuildingManager buildingMgr;
+
+    private bool isInitialized = false;
+
+    private void Awake()
+    {
+        buildingMgr = Object.FindFirstObjectByType<BuildingManager>();
+        currencyMgr = Object.FindFirstObjectByType<CurrencyManager>();
+        weatherMgr = Object.FindFirstObjectByType<WeatherManager>();
+        buildingMgr = Object.FindFirstObjectByType<BuildingManager>();
+    }
+
 
     private void Start()
     {
-        // °ÔÀÓ ½ÃÀÛ ½Ã ÃÊ±âÈ­
-        foreach (var node in allUnlockNodes)
+        SaveData saveData = SaveLoadManager.LoadGame();
+
+        if (saveData != null && saveData.unlockedBuildingNodes != null && saveData.unlockedBuildingNodes.Count > 0)
         {
-            if(node == null)
+            LoadUnlockData(saveData);
+        }
+        else
+        {
+            foreach (var node in allUnlockNodes)
             {
-                continue;
+                if (node == null)
+                {
+                    continue;
+                }
+
+                bool isStartNode = node.isDefaultStartNode;
+                node.ResetNodeState(isStartNode);
             }
-            bool isStartNode = node.isDefaultStartNode;
-            node.ResetNodeState(isStartNode);
+            InitializeNodes();
         }
 
-        InitializeNodes();
+        isInitialized = true;
     }
 
     public void InitializeNodes()
     {
         foreach (var node in allUnlockNodes)
         {
-            if (node == null) continue;
+            if (node == null)
+            {
+                continue;
+            }
 
-            // ¸¸¾à Ã¹ ¹øÂ° ³ëµåÀÌ°Å³ª ¼öµ¿À¸·Î ÄÑµĞ ³ëµå¶ó¸é ÇØ±İ Ã³¸®
+            // ë§Œì•½ ì²« ë²ˆì§¸ ë…¸ë“œì´ê±°ë‚˜ ìˆ˜ë™ìœ¼ë¡œ ì¼œë‘” ë…¸ë“œë¼ë©´ í•´ê¸ˆ ì²˜ë¦¬
             if (node.isUnlocked)
             {
                 UnlockAdjacentNodes(node);
@@ -38,19 +67,19 @@ public class BuildingUnlockManager : MonoBehaviour
         EventManager.TriggerBuildingUnlockUpdated();
     }
 
-    // ÇÃ·¹ÀÌ¾î°¡ ÇØ±İ ¹öÆ°À» ´­·¶À» ¶§ È£ÃâÇÒ ÇÔ¼ö
+    // í”Œë ˆì´ì–´ê°€ í•´ê¸ˆ ë²„íŠ¼ì„ ëˆŒë €ì„ ë•Œ í˜¸ì¶œí•  í•¨ìˆ˜
     public void TryUnlockNode(BuildingUnlockData node)
     {
         if (node.isUnlocked || !node.isAvailable)
         {
-            Debug.Log("[ÇØ±İ ½ÇÆĞ]");
+            Debug.Log("[í•´ê¸ˆ ì‹¤íŒ¨]");
             return;
         }
 
         bool hasEnough = EventManager.RequestCheckCurrency(CurrencyType.Gold, node.unlockCost);
         if (!hasEnough)
         {
-            Debug.Log("[ÇØ±İ ½ÇÆĞ] ÀçÈ­°¡ ºÎÁ·ÇÕ´Ï´Ù!");
+            Debug.Log("[í•´ê¸ˆ ì‹¤íŒ¨] ì¬í™”ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤!");
             return;
         }
 
@@ -61,10 +90,12 @@ public class BuildingUnlockManager : MonoBehaviour
         }
 
         node.isUnlocked = true;
-        Debug.Log($"[ÇØ±İ ¼º°ø] {node.nodeName} ÇØ±İ ¿Ï·á");
+        Debug.Log($"[í•´ê¸ˆ ì„±ê³µ] {node.nodeName} í•´ê¸ˆ ì™„ë£Œ");
 
         UnlockAdjacentNodes(node);
         EventManager.TriggerBuildingUnlockUpdated();
+
+        TriggerSave();
     }
 
     private void UnlockAdjacentNodes(BuildingUnlockData node)
@@ -88,5 +119,66 @@ public class BuildingUnlockManager : MonoBehaviour
         {
             node.rightNode.isAvailable = true;
         }
+    }
+
+    public void SaveUnlockData(SaveData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        data.unlockedBuildingNodes.Clear();
+
+        foreach (var node in allUnlockNodes)
+        {
+            if (node != null && node.isUnlocked)
+            {
+                data.unlockedBuildingNodes.Add(node.name);
+            }
+        }
+    }
+
+    public void LoadUnlockData(SaveData data)
+    {
+        if (data == null || data.unlockedBuildingNodes == null)
+        {
+            return;
+        }
+
+        foreach (var node in allUnlockNodes)
+        {
+            if (node == null)
+            {
+                continue;
+            }
+            node.ResetNodeState(node.isDefaultStartNode);
+        }
+
+        foreach (var nodeName in data.unlockedBuildingNodes)
+        {
+            BuildingUnlockData targetNode = allUnlockNodes.Find(n => n != null && n.name == nodeName);
+            if (targetNode != null)
+            {
+                targetNode.isUnlocked = true;
+            }
+        }
+
+        InitializeNodes();
+        Debug.Log("[BuildingUnlockManager] í…Œí¬íŠ¸ë¦¬ í•´ê¸ˆ ë°ì´í„° ë³µì› ì™„ë£Œ");
+    }
+
+    public void TriggerSave()
+    {
+        if (!isInitialized)
+        {
+            return;
+        }
+
+        Debug.Log("[unlock] ì €ì¥");
+
+        BuildingUnlockManager unlockMgr = this;
+
+        SaveLoadManager.SaveGame(timeMgr, currencyMgr, buildingMgr, weatherMgr, unlockMgr);
     }
 }

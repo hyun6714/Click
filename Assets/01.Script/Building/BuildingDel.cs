@@ -1,15 +1,15 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class BuildingDel : MonoBehaviour
 {
-    [Header("¹Ù´Ú/°Ç¹° Å¸ÀÏ¸Ê")]
-    public Tilemap referenceTilemap; //¹Ù´Ú Å¸ÀÏ¸Ê
-    public Tilemap buildingTilemap; //°Ç¹° Å¸ÀÏ¸Ê
+    [Header("ë°”ë‹¥/ê±´ë¬¼ íƒ€ì¼ë§µ")]
+    public Tilemap referenceTilemap; //ë°”ë‹¥ íƒ€ì¼ë§µ
+    public Tilemap buildingTilemap; //ê±´ë¬¼ íƒ€ì¼ë§µ
     public BuildingPlacer buildingPlacer;
 
-    [Header("Ã¶°Å ÈÄ È¯±Ş·®")]
+    [Header("ì² ê±° í›„ í™˜ê¸‰ëŸ‰")]
     [SerializeField] private float refundRate = 0.5f;
 
     private bool isDemolishMode = false;
@@ -20,7 +20,7 @@ public class BuildingDel : MonoBehaviour
 
         if (buildingPlacer == null)
         {
-            Debug.LogWarning("¾À¿¡¼­ BuildingPlacer¸¦ Ã£Áö ¸øÇß½À´Ï´Ù!");
+            Debug.LogWarning("ì”¬ì—ì„œ BuildingPlacerë¥¼ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤!");
         }
     }
     private void OnEnable()
@@ -42,7 +42,7 @@ public class BuildingDel : MonoBehaviour
         if (isDemolishMode && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             ToggleDemolishMode();
-            Debug.Log("Ã¶°Å¸ğµå off");
+            Debug.Log("ì² ê±°ëª¨ë“œ off");
             return;
         }
 
@@ -64,7 +64,7 @@ public class BuildingDel : MonoBehaviour
 
             if (!buildingTilemap.HasTile(cellPos))
             {
-                Debug.Log("Ã¶°ÅÇÒ °Ç¹°ÀÌ ¾ø½À´Ï´Ù.");
+                Debug.Log("ì² ê±°í•  ê±´ë¬¼ì´ ì—†ìŠµë‹ˆë‹¤.");
                 return;
             }
 
@@ -75,13 +75,20 @@ public class BuildingDel : MonoBehaviour
     public void ToggleDemolishMode()
     {
         isDemolishMode = !isDemolishMode;
-        Debug.Log(isDemolishMode ? "Ã¶°Å ¸ğµå ON" : "Ã¶°Å ¸ğµå OFF");
+        Debug.Log(isDemolishMode ? "ì² ê±° ëª¨ë“œ ON" : "ì² ê±° ëª¨ë“œ OFF");
 
-        GameMode currentMode = isDemolishMode ? GameMode.Del : GameMode.Normal;
-        EventManager.ChangeGameMode(currentMode);
-
-        if (!isDemolishMode)
+        if (isDemolishMode)
         {
+            if (buildingPlacer != null)
+            {
+                buildingPlacer.CancelPlacing();
+            }
+
+            EventManager.ChangeGameMode(GameMode.Del);
+        }
+        else
+        {
+            EventManager.ChangeGameMode(GameMode.Normal);
             EventManager.TriggerBuildMenuPopupToggle();
         }
     }
@@ -91,7 +98,8 @@ public class BuildingDel : MonoBehaviour
         if (isDemolishMode)
         {
             isDemolishMode = false;
-            Debug.Log("°Ç¹° ¼±ÅÃÀ¸·Î ÀÎÇØ Ã¶°Å ¸ğµå ÇØÁ¦");
+            EventManager.TriggerBuildMenuPopupToggle();
+            Debug.Log("ê±´ë¬¼ ì„ íƒìœ¼ë¡œ ì¸í•´ ì² ê±° ëª¨ë“œ í•´ì œ");
         }
     }
 
@@ -100,7 +108,7 @@ public class BuildingDel : MonoBehaviour
         if (newMode != GameMode.Del && isDemolishMode)
         {
             isDemolishMode = false;
-            Debug.Log("¸ğµå ÀüÈ¯µÇ¾î Ã¶°Å ¸ğµå ÀÚµ¿ ÇØÁ¦");
+            Debug.Log("ëª¨ë“œ ì „í™˜ë˜ì–´ ì² ê±° ëª¨ë“œ ìë™ í•´ì œ");
             EventManager.TriggerBuildMenuPopupToggle();
         }
     }

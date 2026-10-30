@@ -26,7 +26,16 @@ public class WeatherManager : MonoBehaviour
 
     private void Start()
     {
-        DetermineAndTriggerWeather(1);
+        SaveData saveData = SaveLoadManager.LoadGame();
+
+        if (saveData != null)
+        {
+            LoadWeatherData(saveData);
+        }
+        else
+        {
+            DetermineAndTriggerWeather(1);
+        }
     }
 
     private void HandleDayChanged(int day)
@@ -85,4 +94,27 @@ public class WeatherManager : MonoBehaviour
         Debug.Log($"[WeatherManager] 날씨 변경됨: {newWeather}");
     }
 
+    public void SaveWeatherData(SaveData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        data.currentWeather = CurrentWeather.ToString(); // 현재 날씨 상태 저장
+    }
+
+    public void LoadWeatherData(SaveData data)
+    {
+        if (data == null || string.IsNullOrEmpty(data.currentWeather))
+        {
+            return;
+        }
+
+        if (Enum.TryParse(data.currentWeather, out WeatherType loadedWeather))
+        {
+            ChangeWeather(loadedWeather);
+            Debug.Log($"[WeatherManager] 날씨 데이터 복원 완료: {loadedWeather}");
+        }
+    }
 }
