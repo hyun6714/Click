@@ -21,11 +21,6 @@ public class FirepitSpawner : MonoBehaviour
         EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
     }
 
-    private void Start()
-    {
-        EventManager.TriggerRequestSyncBuildings();
-    }
-
     private void HandleSpawnFirepit(Vector3Int cellPos, FirepitData firepitData)
     {
         if (spawnedFirepits.ContainsKey(cellPos) && spawnedFirepits[cellPos] != null)

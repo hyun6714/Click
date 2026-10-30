@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,19 +11,28 @@ public class ResourceBuildingSpawner : MonoBehaviour
     public Tilemap treeTilemap;
     public Tilemap stoneTilemap;
 
+    private Dictionary<Vector3Int, GameObject> spawnedResourceBuildings = new Dictionary<Vector3Int, GameObject>();
+
     private void OnEnable()
     {
         EventManager.OnRequestSpawnResourceBuilding += HandleSpawnResourceBuilding;
+        EventManager.OnBuildingUnregistered += HandleBuildingUnregistered;
     }
 
     private void OnDisable()
     {
         EventManager.OnRequestSpawnResourceBuilding -= HandleSpawnResourceBuilding;
+        EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
     }
 
     private void HandleSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData)
     {
         if (prodData.productionPrefab == null)
+        {
+            return;
+        }
+
+        if (spawnedResourceBuildings.ContainsKey(cellPos) && spawnedResourceBuildings[cellPos] != null)
         {
             return;
         }
@@ -38,6 +48,18 @@ public class ResourceBuildingSpawner : MonoBehaviour
         if (controller != null)
         {
             controller.Initialize(prodData, cellPos, treeTilemap, stoneTilemap);
+        }
+    }
+
+    private void HandleBuildingUnregistered(Vector3Int cellPos)
+    {
+        if (spawnedResourceBuildings.ContainsKey(cellPos))
+        {
+            if (spawnedResourceBuildings[cellPos] != null)
+            {
+                Destroy(spawnedResourceBuildings[cellPos]);
+            }
+            spawnedResourceBuildings.Remove(cellPos);
         }
     }
 }

@@ -42,6 +42,8 @@ public class GameStatePopup : MonoBehaviour
     {
         ClosePopupAndDim();
 
+        SaveLoadManager.DeleteSaveData();
+
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
     }
@@ -50,6 +52,8 @@ public class GameStatePopup : MonoBehaviour
     public void MainMenu()
     {
         ClosePopupAndDim();
+
+        SaveLoadManager.DeleteSaveData();
 
         SceneManager.LoadScene("MainScenes");
     }

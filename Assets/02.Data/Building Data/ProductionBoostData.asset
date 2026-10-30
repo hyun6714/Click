@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68b5c52daa19d624cb99b5e4ede12431, type: 3}
+  m_Name: ProductionBoostData
+  m_EditorClassIdentifier: Assembly-CSharp::ProductionBoostBuildingData
+  buildingName: "\uD074\uB9AD\uCDA9\uC804\uC18C"
+  buildingTile: {fileID: 11400000, guid: fd01540ee8c137948bb1faf37d33a603, type: 2}
+  category: 1
+  treeCost: 0
+  rockCost: 0
+  sizeWidth: 2
+  sizeHeight: 2
+  maxBuildingHp: 300
+  unlockData: {fileID: 11400000, guid: 3718dd0ce6483d144bf11409338ddd7b, type: 2}
+  dailyProductionBonus: 5
+  ClickBoPrefab: {fileID: 3498987170322585272, guid: 920e1b07ecdf68d46987723111bc6abb, type: 3}

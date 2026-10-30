@@ -9,6 +9,11 @@ public class BombBuilding : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     [SerializeField] private float explosionRadius = 1.5f; // Æø¹ß ¹üÀ§
 
+
+    public TrapBuildingData TrapData => trapData;
+    public Vector3Int CellPosition => cellPosition;
+    public int CurrentHealth => 1;
+
     public void Initialize(TrapBuildingData data, Vector3Int pos)
     {
         trapData = data;

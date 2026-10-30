@@ -16,7 +16,13 @@ public static class EventManager
     //상점에서 건물 선택 시 
     public static event Action<BuildingData> OnBuildingSelected;
 
-    //클릭 최대지 가져옴
+    //건물로 클릭 최대치 늘릴 때
+    public static event Action<int> OnAddMaxClick;
+
+    //건물로 하루에 얻는 클릭 증가 할 때
+    public static event Action<int> OnAddDailyProductionBonus;
+
+    //클릭 최대치 가져옴
     public static event Action<int> OnMaxClickChanged;
     public static event Action OnRequestMaxClick;
 
@@ -70,6 +76,9 @@ public static class EventManager
     //화로 생성
     public static event Action<Vector3Int, FirepitData> OnRequestSpawnFirepit;
 
+    //클릭 건물 생성
+    public static event Action<Vector3Int, BuildingData> OnRequestSpawnBuilding;
+
     //몬스터 사망 시
     public static event Action<EnemyType, GameObject> OnRequestReturnPool;
 
@@ -116,12 +125,15 @@ public static class EventManager
 
     //세이브 용도
     public static Action OnRequestSaveGame;
-
+    
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
     public static void CurrencyUsed(CurrencyType type, int value) => OnCurrencyUsed?.Invoke(type, value);
     public static void CurrencyChanged(CurrencyType type, int value) => OnCurrencyChanged?.Invoke(type, value);
+    public static void TriggerAddMaxClick(int amount) => OnAddMaxClick?.Invoke(amount);
+    public static void TriggerMaxClickChanged(int maxAmount) => OnMaxClickChanged?.Invoke(maxAmount);
+    public static void TriggerAddDailyProductionBonus(int amount) => OnAddDailyProductionBonus?.Invoke(amount);
     public static void MaxClickChanged(int maxAmount) => OnMaxClickChanged?.Invoke(maxAmount);
     public static void RequestMaxClick() => OnRequestMaxClick?.Invoke();
     public static void TriggerRequestPlaceBuilding(Vector3Int cellPosition, BuildingData buildingData) => OnRequestPlaceBuilding?.Invoke(cellPosition, buildingData);
@@ -138,6 +150,7 @@ public static class EventManager
     public static void TriggerRequestSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData) => OnRequestSpawnResourceBuilding?.Invoke(cellPos, prodData);
     public static void TriggerRequestSpawnTrapBuilding(Vector3Int cellPos, TrapBuildingData trapData) => OnRequestSpawnTrapBuilding?.Invoke(cellPos, trapData);
     public static void TriggerRequestSpawnFirepit(Vector3Int pos, FirepitData data) => OnRequestSpawnFirepit?.Invoke(pos, data);
+    public static void TriggerRequestSpawnBuilding(Vector3Int cellPosition, BuildingData data) => OnRequestSpawnBuilding?.Invoke(cellPosition, data);
     public static void TriggerRequestReturnPool(EnemyType type, GameObject enemyObj) =>OnRequestReturnPool?.Invoke(type, enemyObj);
     public static void TriggerRequestReturnProjectile(GameObject prefabRef, GameObject projectileObj) => OnRequestReturnProjectile?.Invoke(prefabRef, projectileObj);
     public static void TriggerRequestDamageBuilding(Vector3Int cellPosition, int damage) => OnRequestDamageBuilding?.Invoke(cellPosition, damage);

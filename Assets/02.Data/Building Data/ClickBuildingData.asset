@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18be55550bead04cb6034a0259dac12, type: 3}
+  m_Name: ClickBuildingData
+  m_EditorClassIdentifier: Assembly-CSharp::ClickBuildingData
+  buildingName: "\uD074\uB9AD \uC800\uC7A5\uC18C"
+  buildingTile: {fileID: 11400000, guid: 0aa34edcce48b9e489c4c942dfc99971, type: 2}
+  category: 1
+  treeCost: 0
+  rockCost: 0
+  sizeWidth: 2
+  sizeHeight: 2
+  maxBuildingHp: 300
+  unlockData: {fileID: 11400000, guid: 82f7295ffac32b149b1d0a31d6a78607, type: 2}
+  maxClickBonus: 10
+  clickMaxPrefab: {fileID: 6060983459499678069, guid: ae310c3ff9d5c9c4984cd1e084efff6c, type: 3}

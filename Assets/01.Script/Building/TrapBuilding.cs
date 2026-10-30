@@ -12,6 +12,11 @@ public class TrapBuilding : MonoBehaviour
     [SerializeField] private float damageInterval = 1.0f; //공격 속도
     private float nextDamageTime;
 
+
+    public TrapBuildingData TrapData => trapData;
+    public Vector3Int CellPosition => cellPosition;
+    public int CurrentHealth => 1;
+
     public void Initialize(TrapBuildingData data, Vector3Int pos)
     {
         trapData = data;

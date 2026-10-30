@@ -81,7 +81,7 @@ public class BuildingDel : MonoBehaviour
         {
             if (buildingPlacer != null)
             {
-                buildingPlacer.CancelPlacing();
+                buildingPlacer.ClearCurrentBuilding();
             }
 
             EventManager.ChangeGameMode(GameMode.Del);

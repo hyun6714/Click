@@ -17,6 +17,9 @@ public class SaveData
     public int rockCurrency = 0;
     public int goldCurrency = 0;
 
+    public int savedMaxClickLimit;
+    public int savedDailyProductionBonus;
+
     [System.Serializable]
     public struct BuildingSaveEntry
     {

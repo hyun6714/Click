@@ -6,6 +6,9 @@ public class CurrencyManager : MonoBehaviour
     [Header("클릭 최대 횟수")] 
     [SerializeField] private int maxClickLimit = 40;
 
+    [Header("일일 생산량 보너스")]
+    [SerializeField] private int dailyProductionBonus = 0;
+
     private Dictionary<CurrencyType, int> currentCurrencies = new Dictionary<CurrencyType, int>();
 
     [SerializeField] private CurrencyDatabase currencyDatabase;
@@ -16,6 +19,9 @@ public class CurrencyManager : MonoBehaviour
         EventManager.OnCurrencyUsed += UseCurrency;
         EventManager.OnRequestCurrencyValue += SendCurrentValue;
         EventManager.OnCheckCurrency += CheckHasEnoughCurrency;
+        EventManager.OnAddMaxClick += AddMaxClick;
+        EventManager.OnAddDailyProductionBonus += AddDailyProductionBonus;
+        EventManager.OnDayChanged += HandleDayChanged;
     }
 
     private void OnDisable()
@@ -24,6 +30,9 @@ public class CurrencyManager : MonoBehaviour
         EventManager.OnCurrencyUsed -= UseCurrency;
         EventManager.OnRequestCurrencyValue -= SendCurrentValue;
         EventManager.OnCheckCurrency -= CheckHasEnoughCurrency;
+        EventManager.OnAddMaxClick -= AddMaxClick;
+        EventManager.OnAddDailyProductionBonus -= AddDailyProductionBonus;
+        EventManager.OnDayChanged -= HandleDayChanged;
     }
 
     void Start()
@@ -138,6 +147,9 @@ public class CurrencyManager : MonoBehaviour
         data.treeCurrency = GetAmount(CurrencyType.Tree);
         data.rockCurrency = GetAmount(CurrencyType.Rock);
         data.goldCurrency = GetAmount(CurrencyType.Gold);
+
+        data.savedMaxClickLimit = maxClickLimit;
+        data.savedDailyProductionBonus = dailyProductionBonus;
     }
 
     public void LoadCurrencyData(SaveData data)
@@ -152,6 +164,10 @@ public class CurrencyManager : MonoBehaviour
         SetCurrency(CurrencyType.Rock, data.rockCurrency);
         SetCurrency(CurrencyType.Gold, data.goldCurrency);
 
+        maxClickLimit = data.savedMaxClickLimit;
+        dailyProductionBonus = data.savedDailyProductionBonus;
+        EventManager.TriggerMaxClickChanged(maxClickLimit);
+
         Debug.Log("[CurrencyManager] 재화 데이터 복원 완료");
     }
 
@@ -163,6 +179,22 @@ public class CurrencyManager : MonoBehaviour
     public void AddMaxClick(int amount)
     {
         maxClickLimit += amount;
+
+        EventManager.TriggerMaxClickChanged(maxClickLimit);
+    }
+
+    private void HandleDayChanged(int currentDay)
+    {
+        int baseClick = 10;
+        int totalClickToAdd = baseClick + dailyProductionBonus;
+
+        AddCurrency(CurrencyType.Click, totalClickToAdd);
+        Debug.Log($"[일일 생산] 총 {totalClickToAdd}");
+    }
+
+    public void AddDailyProductionBonus(int amount)
+    {
+        dailyProductionBonus += amount;
     }
 
     private bool CheckHasEnoughCurrency(CurrencyType type, int value)

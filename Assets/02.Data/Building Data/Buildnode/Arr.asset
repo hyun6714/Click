@@ -13,13 +13,15 @@ MonoBehaviour:
   m_Name: Arr
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uD654\uC0B4\uD0C0\uC6CC"
-  targetBuildingData: {fileID: 11400000, guid: c8268e945b38c4f478147c23df53d236, type: 2}
   icon: {fileID: 0}
   unlockCost: 0
+  targetBuildingDatas:
+  - {fileID: 11400000, guid: 031923afec3e3ca45a890ab98648dd9e, type: 2}
+  - {fileID: 0}
   isUnlocked: 1
   isAvailable: 1
   isDefaultStartNode: 1
   upNode: {fileID: 11400000, guid: 47e6d6bbd9530c443a69cc05d11dbb03, type: 2}
   downNode: {fileID: 0}
   leftNode: {fileID: 11400000, guid: 99f272390aae7c44cb846f61ed56fb68, type: 2}
-  rightNode: {fileID: 0}
+  rightNode: {fileID: 11400000, guid: 0a30780567871e249af71a0fbfc4983a, type: 2}

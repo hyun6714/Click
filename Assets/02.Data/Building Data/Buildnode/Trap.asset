@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Trap
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uAC00\uC2DC\uD568\uC815"
-  targetBuildingData: {fileID: 11400000, guid: 462e4d4cad4b4af4dabcfed3d5915157, type: 2}
   icon: {fileID: 0}
   unlockCost: 100
+  targetBuildingDatas:
+  - {fileID: 11400000, guid: 4c9ee066335b18049a8c8f923f436fd7, type: 2}
   isUnlocked: 0
   isAvailable: 0
   isDefaultStartNode: 0

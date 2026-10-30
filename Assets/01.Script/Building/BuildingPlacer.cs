@@ -96,7 +96,6 @@ public class BuildingPlacer : MonoBehaviour
         Debug.Log($"설치 대기 중: {currentBuildingToPlace.buildingName}");
 
         EventManager.ChangeGameMode(GameMode.Build);
-
         EventManager.TriggerBuildAddPopupToggle(true);
     }
 
@@ -199,13 +198,17 @@ public class BuildingPlacer : MonoBehaviour
 
         return true;
     }
-       
-    public void CancelPlacing()
+
+    public void ClearCurrentBuilding()
     {
         currentBuildingToPlace = null;
-        Debug.Log("설치 모드 OFF");
-
         EventManager.TriggerBuildAddPopupToggle(false);
+    }
+
+    public void CancelPlacing()
+    {
+        ClearCurrentBuilding();
+        EventManager.ChangeGameMode(GameMode.Normal);
     }
 
     public void ConfirmBuild(Vector3Int cellPos, BuildingData data)

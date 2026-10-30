@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1745478bc65d5e41bf0f5399769e5d4, type: 3}
+  m_Name: ClickBo
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
+  nodeName: "\uD074\uB9AD\uCDA9\uC804\uC18C"
+  icon: {fileID: 0}
+  unlockCost: 100
+  targetBuildingDatas:
+  - {fileID: 11400000, guid: 0d994dc90cda01847813e9281cba4215, type: 2}
+  - {fileID: 11400000, guid: 4c9ee066335b18049a8c8f923f436fd7, type: 2}
+  isUnlocked: 0
+  isAvailable: 0
+  isDefaultStartNode: 0
+  upNode: {fileID: 0}
+  downNode: {fileID: 11400000, guid: 82f7295ffac32b149b1d0a31d6a78607, type: 2}
+  leftNode: {fileID: 0}
+  rightNode: {fileID: 0}

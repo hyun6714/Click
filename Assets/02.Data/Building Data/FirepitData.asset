@@ -13,15 +13,13 @@ MonoBehaviour:
   m_Name: FirepitData
   m_EditorClassIdentifier: Assembly-CSharp::FirepitData
   buildingName: "\uD654\uB85C"
-  buildingTile: {fileID: 0}
+  buildingTile: {fileID: 11400000, guid: 8aff2461d1051aa4aa8088b66eef23a6, type: 2}
   category: 3
   treeCost: 0
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 300
-  unlockData: {fileID: 0}
+  unlockData: {fileID: 11400000, guid: 0a30780567871e249af71a0fbfc4983a, type: 2}
   effectRadius: 5
-  costTree: 5
-  costRock: 5
   firepitPrefab: {fileID: 1787818935662677112, guid: e2bdf1add05d5214b9488a93fdab1154, type: 3}
