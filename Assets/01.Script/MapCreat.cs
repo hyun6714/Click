@@ -148,11 +148,6 @@ public class MapCreat : MonoBehaviour
                         if (mainBuildingTile != null)
                         {
                             buildingTilemap.SetTile(targetPos, mainBuildingTile);
-
-                            if (mainBuildingData != null)
-                            {
-                                EventManager.TriggerRequestPlaceBuilding(targetPos, mainBuildingData);
-                            }
                         }
                     }
                     else

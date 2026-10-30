@@ -108,9 +108,14 @@ public static class EventManager
     //날씨 바뀔 떄
     public static event Action<WeatherType> OnWeatherChanged;
 
+    //게임 모드 바뀔 떄
     public static Action<GameMode> OnGameModeChanged;
 
+
     public static Func<Vector3, bool> OnCheckPositionFogged;
+
+    //세이브 용도
+    public static Action OnRequestSaveGame;
 
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
@@ -142,7 +147,7 @@ public static class EventManager
     public static void TriggerRequestSyncBuildings() => OnRequestSyncBuildings?.Invoke();
     public static void TriggerCastleDestroyed() => OnCastleDestroyed?.Invoke();
     public static void TriggerGameCleared() => OnGameCleared?.Invoke();
-
+    public static void TriggerRequestSaveGame() => OnRequestSaveGame?.Invoke();
 
     //건물 비용차감 
     public static bool RequestUseCurrency(CurrencyType type, int value)

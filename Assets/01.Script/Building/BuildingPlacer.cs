@@ -29,13 +29,11 @@ public class BuildingPlacer : MonoBehaviour
     private void OnEnable()
     {
         EventManager.OnBuildingSelected += HandleBuildingSelected;
-        EventManager.OnDemolishButtonClicked += CancelPlacing;
     }
 
     private void OnDisable()
     {
         EventManager.OnBuildingSelected -= HandleBuildingSelected;
-        EventManager.OnDemolishButtonClicked -= CancelPlacing;
     }
 
     void Start()
@@ -207,7 +205,6 @@ public class BuildingPlacer : MonoBehaviour
         currentBuildingToPlace = null;
         Debug.Log("설치 모드 OFF");
 
-        EventManager.ChangeGameMode(GameMode.Normal);
         EventManager.TriggerBuildAddPopupToggle(false);
     }
 

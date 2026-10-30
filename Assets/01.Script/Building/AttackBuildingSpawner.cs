@@ -13,17 +13,24 @@ public class AttackBuildingSpawner : MonoBehaviour
     {
         EventManager.OnRequestSpawnTower += HandleSpawnTower;
         EventManager.OnBuildingUnregistered += HandleBuildingUnregistered;
+        EventManager.OnBuildingManagerReady += HandleBuildingManagerReady;
     }
 
     private void OnDisable()
     {
         EventManager.OnRequestSpawnTower -= HandleSpawnTower;
         EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
+        EventManager.OnBuildingManagerReady -= HandleBuildingManagerReady;
     }
 
     private void Start()
     {
         EventManager.TriggerRequestSyncBuildings();
+    }
+
+    private void HandleBuildingManagerReady(Tilemap tilemap)
+    {
+        buildingTilemap = tilemap;
     }
 
     private void HandleSpawnTower(Vector3Int cellPos, AttackBuildingData attackData)

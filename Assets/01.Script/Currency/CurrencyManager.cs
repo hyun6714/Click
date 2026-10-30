@@ -1,19 +1,14 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 
 public class CurrencyManager : MonoBehaviour
 {
-    [Header("Å¬¸¯ ÃÖ´ë È½¼ö")] 
+    [Header("í´ë¦­ ìµœëŒ€ íšŸìˆ˜")] 
     [SerializeField] private int maxClickLimit = 40;
 
     private Dictionary<CurrencyType, int> currentCurrencies = new Dictionary<CurrencyType, int>();
 
     [SerializeField] private CurrencyDatabase currencyDatabase;
-
-    private void Awake()
-    {
-        InitializeCurrencies();
-    }
 
     private void OnEnable()
     {
@@ -31,11 +26,24 @@ public class CurrencyManager : MonoBehaviour
         EventManager.OnCheckCurrency -= CheckHasEnoughCurrency;
     }
 
+    void Start()
+    {
+        SaveData loadedData = SaveLoadManager.LoadGame();
+        if (loadedData != null)
+        {
+            LoadCurrencyData(loadedData);
+        }
+        else
+        {
+            InitializeCurrencies();
+        }
+    }
+
     private void InitializeCurrencies()
     {
         if (currencyDatabase == null)
         {
-            Debug.Log("ÀçÈ­ µ¥ÀÌÅÍº£ÀÌ½º°¡ ¾ø½À´Ï´Ù");
+            Debug.Log("ì¬í™” ë°ì´í„°ë² ì´ìŠ¤ê°€ ì—†ìŠµë‹ˆë‹¤");
             return;
         }
 
@@ -52,7 +60,7 @@ public class CurrencyManager : MonoBehaviour
         return currencyDatabase.GetCurrencyInfo(type);
     }
 
-    //ÇöÀç À¯Àú°¡ °¡Áø ÀçÈ­ ¼ö·® ¹İÈ¯
+    //í˜„ì¬ ìœ ì €ê°€ ê°€ì§„ ì¬í™” ìˆ˜ëŸ‰ ë°˜í™˜
     public int GetAmount(CurrencyType type)
     {
         if (currentCurrencies.TryGetValue(type, out int amount))
@@ -63,7 +71,7 @@ public class CurrencyManager : MonoBehaviour
         return 0;
     }
 
-    //ÀçÈ­ È¹µæ
+    //ì¬í™” íšë“
     public void AddCurrency(CurrencyType type, int amount)
     {
         if (amount <= 0)
@@ -84,7 +92,7 @@ public class CurrencyManager : MonoBehaviour
         EventManager.CurrencyChanged(type, currentCurrencies[type]);
     }
 
-    //ÀçÈ­ Â÷°¨ 
+    //ì¬í™” ì°¨ê° 
     public bool UseCurrency(CurrencyType type, int amount)
     {
         if (amount <= 0)
@@ -95,7 +103,7 @@ public class CurrencyManager : MonoBehaviour
         int current = GetAmount(type);
         if (current < amount)
         {
-            Debug.Log($"{type} ÀçÈ­°¡ ºÎÁ·ÇÕ´Ï´Ù");
+            Debug.Log($"{type} ì¬í™”ê°€ ë¶€ì¡±í•©ë‹ˆë‹¤");
             return false;
         }
 
@@ -106,7 +114,7 @@ public class CurrencyManager : MonoBehaviour
         return true;
     }
 
-    // ÀçÈ­ °ª ¼³Á¤
+    // ì¬í™” ê°’ ì„¤ì •
     public void SetCurrency(CurrencyType type, int amount)
     {
         currentCurrencies[type] = amount;
@@ -117,6 +125,34 @@ public class CurrencyManager : MonoBehaviour
     private void SendCurrentValue(CurrencyType type)
     {
         EventManager.CurrencyChanged(type, GetAmount(type));
+    }
+
+    public void SaveCurrencyData(SaveData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        data.clickCurrency = GetAmount(CurrencyType.Click);
+        data.treeCurrency = GetAmount(CurrencyType.Tree);
+        data.rockCurrency = GetAmount(CurrencyType.Rock);
+        data.goldCurrency = GetAmount(CurrencyType.Gold);
+    }
+
+    public void LoadCurrencyData(SaveData data)
+    {
+        if (data == null)
+        {
+            return;
+        }
+
+        SetCurrency(CurrencyType.Click, data.clickCurrency);
+        SetCurrency(CurrencyType.Tree, data.treeCurrency);
+        SetCurrency(CurrencyType.Rock, data.rockCurrency);
+        SetCurrency(CurrencyType.Gold, data.goldCurrency);
+
+        Debug.Log("[CurrencyManager] ì¬í™” ë°ì´í„° ë³µì› ì™„ë£Œ");
     }
 
     public int GetMaxClick()
