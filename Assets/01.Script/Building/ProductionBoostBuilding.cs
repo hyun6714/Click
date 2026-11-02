@@ -6,9 +6,22 @@ public class ProductionBoostBuilding : MonoBehaviour, IDamageable
     private Vector3Int cellPosition;
     private int currentHealth;
 
+    private bool effectApplied;
+
     public ProductionBoostBuildingData BoostData => boostData;
     public int CurrentHealth => currentHealth;
     public Vector3Int CellPosition => cellPosition;
+
+    private void OnEnable()
+    {
+        EventManager.OnBuildingUnregistered += HandleBuildingUnregistered;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
+    }
+
 
     public void Initialize(ProductionBoostBuildingData data, Vector3Int pos)
     {
@@ -19,47 +32,48 @@ public class ProductionBoostBuilding : MonoBehaviour, IDamageable
         ApplyBuildingEffect();
     }
 
+    private void HandleBuildingUnregistered(Vector3Int unregisteredCell)
+    {
+        if (unregisteredCell == cellPosition)
+        {
+            RemoveBuildingEffect();
+        }
+    }
+
+
     private void ApplyBuildingEffect()
     {
-        if (boostData == null)
+        if (boostData == null || effectApplied)
         {
             return;
         }
 
         Debug.Log($"[건물 효과 적용] {boostData.buildingName} 건설 일일 생산량 보너스 {boostData.dailyProductionBonus} 증가");
         EventManager.TriggerAddDailyProductionBonus(boostData.dailyProductionBonus);
+
+        effectApplied = true;
     }
 
     private void RemoveBuildingEffect()
     {
-        if (boostData == null)
+        if (boostData == null || !effectApplied)
         {
             return;
         }
 
         Debug.Log($"[건물 효과 해제] {boostData.buildingName} 파괴 일일 생산량 보너스 감소");
         EventManager.TriggerAddDailyProductionBonus(-boostData.dailyProductionBonus);
+
+        effectApplied = false;
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        Debug.Log($"[생산 건물 피격] {boostData.buildingName} 남은 체력: {currentHealth} / {boostData.maxBuildingHp}");
-
-        if (currentHealth <= 0)
+        if (damage <= 0)
         {
-            DestroyBuilding();
+            return;
         }
-    }
 
-    private void DestroyBuilding()
-    {
-        Debug.Log($"[생산 건물 파괴] {boostData.buildingName} 파괴 및 타일 제거 요청");
-
-        RemoveBuildingEffect();
-        EventManager.TriggerRequestDemolish(cellPosition);
-        Destroy(gameObject);
+        EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 }

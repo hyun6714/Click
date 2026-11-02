@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEditor.PlayerSettings;
 
-public class BuildingManager : MonoBehaviour
+public partial class BuildingManager : MonoBehaviour
 {
     [Header("건물 타일맵 참조")]
     public Tilemap buildingTilemap;
@@ -15,13 +13,11 @@ public class BuildingManager : MonoBehaviour
     [Header("메인 건물 전용 데이터")]
     public BuildingData mainBuildingData;
 
+    [SerializeField] private GameObject demolitionEffectPrefab;
+    [SerializeField] private float demolitionEffectDuration = 1f;
     private bool isInitialized = false;
 
-    private GameTimeManager timeMgr;
-    private CurrencyManager currencyMgr;
-    private WeatherManager weatherMgr;
-    private BuildingUnlockManager unlockMgr;
-    private BuildingPlacer buildingPlacer;
+    public bool IsInitialized => isInitialized;
 
     private void OnEnable()
     {
@@ -50,32 +46,6 @@ public class BuildingManager : MonoBehaviour
         buildingPlacer = Object.FindFirstObjectByType<BuildingPlacer>();
     }
 
-    void Start()
-    {
-        InitializeGameAsync();
-    }
-
-    private async void InitializeGameAsync()
-    {
-        await Task.Yield();
-
-        SaveData loadedData = SaveLoadManager.LoadGame();
-
-        if (loadedData != null)
-        {
-            if (buildingPlacer != null)
-            {
-                LoadBuildingData(loadedData, buildingPlacer.availableBuildings);
-            }
-        }
-
-        EventManager.TriggerBuildingManagerReady(buildingTilemap);
-        EventManager.TriggerRequestSyncBuildings();
-
-        isInitialized = true;
-        Debug.Log("[BuildingManager] 비동기 지연 로드 및 초기화 완료");
-    }
-
     public List<Vector3Int> GetAllBuildingPositions()
     {
         return new List<Vector3Int>(buildingHpDictionary.Keys);
@@ -90,12 +60,14 @@ public class BuildingManager : MonoBehaviour
             buildingTilemap.SetTile(cellPosition, data.buildingTile);
         }
 
-        buildingHpDictionary[cellPosition] = data.maxBuildingHp;
+        int maxHp = data is BarricadeBuildingData barricadeHpData ? barricadeHpData.maxHealth : data.maxBuildingHp;
+
+        buildingHpDictionary[cellPosition] = maxHp;
         buildingDataDictionary[cellPosition] = data;
 
         EventManager.TriggerBuildingRegistered(cellPosition);
 
-        Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {data.maxBuildingHp}");
+        Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {maxHp}");
 
         if (data is AttackBuildingData attackData)
         {
@@ -131,18 +103,27 @@ public class BuildingManager : MonoBehaviour
     //건물 공격 받을 시 
     private void HandleDamageBuildingRequest(Vector3Int cellPosition, int damage)
     {
-        if (buildingHpDictionary.ContainsKey(cellPosition))
+        if (damage <= 0 || !buildingHpDictionary.TryGetValue(cellPosition, out int currentHp))
         {
-            buildingHpDictionary[cellPosition] -= damage;
-            int currentHp = buildingHpDictionary[cellPosition];
-
-            Debug.Log($"[건물 피격] 좌표 {cellPosition} | 남은 HP: {currentHp}");
-
-            if (currentHp <= 0)
-            {
-                HandleDemolishRequest(cellPosition);
-            }
+            return;
         }
+
+
+        int remainingHp = Mathf.Max(0, currentHp - damage);
+        buildingHpDictionary[cellPosition] = remainingHp;
+        PlayTileHitEffect(cellPosition);
+
+        Debug.Log($"[건물 피격] 좌표 {cellPosition} | 남은 HP: {remainingHp}");
+
+        if (remainingHp <= 0)
+        {
+            HandleDemolishRequest(cellPosition);
+        }
+    }
+
+    public bool TryGetBuildingHealth(Vector3Int cellPosition, out int health)
+    {
+        return buildingHpDictionary.TryGetValue(cellPosition, out health);
     }
 
     //건물 철거,파괴 시 호출
@@ -151,6 +132,7 @@ public class BuildingManager : MonoBehaviour
         if (buildingDataDictionary.ContainsKey(cellPosition))
         {
             BuildingData data = buildingDataDictionary[cellPosition];
+            Vector3 effectPosition = buildingTilemap.GetCellCenterWorld(cellPosition);
 
             if (data.category == BuildingCategory.Main)
             {
@@ -178,11 +160,17 @@ public class BuildingManager : MonoBehaviour
 
             buildingTilemap.SetTile(cellPosition, null);
 
+            if (demolitionEffectPrefab != null)
+            {
+                GameObject effectInstance = Instantiate(demolitionEffectPrefab, effectPosition, Quaternion.identity);
+                Destroy(effectInstance, demolitionEffectDuration);
+            }
+
             buildingHpDictionary.Remove(cellPosition);
             buildingDataDictionary.Remove(cellPosition);
             EventManager.TriggerBuildingUnregistered(cellPosition);
 
-            Debug.Log($"[건물 철거 성공] 좌표 {cellPosition} 철거 및 데이터 삭제 완료");
+            Debug.Log($"[건물 파괴,철거 성공] 좌표 {cellPosition} 철거 및 데이터 삭제 완료");
 
             TriggerSave();
         }
@@ -190,6 +178,19 @@ public class BuildingManager : MonoBehaviour
         {
             Debug.Log("철거할 건물의 데이터가 존재하지 않습니다.");
         }
+    }
+
+
+    public void RegisterMainBuilding(Vector3Int cellPos, BuildingData data)
+    {
+        if (data == null)
+        {
+            Debug.LogError("mainBuildingData가 비어 있습니다.");
+            return;
+        }
+
+        buildingDataDictionary[cellPos] = data;
+        buildingHpDictionary[cellPos] = data.maxBuildingHp;
     }
 
     private void HandleSyncBuildings()
@@ -259,94 +260,4 @@ public class BuildingManager : MonoBehaviour
         TriggerSave();
     }
 
-    public void SaveBuildingData(SaveData data)
-    {
-        if(data == null)
-        {
-            return;
-        }
-
-        data.savedBuildings.Clear();
-
-        foreach (var pair in buildingDataDictionary)
-        {
-            Vector3Int pos = pair.Key;
-            BuildingData buildingData = pair.Value;
-
-            SaveData.BuildingSaveEntry entry = new SaveData.BuildingSaveEntry();
-            entry.x = pos.x;
-            entry.y = pos.y;
-            entry.z = pos.z;
-            entry.buildingName = buildingData.buildingName;
-
-            entry.tileName = (buildingData.buildingTile != null) ? buildingData.buildingTile.name : "";
-
-            data.savedBuildings.Add(entry);
-        }
-    }
-
-    public void LoadBuildingData(SaveData data, List<BuildingData> availableBuildings)
-    {
-        if (data == null || data.savedBuildings == null)
-        { 
-            return;
-        }
-
-        foreach (var entry in data.savedBuildings)
-        {
-            Vector3Int pos = new Vector3Int(entry.x, entry.y, entry.z);
-
-            BuildingData foundData = availableBuildings.Find(b => b.buildingName == entry.buildingName);
-
-            if (foundData != null)
-            {
-                PlaceBuildingSilently(pos, foundData);
-
-                Debug.Log($"[로드 체크] 건물: {entry.buildingName}, 저장된 tileName: '{entry.tileName}'");
-
-                if (buildingTilemap != null && !string.IsNullOrEmpty(entry.tileName))
-                {
-                    TileBase targetTile = null;
-                    foreach (var b in availableBuildings)
-                    {
-                        if (b.buildingTile != null && b.buildingTile.name == entry.tileName)
-                        {
-                            targetTile = b.buildingTile;
-                            break;
-                        }
-                    }
-
-                    //못 찾으면 직접 찾기 
-                    if (targetTile != null)
-                    {
-                        buildingTilemap.SetTile(pos, targetTile);
-                        Debug.Log($"[타일 꽂기 성공] 좌표 {pos}에 타일 [{targetTile.name}] 꽂음!");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[타일 찾기 실패] availableBuildings 목록에서 '{entry.tileName}' 이름을 가진 타일을 못 찾았습니다!");
-                    }
-                }
-            }
-            else
-            {
-                Debug.LogWarning($"[Load] 저장된 건물의 ScriptableObject = Null: {entry.buildingName}");
-            }
-        }
-        Debug.Log("[BuildingManager] 건물 데이터 복원 완료");
-    }
-
-    private void TriggerSave()
-    {
-        if (!isInitialized)
-        {
-            return;
-        }
-
-        Debug.Log("[디버그] TriggerSave 함수 진입 성공");
-        BuildingManager buildingMgr = this;
-
-        SaveLoadManager.SaveGame(timeMgr, currencyMgr, buildingMgr, weatherMgr, unlockMgr);
-        Debug.Log("[BuildingManager] 건물 변경으로 인한 자동 저장 완료");
-    }
 }

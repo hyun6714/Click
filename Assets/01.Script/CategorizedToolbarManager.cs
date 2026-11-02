@@ -22,11 +22,6 @@ public class CategorizedToolbarManager : MonoBehaviour
         EventManager.OnBuildingUnlockUpdated -= InitCategorizedToolbar;
     }
 
-    void Start()
-    {
-        InitCategorizedToolbar();
-    }
-
     public void InitCategorizedToolbar()
     {
         ClearTransformChildren(resourceContentParent);

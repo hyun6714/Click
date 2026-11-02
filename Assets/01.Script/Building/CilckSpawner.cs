@@ -18,7 +18,7 @@ public class CilckSpawner : MonoBehaviour
 
     private void OnDisable()
     {
-        EventManager.OnRequestSpawnBuilding += HandleSpawnBuilding;
+        EventManager.OnRequestSpawnBuilding -= HandleSpawnBuilding;
         EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
         EventManager.OnBuildingManagerReady -= HandleBuildingManagerReady;
     }
@@ -41,7 +41,7 @@ public class CilckSpawner : MonoBehaviour
         }
 
         GameObject targetPrefab = null;
-        Vector3 worldPos = buildingTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0f);
+        Vector3 worldPos = buildingTilemap.GetCellCenterWorld(cellPos);
 
         if (buildingData is ClickBuildingData clickData)
         {

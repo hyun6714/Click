@@ -133,19 +133,39 @@ public class BuildingPlacer : MonoBehaviour
         int treeCost = currentBuildingToPlace.treeCost;
         int rockCost = currentBuildingToPlace.rockCost;
 
-        bool success = EventManager.RequestCheckCurrency(CurrencyType.Tree, treeCost) &&
-                       EventManager.RequestCheckCurrency(CurrencyType.Rock, rockCost);
+        bool hasEnoughTree = treeCost <= 0 || EventManager.RequestCheckCurrency(CurrencyType.Tree, treeCost);
 
-        if (!success)
+        bool hasEnoughRock = rockCost <= 0 || EventManager.RequestCheckCurrency(CurrencyType.Rock, rockCost);
+
+        if (!hasEnoughTree || !hasEnoughRock)
         {
-            Debug.Log("자원 부족");
+            Debug.Log("자원이 부족합니다.");
             return;
         }
 
-        EventManager.RequestUseCurrency(CurrencyType.Tree, treeCost);
-        EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
-        EventManager.TriggerRequestPlaceBuilding(cellPos, currentBuildingToPlace);
+        // 나무부터 차감
+        bool treeSpent = treeCost <= 0 || EventManager.RequestUseCurrency(CurrencyType.Tree, treeCost);
 
+        if (!treeSpent)
+        {
+            Debug.Log("나무 재화 차감에 실패");
+            return;
+        }
+
+        bool rockSpent = rockCost <= 0 || EventManager.RequestUseCurrency(CurrencyType.Rock, rockCost);
+
+        if (!rockSpent)
+        {
+            if (treeCost > 0)
+            {
+                EventManager.CurrencyAdded(CurrencyType.Tree, treeCost);
+            }
+
+            Debug.Log("돌 재화 차감에 실패 나무 재화 복구");
+            return;
+        }
+
+        EventManager.TriggerRequestPlaceBuilding(cellPos, currentBuildingToPlace);
         hasMainBuilding = true;
     }
 

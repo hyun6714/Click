@@ -18,6 +18,11 @@ public class BuildingInfoUI : MonoBehaviour
 
     private Vector3Int currentSelectedCell;
 
+    public BuildingManager buildingManager;
+
+    private BuildingData currentData;
+
+
     private void Awake()
     {
         HidePanel();
@@ -29,13 +34,42 @@ public class BuildingInfoUI : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (infoPanel != null && infoPanel.activeSelf && currentData != null)
+        {
+            UpdateHpText(0);
+        }
+    }
+
+    private void UpdateHpText(int fallbackHp)
+    {
+        if (currentData == null || hpText == null)
+        {
+            return;
+        }
+
+        int currentHp = fallbackHp;
+
+        if (buildingManager != null &&
+            buildingManager.TryGetBuildingHealth(currentSelectedCell, out int managerHp))
+        {
+            currentHp = managerHp;
+        }
+
+        int maxHp = currentData is BarricadeBuildingData barricadeData ? barricadeData.maxHealth: currentData.maxBuildingHp;
+
+        hpText.text = $"체력: {currentHp} / {maxHp}";
+    }
+
     public void ShowBuildingInfo(Vector3Int cellPos, BuildingData data, int currentHp)
     {
         currentSelectedCell = cellPos;
+        currentData = data;
         infoPanel.SetActive(true);
 
         nameText.text = data.buildingName;
-        hpText.text = $"체력: {currentHp} / {data.maxBuildingHp}";
+        UpdateHpText(currentHp);
 
         float rangeValue = 0f;
 

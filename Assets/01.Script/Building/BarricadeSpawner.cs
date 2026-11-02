@@ -50,7 +50,7 @@ public class BarricadeSpawner : MonoBehaviour
                 return;
             }
 
-            Vector3 worldPos = buildingTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0f);
+            Vector3 worldPos = buildingTilemap.GetCellCenterWorld(cellPos);
             GameObject spawnedObj = Instantiate(targetPrefab, worldPos, Quaternion.identity);
             spawnedBarricades[cellPos] = spawnedObj;
 

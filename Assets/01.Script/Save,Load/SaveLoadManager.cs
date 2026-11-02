@@ -13,7 +13,14 @@ public class SaveLoadManager : MonoBehaviour
         WeatherManager weatherManager,
         BuildingUnlockManager unlockManager)
     {
+        SaveData previousData = LoadGame();
         SaveData data = new SaveData();
+
+        if (previousData != null)
+        {
+            data.waveCheckpointActive = previousData.waveCheckpointActive;
+            data.waveStartBuildings = previousData.waveStartBuildings ?? new System.Collections.Generic.List<SaveData.BuildingSaveEntry>();
+        }
 
         if (timeManager != null)
         {
@@ -64,7 +71,14 @@ public class SaveLoadManager : MonoBehaviour
         return data;
     }
 
-    // 저장 파일 삭제 (테스트용)
+    public static void SaveRawData(SaveData data)
+    {
+        string json = JsonUtility.ToJson(data, true);
+        File.WriteAllText(SavePath, json);
+
+        Debug.Log($"[SaveLoadManager] 체크포인트 저장 완료: {SavePath}");
+    }
+
     public static void DeleteSaveData()
     {
         if (File.Exists(SavePath))

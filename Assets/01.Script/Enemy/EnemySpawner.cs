@@ -16,6 +16,8 @@ public class EnemySpawner : MonoBehaviour
     private WaveData currentActiveWave;
     private bool isWaveInProgress = false;
 
+    [SerializeField] private BuildingManager buildingManager;
+
     private void OnEnable()
     {
         EventManager.OnDayChanged += HandleDayChanged;
@@ -30,62 +32,78 @@ public class EnemySpawner : MonoBehaviour
 
     private void HandleDayChanged(int day)
     {
-        Debug.Log($"[스포너] {day}일차 도달 - 웨이브 체크");
-
-        WaveData matchingWave = waveDataList.Find(wave => wave.targetDay == day);
-
-        if (matchingWave != null)
+        if (waveDataList == null)
         {
-            StartCoroutine(SpawnSpecificWaveRoutine(matchingWave));
+            Debug.LogError("[EnemySpawner] waveDataList가 연결이 안됨");
+            return;
         }
-        else
+
+        WaveData matchingWave = waveDataList.Find(wave => wave != null && wave.targetDay == day);
+        if (matchingWave == null)
         {
-            Debug.Log($"[스포너] {day}일차 Wave 없음");
+            return;
         }
+
+        if (spawnPoints == null || spawnPoints.Length == 0)
+        {
+            Debug.LogError($"[EnemySpawner] {day}일차 웨이브: spawnPoints가 비어 있음");
+            return;
+        }
+
+        StartCoroutine(SpawnSpecificWaveRoutine(matchingWave));
     }
 
     private IEnumerator SpawnSpecificWaveRoutine(WaveData wave)
     {
+        if (isWaveInProgress)
+        {
+            Debug.LogWarning("[EnemySpawner] 기존 웨이브가 진행 중 새 웨이브 시작 안함");
+            yield break;
+        }
+
+        if (buildingManager == null)
+        {
+            Debug.LogError("[EnemySpawner] BuildingManager가 연결되지 않았습니다.");
+            yield break;
+        }
+
+        while (!buildingManager.IsInitialized)
+        {
+            yield return null;
+        }
+
+
+        buildingManager.BeginWaveBuildingCheckpoint();
+
         isWaveInProgress = true;
         currentActiveWave = wave;
+        remainingEnemyCount = 0;
 
-        int totalSpawnCount = 0;
-        if (wave.spawnInfoList != null)
-        {
-            foreach (var info in wave.spawnInfoList)
-            {
-                totalSpawnCount += info.spawnCount;
-            }
-        }
-
-        if (wave.isBossWave && wave.bossEnemy != null)
-        {
-            totalSpawnCount += 1;
-        }
-
-        remainingEnemyCount = totalSpawnCount;
-
-        Debug.Log($"[스포너] {wave.targetDay}일차 웨이브 시작");
-
-        //일반 
         if (wave.spawnInfoList != null)
         {
             foreach (var spawnInfo in wave.spawnInfoList)
             {
-                if (spawnInfo.enemyData == null || spawnPoints.Length == 0)
-                {
+                if (spawnInfo.enemyData == null || spawnInfo.spawnCount <= 0)
                     continue;
-                }
 
                 for (int i = 0; i < spawnInfo.spawnCount; i++)
                 {
-                    int randomSpawnIndex = Random.Range(0, spawnPoints.Length);
-                    Vector3 spawnPos = spawnPoints[randomSpawnIndex].position;
+                    int index = Random.Range(0, spawnPoints.Length);
+                    Vector3 spawnPos = spawnPoints[index].position;
 
-                    GameObject enemyObj = enemyPool.GetEnemy(spawnInfo.enemyData, spawnPos, mainCastleTarget);
-                    if (enemyObj.TryGetComponent<EnemyBase>(out var enemyScript))
+                    GameObject enemyObj = enemyPool.GetEnemy(
+                        spawnInfo.enemyData, spawnPos, mainCastleTarget
+                    );
+
+                    if (enemyObj != null &&
+                        enemyObj.TryGetComponent<EnemyBase>(out var enemy))
                     {
-                        enemyScript.Initialize(spawnInfo.enemyData, spawnPos, mainCastleTarget);
+                        enemy.Initialize(spawnInfo.enemyData, spawnPos, mainCastleTarget);
+                        remainingEnemyCount++;
+                    }
+                    else
+                    {
+                        Debug.LogError("[EnemySpawner] 적 오브젝트 생성 또는 EnemyBase 초기화 실패");
                     }
 
                     yield return new WaitForSeconds(1f);
@@ -93,25 +111,33 @@ public class EnemySpawner : MonoBehaviour
             }
         }
 
-        //보스
         if (wave.isBossWave && wave.bossEnemy != null)
         {
             yield return new WaitForSeconds(1.5f);
 
-            int randomSpawnIndex = Random.Range(0, spawnPoints.Length);
-            Vector3 spawnPos = spawnPoints[randomSpawnIndex].position;
-
+            int index = Random.Range(0, spawnPoints.Length);
+            Vector3 spawnPos = spawnPoints[index].position;
             GameObject bossObj = enemyPool.GetEnemy(wave.bossEnemy, spawnPos, mainCastleTarget);
-            if (bossObj.TryGetComponent<BossEnemy>(out var bossScript))
+
+            if (bossObj != null)
             {
-                bossScript.InitializeBoss(wave.bossEnemy, spawnPos, mainCastleTarget);
-                Debug.Log($"[스포너] 보스 [{wave.bossEnemy.enemyName}] 출현 (클리어 보스 여부: {wave.isClearWave})");
+                if (bossObj.TryGetComponent<BossEnemy>(out var boss))
+                {
+                    boss.InitializeBoss(wave.bossEnemy, spawnPos, mainCastleTarget);
+                    remainingEnemyCount++;
+                }
+                else if (bossObj.TryGetComponent<EnemyBase>(out var enemy))
+                {
+                    enemy.Initialize(wave.bossEnemy, spawnPos, mainCastleTarget);
+                    remainingEnemyCount++;
+                }
             }
-            else if (bossObj.TryGetComponent<EnemyBase>(out var enemyScript))
-            {
-                enemyScript.Initialize(wave.bossEnemy, spawnPos, mainCastleTarget);
-                Debug.Log($"[스포너] 보스 [{wave.bossEnemy.enemyName}] 출현");
-            }
+        }
+
+        // 스폰된 적이 없으면 웨이브를 즉시 완료
+        if (remainingEnemyCount == 0)
+        { 
+            CompleteCurrentWave();
         }
     }
 
@@ -137,6 +163,7 @@ public class EnemySpawner : MonoBehaviour
         Debug.Log($"[스포너] {currentActiveWave.targetDay}일차 웨이브 클리어 보상 골드: {currentActiveWave.rewardGold}");
 
         EventManager.OnWaveCleared?.Invoke(currentActiveWave);
+        buildingManager.EndWaveBuildingCheckpoint();
 
         if (currentActiveWave.isClearWave)
         {

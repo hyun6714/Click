@@ -42,13 +42,12 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        Debug.Log($"[채집 건물 피격] {buildingData.buildingName} 남은 체력: {currentHealth} / {buildingData.maxBuildingHp}");
-
-        if (currentHealth <= 0)
+        if (damage <= 0)
         {
-            DestroyBuilding();
+            return;
         }
+
+        EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 
     private IEnumerator GatherRoutine()
@@ -118,23 +117,14 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
                         int rewardAmount = (currentWeather == WeatherType.Rain) ? 2 : 1;
 
-                        EventManager.CurrencyAdded(rewardType, 1);
-                        Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} (+1 {rewardType})");
+                        EventManager.CurrencyAdded(rewardType, rewardAmount);
+                        Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} ({rewardType})");
 
                         return;
                     }
                 }
             }
         }
-    }
-
-    private void DestroyBuilding()
-    {
-        Debug.Log($"[채집 건물 파괴] {buildingData.buildingName} 파괴 및 타일 제거");
-
-        EventManager.TriggerRequestDemolish(cellPosition);
-
-        Destroy(gameObject);
     }
 
     private void HandleWeatherChanged(WeatherType newWeather)

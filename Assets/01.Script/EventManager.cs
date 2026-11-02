@@ -125,7 +125,17 @@ public static class EventManager
 
     //세이브 용도
     public static Action OnRequestSaveGame;
-    
+
+    //투사체
+    public static event Action<
+        GameObject, // 투사체 프리팹
+        Vector3,    // 발사 위치
+        Vector3,    // 건물 셀 중심 월드 좌표
+        Vector3Int, // 건물 셀 좌표
+        int,        // 피해량
+        float       // 투사체 속도
+    > OnRequestSpawnBuildingProjectile;
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -204,6 +214,24 @@ public static class EventManager
             return OnCheckPositionFogged.Invoke(pos);
         }
         return false;
+    }
+
+    public static void TriggerRequestSpawnBuildingProjectile(
+        GameObject prefab,
+        Vector3 spawnPos,
+        Vector3 targetWorldPos,
+        Vector3Int targetCell,
+        int damage,
+    float speed)
+    {
+        OnRequestSpawnBuildingProjectile?.Invoke(
+            prefab,
+            spawnPos,
+            targetWorldPos,
+            targetCell,
+            damage,
+            speed
+        );
     }
 }
 

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StoneBuild
   m_EditorClassIdentifier: Assembly-CSharp::ProductionBuildingData
   buildingName: "\uCC44\uC11D\uC7A5"
-  buildingTile: {fileID: 11400000, guid: 897a50ac9525e1f459fdfbda9c4bd508, type: 2}
+  buildingTile: {fileID: 11400000, guid: d6028ead0d2ef9140b81560364aee1ac, type: 2}
   category: 1
   treeCost: 2
   rockCost: 2

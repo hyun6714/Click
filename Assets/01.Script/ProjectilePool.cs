@@ -8,12 +8,14 @@ public class ProjectilePool : MonoBehaviour
     private void OnEnable()
     {
         EventManager.OnRequestSpawnProjectile += HandleSpawnProjectile;
+        EventManager.OnRequestSpawnBuildingProjectile += HandleSpawnBuildingProjectile;
         EventManager.OnRequestReturnProjectile += ReturnProjectile;
     }
 
     private void OnDisable()
     {
         EventManager.OnRequestSpawnProjectile -= HandleSpawnProjectile;
+        EventManager.OnRequestSpawnBuildingProjectile -= HandleSpawnBuildingProjectile;
         EventManager.OnRequestReturnProjectile -= ReturnProjectile;
     }
 
@@ -55,5 +57,61 @@ public class ProjectilePool : MonoBehaviour
         }
 
         projectilePoolDict[prefabRef].Enqueue(projObj);
+    }
+
+    private void HandleSpawnBuildingProjectile(
+        GameObject prefab,
+        Vector3 spawnPos,
+        Vector3 targetWorldPos,
+        Vector3Int targetCell,
+        int damage,
+    float speed)
+    {
+        if (prefab == null)
+        {
+            Debug.LogError("[ProjectilePool] 투사체 프리팹이 null입니다.");
+            return;
+        }
+
+        if (!projectilePoolDict.ContainsKey(prefab))
+        {
+            projectilePoolDict[prefab] = new Queue<GameObject>();
+        }
+
+        GameObject projectileObj;
+
+        if (projectilePoolDict[prefab].Count > 0)
+        {
+            projectileObj = projectilePoolDict[prefab].Dequeue();
+            projectileObj.transform.position = spawnPos;
+            projectileObj.SetActive(true);
+        }
+        else
+        {
+            projectileObj = Instantiate(
+                prefab,
+                spawnPos,
+                Quaternion.identity
+            );
+        }
+
+        if (projectileObj.TryGetComponent<EnemyProjectile>(out var projectile))
+        {
+            projectile.InitializeBuilding(
+                targetWorldPos,
+                targetCell,
+                damage,
+                speed,
+                prefab
+            );
+        }
+        else
+        {
+            Debug.LogError(
+                $"투사체 프리팹에 EnemyProjectile이 없습니다: {prefab.name}"
+            );
+
+            Destroy(projectileObj);
+        }
     }
 }

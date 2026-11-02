@@ -19,21 +19,11 @@ public class BarricadeBuilding : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        Debug.Log($"[바리케이트 피격] 남은 체력: {currentHealth} / {barricadeData.maxHealth}");
-
-        if (currentHealth <= 0)
+        if (damage <= 0)
         {
-            DestroyBarricade();
+            return;
         }
-    }
 
-    private void DestroyBarricade()
-    {
-        Debug.Log($"[바리케이트 파괴] {barricadeData.buildingName} 파괴 및 타일 제거");
-
-        EventManager.TriggerRequestDemolish(cellPosition);
-
-        Destroy(gameObject);
+        EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 }
