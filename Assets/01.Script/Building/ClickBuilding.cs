@@ -6,6 +6,8 @@ public class ClickBuilding : MonoBehaviour, IDamageable
     private Vector3Int cellPosition;
     private int currentHealth;
 
+    private bool effectApplied;
+
     public ClickBuildingData ClickData => clickData;
     public int CurrentHealth => currentHealth;
     public Vector3Int CellPosition => cellPosition;
@@ -20,18 +22,27 @@ public class ClickBuilding : MonoBehaviour, IDamageable
         ApplyBuildingEffect();
     }
 
-    private void OnMouseDown()
+    private void OnEnable()
     {
+        EventManager.OnBuildingUnregistered += HandleBuildingUnregistered;
+    }
 
-        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
-        { 
-            return;
+    private void OnDisable()
+    {
+        EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
+    }
+
+    private void HandleBuildingUnregistered(Vector3Int unregisteredCell)
+    {
+        if (unregisteredCell == cellPosition)
+        {
+            RemoveBuildingEffect();
         }
     }
 
     private void ApplyBuildingEffect()
     {
-        if (clickData == null)
+        if (clickData == null || effectApplied)
         {
             return;
         }
@@ -39,11 +50,12 @@ public class ClickBuilding : MonoBehaviour, IDamageable
         Debug.Log($"[건물 효과 적용] {clickData.buildingName} 건설 완료 최대 클릭 수 {clickData.maxClickBonus} 증가");
 
         EventManager.TriggerAddMaxClick(clickData.maxClickBonus);
+        effectApplied = true;
     }
 
     private void RemoveBuildingEffect()
     {
-        if (clickData == null)
+        if (clickData == null || !effectApplied)
         {
             return;
         }
@@ -51,29 +63,16 @@ public class ClickBuilding : MonoBehaviour, IDamageable
         Debug.Log($"[건물 효과 해제] {clickData.buildingName} 파괴됨 최대 클릭 수 감소");
 
         EventManager.TriggerAddMaxClick(-clickData.maxClickBonus);
+        effectApplied = false;
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        Debug.Log($"[클릭 건물 피격] {clickData.buildingName} 남은 체력: {currentHealth} / {clickData.maxBuildingHp}");
-
-        if (currentHealth <= 0)
+        if (damage <= 0)
         {
-            DestroyBuilding();
+            return;
         }
-    }
 
-    private void DestroyBuilding()
-    {
-        Debug.Log($"[클릭 건물 파괴] {clickData.buildingName} 파괴 및 타일 제거 요청");
-
-        RemoveBuildingEffect();
-
-        EventManager.TriggerRequestDemolish(cellPosition);
-
-        Destroy(gameObject);
+        EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 }

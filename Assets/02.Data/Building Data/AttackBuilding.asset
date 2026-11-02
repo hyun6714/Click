@@ -24,5 +24,6 @@ MonoBehaviour:
   attackRange: 5
   attackDamage: 10
   attackSpeed: 1
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 3708120434545309992, guid: 2dbbe5bc564bf804294b91db649c469d, type: 3}
   towerPrefab: {fileID: 3752268226886733323, guid: 5c34e31e538e26a439786c60c3235c14, type: 3}
+  projectileSpeed: 8

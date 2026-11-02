@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class AttackBuilding : MonoBehaviour, IDamageable
 {
+    [SerializeField] private Transform firePoint;
+
     private WeatherType currentWeather = WeatherType.Sunny;
     private AttackBuildingData towerData;
     private Vector3Int cellPosition;
@@ -12,6 +14,8 @@ public class AttackBuilding : MonoBehaviour, IDamageable
 
     private float baseAttackSpeed;
     private float baseAttackDamage;
+
+    [SerializeField] private Animator animator;
 
     public AttackBuildingData TowerData => towerData;
     public int CurrentHealth => currentHealth;
@@ -59,8 +63,15 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         Transform target = FindNearestEnemy(towerData.attackRange);
         if (target != null)
         {
+            float attackSpeed = GetCurrentAttackSpeed();
+
+            if (attackSpeed <= 0f)
+            {
+                return;
+            }
+
             Attack(target);
-            cooldown = 1f / GetCurrentAttackSpeed();
+            cooldown = 1f / attackSpeed;
         }
     }
 
@@ -84,35 +95,49 @@ public class AttackBuilding : MonoBehaviour, IDamageable
 
     void Attack(Transform target)
     {
-        float finalDamage = GetCurrentAttackDamage();
-        Debug.Log($"{towerData.buildingName} 공격! 데미지: {finalDamage}");
-
-        if (target.TryGetComponent<IDamageable>(out var damageableTarget))
+        if (target == null || towerData.projectilePrefab == null)
         {
-            damageableTarget.TakeDamage(Mathf.RoundToInt(finalDamage));
+            return;
         }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+
+        Vector3 spawnPosition = firePoint != null ? firePoint.position : transform.position;
+
+        Vector2 direction = (target.position - spawnPosition).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+        GameObject projectileObject = Instantiate( towerData.projectilePrefab, spawnPosition, Quaternion.Euler(0f, 0f, angle));
+
+        TowerProjectile projectile = projectileObject.GetComponent<TowerProjectile>();
+
+        if (projectile == null)
+        {
+            Debug.LogError($"[{towerData.buildingName}] projectilePrefab에 TowerProjectile 스크립트가 없어 발사체를 제거합니다.");
+
+            Destroy(projectileObject);
+            return;
+        }
+
+        int damage = Mathf.RoundToInt(GetCurrentAttackDamage());
+
+        projectile.Initialize(target, damage, towerData.projectileSpeed
+        );
+
+        Debug.Log($"[{towerData.buildingName}] 투사체 발사! 데미지: {damage}");
     }
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        Debug.Log($"[타워 피격] {towerData.buildingName} 남은 체력: {currentHealth} / {towerData.maxBuildingHp}");
-
-        if (currentHealth <= 0)
+        if (damage <= 0)
         {
-            DestroyTower();
+            return;
         }
-    }
 
-    private void DestroyTower()
-    {
-        Debug.Log($"[타워 파괴] {towerData.buildingName} 파괴 및 타일 제거");
-
-        EventManager.TriggerRequestDemolish(cellPosition);
-
-        Destroy(gameObject);
+        EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 
     private float GetCurrentAttackSpeed()

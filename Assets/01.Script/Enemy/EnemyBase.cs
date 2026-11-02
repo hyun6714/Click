@@ -10,6 +10,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     protected int currentHp;
     protected Transform target;
     protected float attackCooldown;
+    private bool isDead;
 
     [Header("Å¸°ÙÆÃ ¼³Á¤")]
     [SerializeField] protected float searchRadius = 5f;
@@ -22,6 +23,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     protected int baseAttackDamage;
 
     protected static Tilemap sharedBuildingTilemap;
+
+    [SerializeField] protected Animator animator;
+    protected SpriteRenderer spriteRenderer;
 
     private void OnEnable()
     {
@@ -69,6 +73,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         transform.position = spawnPosition;
         attackCooldown = 0f;
+
+        isDead = false;
         hasBuildingTarget = false;
 
         baseMoveSpeed = enemyData.moveSpeed;
@@ -76,6 +82,25 @@ public class EnemyBase : MonoBehaviour, IDamageable
         baseAttackDamage = enemyData.attackDamage;
 
         gameObject.SetActive(true);
+
+        if (spriteRenderer == null)
+        {
+            spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        }
+
+        if (animator == null)
+        {
+            animator = GetComponent<Animator>();
+        }
+
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("Hit");
+            animator.SetBool("Move", false);
+            animator.Play("EnemyIdle", 0, 0f);
+        }
+
         EventManager.TriggerRequestSyncBuildings();
     }
 
@@ -102,7 +127,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
-            targetWorldPos = sharedBuildingTilemap.CellToWorld(currentBuildingCell) + new Vector3(0.5f, 0.5f, 0f);
+            targetWorldPos = sharedBuildingTilemap.GetCellCenterWorld(currentBuildingCell);
         }
         else if (target != null)
         {
@@ -110,6 +135,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         else
         {
+            SetMoveAnimation(false);
             return;
         }
 
@@ -117,18 +143,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (distance <= enemyData.attackRange)
         {
+            SetMoveAnimation(false);
+
             if (attackCooldown <= 0)
             {
-                Attack();
-
                 float speedMultiplier = (currentWeather == WeatherType.Storm) ? 1.2f : (currentWeather == WeatherType.Snow ? 0.8f : 1.0f);
                 float currentAttackSpeed = baseAttackSpeed * speedMultiplier;
 
+                if (currentAttackSpeed <= 0f)
+                {
+                    attackCooldown = 1f;
+                    return;
+                }
+
+                FaceDirection(targetWorldPos - transform.position);
+                PlayAttackAnimation();
                 attackCooldown = 1f / currentAttackSpeed;
             }
         }
         else
         {
+            SetMoveAnimation(true);
             Move(targetWorldPos);
         }
     }
@@ -147,7 +182,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         foreach (var pos in activeBuildingPositions)
         {
-            Vector3 worldPos = sharedBuildingTilemap.CellToWorld(pos) + new Vector3(0.5f, 0.5f, 0f);
+            Vector3 worldPos = sharedBuildingTilemap.GetCellCenterWorld(pos);
             float distanceToBuilding = Vector2.Distance(transform.position, worldPos);
 
             if (distanceToBuilding <= searchRadius && distanceToBuilding < shortestDistance)
@@ -196,17 +231,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void TakeDamage(int damage)
     {
+        if (isDead || damage <= 0)
+        {
+            return;
+        }
+
+
         currentHp -= damage;
         currentHp = Mathf.Max(currentHp, 0);
 
         if (currentHp <= 0)
         {
             Die();
+            return;
+        }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Hit");
         }
     }
 
     protected virtual void Die()
     {
+        if (isDead)
+        {
+            return;
+        }
+
+        isDead = true;
+
+
         EventManager.CurrencyAdded(CurrencyType.Gold, enemyData.rewardGold);
         EventManager.TriggerRequestReturnPool(enemyData.enemyType, gameObject);
 
@@ -245,5 +300,41 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
 
         return Mathf.RoundToInt(baseAttackDamage * multiplier);
+    }
+
+    protected void FaceDirection(Vector3 direction)
+    {
+        if (spriteRenderer == null || Mathf.Abs(direction.x) < 0.01f)
+        {
+            return;
+        }
+
+        spriteRenderer.flipX = direction.x < 0f;
+    }
+
+    protected void SetMoveAnimation(bool isMoving)
+    {
+        if (animator != null)
+        {
+            animator.SetBool("Move", isMoving);
+        }
+    }
+
+    protected void PlayAttackAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+
+        Attack();
+    }
+
+    public void AnimationAttackEvent()
+    {
+        if (!isDead)
+        {
+            Attack();
+        }
     }
 }

@@ -31,6 +31,10 @@ public class SaveData
     }
 
     public List<BuildingSaveEntry> savedBuildings = new List<BuildingSaveEntry>();
+
+    public bool waveCheckpointActive;
+    public List<BuildingSaveEntry> waveStartBuildings = new List<BuildingSaveEntry>();
+
     public List<string> unlockedBuildingNodes = new List<string>();
 
 }

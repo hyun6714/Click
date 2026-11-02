@@ -25,41 +25,68 @@ public class ResourceBuildingSpawner : MonoBehaviour
         EventManager.OnBuildingUnregistered -= HandleBuildingUnregistered;
     }
 
+
     private void HandleSpawnResourceBuilding(Vector3Int cellPos, ProductionBuildingData prodData)
     {
+        if (prodData == null)
+        {
+            return;
+        }
         if (prodData.productionPrefab == null)
         {
             return;
         }
-
-        if (spawnedResourceBuildings.ContainsKey(cellPos) && spawnedResourceBuildings[cellPos] != null)
+        if (spawnedResourceBuildings.TryGetValue(cellPos, out GameObject existingObj)&& existingObj != null)
         {
             return;
         }
+        spawnedResourceBuildings.Remove(cellPos);
 
-        // 월드 좌표로 변환
-        Vector3 worldPos = buildingTilemap.CellToWorld(cellPos) + new Vector3(0.5f, 0.5f, 0f);
-
-        // 생성
-        GameObject spawnedObj = Instantiate(prodData.productionPrefab, worldPos, Quaternion.identity);
-
-        // 데이터 주입
-        ResourceBuilding controller = spawnedObj.GetComponent<ResourceBuilding>();
-        if (controller != null)
+        if (buildingTilemap == null)
         {
-            controller.Initialize(prodData, cellPos, treeTilemap, stoneTilemap);
+            Debug.LogError("[ResourceBuildingSpawner] buildingTilemap이 연결되지 않았습니다.");
+            return;
         }
+
+        Vector3 worldPos =
+            buildingTilemap.GetCellCenterWorld(cellPos);
+
+        GameObject spawnedObj = Instantiate(
+            prodData.productionPrefab,
+            worldPos,
+            Quaternion.identity
+        );
+
+        ResourceBuilding controller = spawnedObj.GetComponent<ResourceBuilding>();
+
+        if (controller == null)
+        {
+            Destroy(spawnedObj);
+            return;
+        }
+
+        controller.Initialize(
+            prodData,
+            cellPos,
+            treeTilemap,
+            stoneTilemap
+        );
+
+        spawnedResourceBuildings[cellPos] = spawnedObj;
     }
 
     private void HandleBuildingUnregistered(Vector3Int cellPos)
     {
-        if (spawnedResourceBuildings.ContainsKey(cellPos))
+        if (!spawnedResourceBuildings.TryGetValue(cellPos, out GameObject spawnedObj))
         {
-            if (spawnedResourceBuildings[cellPos] != null)
-            {
-                Destroy(spawnedResourceBuildings[cellPos]);
-            }
-            spawnedResourceBuildings.Remove(cellPos);
+            return;
+        }
+
+        spawnedResourceBuildings.Remove(cellPos);
+
+        if (spawnedObj != null)
+        {
+            Destroy(spawnedObj);
         }
     }
 }

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8531513552405656932}
   - component: {fileID: 2551740477922977952}
   - component: {fileID: 8066338613927365280}
+  - component: {fileID: -2766418588184987531}
   m_Layer: 6
   m_Name: Fast
   m_TagString: Untagged
@@ -152,5 +153,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FastEnemy
   searchRadius: 10
-  obstacleTilemaps: []
+  animator: {fileID: -2766418588184987531}
   speedMultiplier: 1.5
+--- !u!95 &-2766418588184987531
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7625555156563882916}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3649103765b8ec5478ff37653f55f16b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

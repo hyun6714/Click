@@ -7,9 +7,9 @@ public class RangedEnemy : EnemyBase
 
     protected override void Attack()
     {
-        if (enemyData.projectilePrefab == null)
-        {
-            return;
+        if (enemyData == null || enemyData.projectilePrefab == null)
+        {  
+            return; 
         }
 
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
@@ -18,20 +18,39 @@ public class RangedEnemy : EnemyBase
 
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
-            Vector3 buildingWorldPos = sharedBuildingTilemap.CellToWorld(currentBuildingCell) + new Vector3(0.5f, 0.5f, 0f);
+            Vector3 buildingWorldPos =
+                sharedBuildingTilemap.GetCellCenterWorld(currentBuildingCell);
 
-            EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
-            Debug.Log($"[{enemyData.enemyName}] 타일 건물 {currentBuildingCell}에 원거리 공격");
+            EventManager.TriggerRequestSpawnBuildingProjectile(
+                enemyData.projectilePrefab,
+                spawnPos,
+                buildingWorldPos,
+                currentBuildingCell,
+                finalDamage,
+                enemyData.projectileSpeed
+            );
+
+            Debug.Log(
+                $"[{enemyData.enemyName}] 건물 {currentBuildingCell}을 향해 투사체 발사"
+            );
+
+            return;
         }
 
+        if (target == null)
+        {
+            return;
+        }
+
+        // 주변 건물이 타겟이 아닐 때 기본 타겟인 성으로 발사
         EventManager.TriggerRequestSpawnProjectile(
             enemyData.projectilePrefab,
             spawnPos,
             target,
-            finalDamage, 
+            finalDamage,
             enemyData.projectileSpeed
         );
 
-        Debug.Log($"[{enemyData.enemyName}] {target.name}게 원거리 공격 발사");
+        Debug.Log($"[{enemyData.enemyName}] {target.name}을 향해 투사체 발사");
     }
 }

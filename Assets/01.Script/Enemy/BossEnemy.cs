@@ -11,8 +11,6 @@ public class BossEnemy : EnemyBase
     {
         Debug.Log($"[보스 처치 완료]");
 
-        EventManager.TriggerRequestReturnPool(enemyData.enemyType, gameObject);
-
         base.Die();
     }
 }

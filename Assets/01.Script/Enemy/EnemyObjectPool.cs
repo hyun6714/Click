@@ -44,13 +44,6 @@ public class EnemyObjectPool : MonoBehaviour
         {
             enemyObj = Instantiate(data.enemyPrefab);
         }
-
-        EnemyBase enemyScript = enemyObj.GetComponent<EnemyBase>();
-        if (enemyScript != null)
-        {
-            enemyScript.Initialize(data, spawnPos, target);
-        }
-
         return enemyObj;
     }
 }

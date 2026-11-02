@@ -11,4 +11,6 @@ public class AttackBuildingData : BuildingData
     [Header("타워 프리팹")]
     public GameObject projectilePrefab; // 발사체
     public GameObject towerPrefab;
+
+    public float projectileSpeed = 8f;
 }

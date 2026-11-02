@@ -71,11 +71,16 @@ public class GameTimeManager : MonoBehaviour
 
     private void Update()
     {
+        if (realSecondsPerSecond <= 0f)
+        {
+            return;
+        }
+
         timer += Time.deltaTime;
 
-        if (timer >= realSecondsPerSecond)
+        while (timer >= realSecondsPerSecond)
         {
-            timer -= 1f; // 남은 잔여 시간 보존
+            timer -= realSecondsPerSecond;
             AdvanceSecond();
         }
     }
@@ -134,12 +139,7 @@ public class GameTimeManager : MonoBehaviour
         float startMinute = currentMinute;
 
         float currentTotalMinutes = (currentHour * 60f) + currentMinute;
-        float targetTotalMinutes = (targetMorningHour * 60f);
-
-        if (currentTotalMinutes >= targetTotalMinutes)
-        {
-            targetTotalMinutes += 24f * 60f; 
-        }
+        float targetTotalMinutes = (targetMorningHour * 60f) + (24f * 60f);
 
         float elapsed = 0f;
         timer = 0f;

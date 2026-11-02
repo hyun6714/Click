@@ -21,5 +21,5 @@ MonoBehaviour:
   attackSpeed: 1
   attackRange: 5
   rewardGold: 10
-  projectilePrefab: {fileID: 0}
+  projectilePrefab: {fileID: 348859885669305152, guid: 58b5977f9ce6c2e4f9a4924d6060e749, type: 3}
   projectileSpeed: 10

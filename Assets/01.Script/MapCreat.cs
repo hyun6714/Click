@@ -49,6 +49,8 @@ public class MapCreat : MonoBehaviour
     [Range(0f, 1f)]
     public float treeDensity = 0.0f;
 
+    [SerializeField] private BuildingManager buildingManager;
+
     private void OnEnable()
     {
         EventManager.OnCheckPositionFogged += CheckIfFogged;
@@ -127,10 +129,18 @@ public class MapCreat : MonoBehaviour
         }
 
         HashSet<Vector3Int> forbiddenForTrees = new HashSet<Vector3Int>();
-
         if (buildingTilemap != null && mainBuildingTile != null)
         {
             buildingTilemap.SetTile(mainBuildingCellPos, mainBuildingTile);
+
+            if (buildingManager != null && mainBuildingData != null)
+            {
+                buildingManager.RegisterMainBuilding(mainBuildingCellPos, mainBuildingData);
+            }
+            else
+            {
+                Debug.LogError("[MapCreat] BuildingManager 또는 mainBuildingData가 연결되지 않았습니다.");
+            }
         }
 
         if (buildingTilemap != null)
@@ -273,6 +283,7 @@ public class MapCreat : MonoBehaviour
             treeTilemap.SetTiles(treePositionsList.ToArray(), treeTilesList.ToArray());
         }
     }
+
 
     private bool CheckIfFogged(Vector3 pos)
     {

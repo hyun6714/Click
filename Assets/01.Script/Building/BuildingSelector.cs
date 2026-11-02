@@ -6,6 +6,7 @@ public class BuildingSelector : MonoBehaviour
 {
     [Header("UI 참조")]
     public BuildingInfoUI buildingInfoUI;
+    [SerializeField] private BuildingManager buildingManager;
 
     [Header("레이어 설정")]
     public LayerMask buildingLayer;
@@ -42,7 +43,7 @@ public class BuildingSelector : MonoBehaviour
             {
                 if (buildingInfoUI != null)
                 {
-                    buildingInfoUI.ShowBuildingInfo(attackBuilding.CellPosition, attackBuilding.TowerData, attackBuilding.CurrentHealth);
+                    buildingInfoUI.ShowBuildingInfo(attackBuilding.CellPosition, attackBuilding.TowerData, GetBuildingHealth(attackBuilding.CellPosition, attackBuilding.CurrentHealth));
                 }
             }
 
@@ -50,23 +51,23 @@ public class BuildingSelector : MonoBehaviour
             {
                 if (buildingInfoUI != null)
                 {
-                    buildingInfoUI.ShowBuildingInfo(resourceBuilding.CellPosition, resourceBuilding.BuildingData, resourceBuilding.CurrentHealth);
+                    buildingInfoUI.ShowBuildingInfo(resourceBuilding.CellPosition, resourceBuilding.BuildingData, GetBuildingHealth(resourceBuilding.CellPosition, resourceBuilding.CurrentHealth));
                 }
             }
 
             else if (clickedObject.TryGetComponent<ClickBuilding>(out var clickBuilding))
             {
-                buildingInfoUI.ShowBuildingInfo(clickBuilding.CellPosition, clickBuilding.ClickData, clickBuilding.CurrentHealth);
+                buildingInfoUI.ShowBuildingInfo(clickBuilding.CellPosition, clickBuilding.ClickData, GetBuildingHealth(clickBuilding.CellPosition, clickBuilding.CurrentHealth));
             }
 
             else if (clickedObject.TryGetComponent<ProductionBoostBuilding>(out var boostBuilding))
             {
-                buildingInfoUI.ShowBuildingInfo(boostBuilding.CellPosition, boostBuilding.BoostData, boostBuilding.CurrentHealth);
+                buildingInfoUI.ShowBuildingInfo(boostBuilding.CellPosition, boostBuilding.BoostData, GetBuildingHealth(boostBuilding.CellPosition, boostBuilding.CurrentHealth));
             }
 
             else if (clickedObject.TryGetComponent<BarricadeBuilding>(out var barricadeBuilding))
             {
-                buildingInfoUI.ShowBuildingInfo(barricadeBuilding.CellPosition, barricadeBuilding.BarricadeData, barricadeBuilding.CurrentHealth);
+                buildingInfoUI.ShowBuildingInfo(barricadeBuilding.CellPosition, barricadeBuilding.BarricadeData, GetBuildingHealth(barricadeBuilding.CellPosition, barricadeBuilding.CurrentHealth));
             }
 
             else if (clickedObject.GetComponentInParent<TrapBuilding>() is var trap && trap != null)
@@ -80,7 +81,7 @@ public class BuildingSelector : MonoBehaviour
 
             else if (clickedObject.TryGetComponent<Firepit>(out var firepitBuilding))
             {
-                buildingInfoUI.ShowBuildingInfo(firepitBuilding.CellPosition, firepitBuilding.FirepitData, firepitBuilding.CurrentHealth);
+                buildingInfoUI.ShowBuildingInfo(firepitBuilding.CellPosition, firepitBuilding.FirepitData, GetBuildingHealth(firepitBuilding.CellPosition, firepitBuilding.CurrentHealth));
             }
         }
         else
@@ -90,5 +91,16 @@ public class BuildingSelector : MonoBehaviour
                 buildingInfoUI.HidePanel();
             }
         }
+    }
+
+    private int GetBuildingHealth(Vector3Int cellPosition, int fallbackHealth)
+    {
+        if (buildingManager != null &&
+            buildingManager.TryGetBuildingHealth(cellPosition, out int health))
+        {
+            return health;
+        }
+
+        return fallbackHealth;
     }
 }

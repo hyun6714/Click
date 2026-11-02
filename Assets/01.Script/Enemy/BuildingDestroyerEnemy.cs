@@ -9,6 +9,7 @@ public class BuildingDestroyerEnemy : EnemyBase
     {
         if (target == null)
         {
+            SetMoveAnimation(false);
             return;
         }
 
@@ -16,15 +17,28 @@ public class BuildingDestroyerEnemy : EnemyBase
 
         if (distance <= enemyData.attackRange)
         {
+            SetMoveAnimation(false);
+
             if (attackCooldown <= 0)
             {
-                Attack();
-                attackCooldown = 1f / enemyData.attackSpeed;
+                float speedMultiplier = (currentWeather == WeatherType.Storm) ? 1.2f : (currentWeather == WeatherType.Snow ? 0.8f : 1.0f);
+                float currentAttackSpeed = baseAttackSpeed * speedMultiplier;
+
+                if (currentAttackSpeed <= 0f)
+                {
+                    attackCooldown = 1f;
+                    return;
+                }
+
+                FaceDirection(target.position - transform.position);
+                PlayAttackAnimation();
+                attackCooldown = 1f / currentAttackSpeed;
             }
         }
 
         else
         {
+            SetMoveAnimation(true);
             Move(target.position);
         }
     }
@@ -40,4 +54,5 @@ public class BuildingDestroyerEnemy : EnemyBase
             }
         }
     }
+
 }

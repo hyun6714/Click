@@ -10,7 +10,6 @@ public class BuildUIManager : MonoBehaviour
     public GameObject buildAddPopup; //설치 팝업
 
     [Header("프리팹 연결")]
-    public GameObject mainCastlePrefab;
     public GameObject attackTowerPrefab;
     public GameObject resourceBuildingPrefab; 
     public GameObject barricadePrefab;

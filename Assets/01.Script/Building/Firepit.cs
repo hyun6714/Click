@@ -56,22 +56,12 @@ public class Firepit : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        Debug.Log($"[화로 피격] 남은 체력: {currentHealth} / {firepitData.maxBuildingHp}");
-
-        if (currentHealth <= 0)
+        if (damage <= 0)
         {
-            DestroyFirepit();
+            return;
         }
-    }
 
-    private void DestroyFirepit()
-    {
-        Debug.Log("[화로 파괴]");
-        EventManager.TriggerRequestDemolish(cellPosition);
-        Destroy(gameObject);
+        EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 
     private void OnDrawGizmosSelected()
