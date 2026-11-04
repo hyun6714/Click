@@ -4,7 +4,8 @@ public enum GameMode
 {
     Normal,
     Build,
-    Del
+    Del,
+    Paused
 }
 
 

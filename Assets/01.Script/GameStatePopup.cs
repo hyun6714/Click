@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // UI 컴포넌트를 사용하기 위해 필요합니다.
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameStatePopup : MonoBehaviour

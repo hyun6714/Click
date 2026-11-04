@@ -2,8 +2,33 @@ using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+public enum SoundCue
+{
+    ButtonClick,
+    GameOver,
+    GameClear,
+    ResourceBuildingGather,
+    ResourceGather,
+    BuildingPlace,
+    BuildingDemolish,
+    BuildingHit,
+    EnemyAttack,
+    EnemyHit,
+    WaveStart,
+    WaveClear,
+    Rain,
+    Storm,
+    Snow,
+    TrapActivate,
+    BombExplode,
+    BuildingUnlock,
+    ResourceInsufficient
+}
+
 public static class EventManager
 {
+    public static bool IsWaveInProgress { get; private set; }
+
     //UI 전용 현재 재화량 가져오기 
     public static event Action<CurrencyType> OnRequestCurrencyValue;
     //재화 얻을 시
@@ -85,6 +110,10 @@ public static class EventManager
     //웨이브 클리어 시
     public static Action<WaveData> OnWaveCleared;
 
+    //웨이브 시작&끝
+    public static event Action<WaveData> OnWaveStarted;
+    public static event Action<WaveData> OnWaveEnded;
+
     //투사체 풀에 반납 
     public static event Action<GameObject, GameObject> OnRequestReturnProjectile;
 
@@ -136,6 +165,11 @@ public static class EventManager
         float       // 투사체 속도
     > OnRequestSpawnBuildingProjectile;
 
+
+    //사운드 
+    public static event Action<SoundCue> OnSoundRequested;
+
+
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
     public static void CurrencyAdded(CurrencyType type, int value) => OnCurrencyAdded?.Invoke(type, value);
@@ -171,6 +205,7 @@ public static class EventManager
     public static void TriggerCastleDestroyed() => OnCastleDestroyed?.Invoke();
     public static void TriggerGameCleared() => OnGameCleared?.Invoke();
     public static void TriggerRequestSaveGame() => OnRequestSaveGame?.Invoke();
+    public static void PlaySound(SoundCue cue) => OnSoundRequested?.Invoke(cue);
 
     //건물 비용차감 
     public static bool RequestUseCurrency(CurrencyType type, int value)
@@ -222,7 +257,7 @@ public static class EventManager
         Vector3 targetWorldPos,
         Vector3Int targetCell,
         int damage,
-    float speed)
+        float speed)
     {
         OnRequestSpawnBuildingProjectile?.Invoke(
             prefab,
@@ -232,6 +267,18 @@ public static class EventManager
             damage,
             speed
         );
+    }
+
+    public static void TriggerWaveStarted(WaveData wave)
+    {
+        IsWaveInProgress = true;
+        OnWaveStarted?.Invoke(wave);
+    }
+
+    public static void TriggerWaveEnded(WaveData wave)
+    {
+        IsWaveInProgress = false;
+        OnWaveEnded?.Invoke(wave);
     }
 }
 

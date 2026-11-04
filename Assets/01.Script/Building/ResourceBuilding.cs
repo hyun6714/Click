@@ -4,6 +4,11 @@ using UnityEngine.Tilemaps;
 
 public class ResourceBuilding : MonoBehaviour, IDamageable
 {
+    [Header("FX용 참조")]
+    [SerializeField] private ResourceGainPopup gainPopupPrefab;
+    [SerializeField] private Sprite treeIcon;
+    [SerializeField] private Sprite rockIcon;
+
     private ProductionBuildingData buildingData;
     private Vector3Int cellPosition;
     private Tilemap treeTilemap;
@@ -113,13 +118,24 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
                     if (ellipticalValue <= 1.0f)
                     {
-                        targetTilemap.SetTile(targetPos, null);
-
                         int rewardAmount = (currentWeather == WeatherType.Rain) ? 2 : 1;
 
-                        EventManager.CurrencyAdded(rewardType, rewardAmount);
-                        Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} ({rewardType})");
+                        Sprite icon = rewardType == CurrencyType.Tree ? treeIcon : rockIcon;
 
+                        if (gainPopupPrefab != null)
+                        {
+                            Vector3 popupPosition = targetCenterWorld;
+
+                            ResourceGainPopup popup = Instantiate( gainPopupPrefab, popupPosition, Quaternion.identity);
+
+                            popup.Initialize(rewardAmount, icon);
+                        }
+
+                        targetTilemap.SetTile(targetPos, null);
+                        EventManager.CurrencyAdded(rewardType, rewardAmount);
+                        EventManager.PlaySound(SoundCue.ResourceBuildingGather);
+
+                        Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} ({rewardType})");
                         return;
                     }
                 }

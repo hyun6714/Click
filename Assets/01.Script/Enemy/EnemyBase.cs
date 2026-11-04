@@ -240,6 +240,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentHp -= damage;
         currentHp = Mathf.Max(currentHp, 0);
 
+        EventManager.PlaySound(SoundCue.EnemyHit);
+
         if (currentHp <= 0)
         {
             Die();
@@ -327,14 +329,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             animator.SetTrigger("Attack");
         }
 
+        EventManager.PlaySound(SoundCue.EnemyAttack);
         Attack();
-    }
-
-    public void AnimationAttackEvent()
-    {
-        if (!isDead)
-        {
-            Attack();
-        }
     }
 }

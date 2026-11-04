@@ -45,6 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7203a340082958443a189023a532b842, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ResourceBuilding
+  gainPopupPrefab: {fileID: 8599588534052455297, guid: 299f8b9d5ec30b64e892e3a52d3bca64, type: 3}
+  treeIcon: {fileID: 6853316077166303748, guid: c0382eca0835cce479c25110d4d7a40d, type: 3}
+  rockIcon: {fileID: -6960903314270103029, guid: e0568493eacadea4db9d5c701140db53, type: 3}
 --- !u!61 &8358891132760035980
 BoxCollider2D:
   m_ObjectHideFlags: 0
