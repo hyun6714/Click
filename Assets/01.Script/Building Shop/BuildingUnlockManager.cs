@@ -90,6 +90,7 @@ public class BuildingUnlockManager : MonoBehaviour
         }
 
         node.isUnlocked = true;
+        EventManager.PlaySound(SoundCue.BuildingUnlock);
         Debug.Log($"[해금 성공] {node.nodeName} 해금 완료");
 
         UnlockAdjacentNodes(node);

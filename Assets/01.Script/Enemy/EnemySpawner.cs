@@ -67,17 +67,18 @@ public class EnemySpawner : MonoBehaviour
             yield break;
         }
 
+        isWaveInProgress = true;
+        currentActiveWave = wave;
+        remainingEnemyCount = 0;
+
+        EventManager.TriggerWaveStarted(wave);
+
         while (!buildingManager.IsInitialized)
         {
             yield return null;
         }
 
-
         buildingManager.BeginWaveBuildingCheckpoint();
-
-        isWaveInProgress = true;
-        currentActiveWave = wave;
-        remainingEnemyCount = 0;
 
         if (wave.spawnInfoList != null)
         {
@@ -160,6 +161,8 @@ public class EnemySpawner : MonoBehaviour
     private void CompleteCurrentWave()
     {
         isWaveInProgress = false;
+        EventManager.TriggerWaveEnded(currentActiveWave);
+
         Debug.Log($"[스포너] {currentActiveWave.targetDay}일차 웨이브 클리어 보상 골드: {currentActiveWave.rewardGold}");
 
         EventManager.OnWaveCleared?.Invoke(currentActiveWave);

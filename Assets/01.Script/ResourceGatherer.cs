@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
+using System.Collections;
 
 public class ResourceGatherer : MonoBehaviour
 {
@@ -16,14 +17,20 @@ public class ResourceGatherer : MonoBehaviour
     public Tilemap fogTilemap; //¾È°³ Å¸ÀÏ¸Ê
 
     [Header("¾È°³ ¼³Á¤")]
-    [SerializeField] private int fogRevealRadius = 1; // Å¬¸¯ ½Ã °ÈÈú ¹üÀ§
+    [SerializeField] private int fogRevealRadius = 2; // Å¬¸¯ ½Ã °ÈÈú ¹üÀ§
     [SerializeField] private int fogClickCost = 1; // ¼Ò¸ð·®
+    [SerializeField] private float fogFadeDuration = 0.12f;
 
     [Header("Ã¤Áý ½Ã È¹µæ·®")]
     [SerializeField] private int harvestAmount = 1;
 
     [Header("Å¬¸¯ Â÷°¨")]
     [SerializeField] private int clickCost = 1;
+
+    [Header("FX¿ë ÂüÁ¶")]
+    [SerializeField] private ResourceGainPopup gainPopupPrefab;
+    [SerializeField] private Sprite treeIcon;
+    [SerializeField] private Sprite rockIcon;
 
     private HashSet<Vector3Int> revealedFogPositions = new HashSet<Vector3Int>();
 
@@ -92,6 +99,7 @@ public class ResourceGatherer : MonoBehaviour
 
         if (!canUseClick)
         {
+            EventManager.PlaySound(SoundCue.ResourceInsufficient);
             Debug.Log("Å¬¸¯ È½¼ö ºÎÁ·");
             return;
         }
@@ -101,7 +109,18 @@ public class ResourceGatherer : MonoBehaviour
         if (treeTilemap.HasTile(cellPos))
         {
             EventManager.CurrencyAdded(CurrencyType.Tree, finalHarvestAmount);
+            EventManager.PlaySound(SoundCue.ResourceGather);
             Debug.Log("³ª¹« È¹µæ");
+
+            if (gainPopupPrefab != null)
+            {
+                Vector3 popupPosition = treeTilemap.GetCellCenterWorld(cellPos);
+
+                ResourceGainPopup popup = Instantiate(gainPopupPrefab, popupPosition, Quaternion.identity);
+
+                popup.Initialize(finalHarvestAmount, treeIcon);
+            }
+
 
             treeTilemap.SetTile(cellPos, null);
             return;
@@ -110,7 +129,17 @@ public class ResourceGatherer : MonoBehaviour
         if (stoneTilemap.HasTile(cellPos))
         {
             EventManager.CurrencyAdded(CurrencyType.Rock, finalHarvestAmount);
+            EventManager.PlaySound(SoundCue.ResourceGather);
             Debug.Log("µ¹ È¹µæ");
+
+            if (gainPopupPrefab != null)
+            {
+                Vector3 popupPosition = stoneTilemap.GetCellCenterWorld(cellPos);
+
+                ResourceGainPopup popup = Instantiate(gainPopupPrefab, popupPosition, Quaternion.identity);
+
+                popup.Initialize(finalHarvestAmount, rockIcon);
+            }
 
             stoneTilemap.SetTile(cellPos, null);
             return;
@@ -119,6 +148,12 @@ public class ResourceGatherer : MonoBehaviour
 
     private void TryClearFog(Vector3Int centerCell)
     {
+        if (fogTilemap == null || revealedFogPositions.Contains(centerCell) ||
+            !fogTilemap.HasTile(centerCell) || !HasClearCardinalNeighbor(centerCell))
+        {
+            return;
+        }
+
         if (fogClickCost > 0)
         {
             bool canUseClick = EventManager.RequestUseCurrency(CurrencyType.Click, fogClickCost);
@@ -129,24 +164,132 @@ public class ResourceGatherer : MonoBehaviour
             }
         }
 
+        StartCoroutine(ClearFogPlusThenDiagonals(centerCell));
+
+        Debug.Log("¾È°³°¡ °ÈÇû½À´Ï´Ù!");
+    }
+
+    private IEnumerator ClearFogPlusThenDiagonals(Vector3Int centerCell)
+    {
+        List<Vector3Int> plusCells = new List<Vector3Int>();
+
+        Vector3Int[] plusOffsets = {Vector3Int.zero, Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right,
+                                   new Vector3Int(0, 2, 0), new Vector3Int(0, -2, 0), new Vector3Int(-2, 0, 0), new Vector3Int(2, 0, 0) };
+       
+        foreach (Vector3Int offset in plusOffsets)
+        {
+            Vector3Int cell = centerCell + offset;
+
+            if (fogTilemap.HasTile(cell) && revealedFogPositions.Add(cell))
+            {
+                plusCells.Add(cell);
+                StartCoroutine(FadeOutFogTile(cell, 0f));
+            }
+        }
+
+        bool plusTilesRemain;
+
+        do
+        {
+            plusTilesRemain = false;
+
+            foreach (Vector3Int cell in plusCells)
+            {
+                if (fogTilemap.HasTile(cell))
+                {
+                    plusTilesRemain = true;
+                    break;
+                }
+            }
+
+            if (plusTilesRemain)
+            {
+                yield return null;
+            }
+        }
+
+        while (plusTilesRemain);
+
+        List<Vector3Int> remainingCells = new List<Vector3Int>();
+
         for (int x = -fogRevealRadius; x <= fogRevealRadius; x++)
         {
             for (int y = -fogRevealRadius; y <= fogRevealRadius; y++)
             {
-                Vector3Int targetPos = new Vector3Int(centerCell.x + x, centerCell.y + y, 0);
+                Vector3Int cell = centerCell + new Vector3Int(x, y, 0);
 
-                if (!revealedFogPositions.Contains(targetPos))
+                if (fogTilemap.HasTile(cell) && revealedFogPositions.Add(cell))
                 {
-                    revealedFogPositions.Add(targetPos);
-
-                    if (fogTilemap.HasTile(targetPos))
-                    {
-                        fogTilemap.SetTile(targetPos, null);
-                    }
+                    remainingCells.Add(cell);
                 }
             }
         }
 
-        Debug.Log("¾È°³°¡ °ÈÇû½À´Ï´Ù!");
+        remainingCells.Sort((a, b) =>
+        {
+            int distanceA = Mathf.Abs(a.x - centerCell.x) + Mathf.Abs(a.y - centerCell.y);
+            int distanceB = Mathf.Abs(b.x - centerCell.x) + Mathf.Abs(b.y - centerCell.y);
+            return distanceA.CompareTo(distanceB);
+        });
+
+        foreach (Vector3Int cell in remainingCells)
+        {
+            if (fogTilemap.HasTile(cell))
+            {
+                yield return StartCoroutine(FadeOutFogTile(cell, 0f));
+            }
+        }
     }
+
+
+    private bool HasClearCardinalNeighbor(Vector3Int cell)
+    {
+        Vector3Int[] directions = {Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right};
+
+        foreach (Vector3Int direction in directions)
+        {
+            Vector3Int neighbor = cell + direction;
+
+            bool isValidMapCell = referenceTilemap == null || referenceTilemap.HasTile(neighbor);
+
+            if (isValidMapCell && !fogTilemap.HasTile(neighbor))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private IEnumerator FadeOutFogTile(Vector3Int cellPos, float delay)
+    {
+        if (delay > 0f)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+
+        if (fogTilemap == null || !fogTilemap.HasTile(cellPos))
+        {
+            yield break;
+        }
+
+        Color originalColor = fogTilemap.GetColor(cellPos);
+        float duration = Mathf.Max(0.01f, fogFadeDuration);
+        float elapsed = 0f;
+
+        while (elapsed < duration && fogTilemap.HasTile(cellPos))
+        {
+            elapsed += Time.deltaTime;
+
+            Color color = originalColor;
+            color.a = Mathf.Lerp(originalColor.a, 0f, elapsed / duration);
+            fogTilemap.SetColor(cellPos, color);
+
+            yield return null;
+        }
+
+        fogTilemap.SetTile(cellPos, null);
+        fogTilemap.SetColor(cellPos, Color.white);
+    }
+
 }

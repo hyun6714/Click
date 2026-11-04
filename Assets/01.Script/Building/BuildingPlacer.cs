@@ -62,11 +62,6 @@ public class BuildingPlacer : MonoBehaviour
 
     void Update()
     {
-        if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            CancelPlacing();
-            return;
-        }
         if (Mouse.current == null || currentBuildingToPlace == null)
         {
             return;
@@ -139,6 +134,7 @@ public class BuildingPlacer : MonoBehaviour
 
         if (!hasEnoughTree || !hasEnoughRock)
         {
+            EventManager.PlaySound(SoundCue.ResourceInsufficient);
             Debug.Log("자원이 부족합니다.");
             return;
         }

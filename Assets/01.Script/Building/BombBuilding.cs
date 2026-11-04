@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BombBuilding : MonoBehaviour
 {
+    [SerializeField] private GameObject explosionEffectPrefab;
+
     private TrapBuildingData trapData;
     private Vector3Int cellPosition;
 
@@ -30,6 +32,7 @@ public class BombBuilding : MonoBehaviour
 
     private void Explode()
     {
+        EventManager.PlaySound(SoundCue.BombExplode);
         Debug.Log($"[폭발!] {trapData.buildingName}이(가) 발동 데미지: {trapData.damage}");
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius, enemyLayer);
@@ -40,6 +43,11 @@ public class BombBuilding : MonoBehaviour
             {
                 target.TakeDamage(trapData.damage);
             }
+        }
+
+        if (explosionEffectPrefab != null)
+        {
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
 
         EventManager.TriggerRequestDemolish(cellPosition);

@@ -65,7 +65,10 @@ public partial class BuildingManager : MonoBehaviour
         buildingHpDictionary[cellPosition] = maxHp;
         buildingDataDictionary[cellPosition] = data;
 
-        EventManager.TriggerBuildingRegistered(cellPosition);
+        if (!(data is TrapBuildingData))
+        {
+            EventManager.TriggerBuildingRegistered(cellPosition);
+        }
 
         Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {maxHp}");
 
@@ -112,7 +115,7 @@ public partial class BuildingManager : MonoBehaviour
         int remainingHp = Mathf.Max(0, currentHp - damage);
         buildingHpDictionary[cellPosition] = remainingHp;
         PlayTileHitEffect(cellPosition);
-
+        EventManager.PlaySound(SoundCue.BuildingDemolish);
         Debug.Log($"[건물 피격] 좌표 {cellPosition} | 남은 HP: {remainingHp}");
 
         if (remainingHp <= 0)
@@ -131,6 +134,8 @@ public partial class BuildingManager : MonoBehaviour
     {
         if (buildingDataDictionary.ContainsKey(cellPosition))
         {
+            EventManager.PlaySound(SoundCue.BuildingDemolish);
+
             BuildingData data = buildingDataDictionary[cellPosition];
             Vector3 effectPosition = buildingTilemap.GetCellCenterWorld(cellPosition);
 
@@ -160,7 +165,7 @@ public partial class BuildingManager : MonoBehaviour
 
             buildingTilemap.SetTile(cellPosition, null);
 
-            if (demolitionEffectPrefab != null)
+            if (!(data is TrapBuildingData) && demolitionEffectPrefab != null)
             {
                 GameObject effectInstance = Instantiate(demolitionEffectPrefab, effectPosition, Quaternion.identity);
                 Destroy(effectInstance, demolitionEffectDuration);
@@ -202,6 +207,11 @@ public partial class BuildingManager : MonoBehaviour
 
         foreach (var pos in buildingHpDictionary.Keys)
         {
+            if (buildingDataDictionary.TryGetValue(pos, out BuildingData data) && data is TrapBuildingData)
+            {
+                continue;
+            }
+
             EventManager.TriggerBuildingRegistered(pos);
         }
 
@@ -257,6 +267,7 @@ public partial class BuildingManager : MonoBehaviour
     private void HandlePlaceBuildingRequest(Vector3Int cellPosition, BuildingData data)
     {
         PlaceBuildingSilently(cellPosition, data);
+        EventManager.PlaySound(SoundCue.BuildingPlace);
         TriggerSave();
     }
 

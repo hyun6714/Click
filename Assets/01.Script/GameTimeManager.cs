@@ -122,6 +122,12 @@ public class GameTimeManager : MonoBehaviour
 
     public void SkipToNextDay()
     {
+        if (EventManager.IsWaveInProgress)
+        {
+            Debug.Log("웨이브 진행 중에는 날짜를 넘길 수 없습니다.");
+            return;
+        }
+
         if (isSkipping)
         {
             return;

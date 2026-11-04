@@ -40,13 +40,6 @@ public class BuildingDel : MonoBehaviour
 
     void Update()
     {
-        if (isDemolishMode && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            ToggleDemolishMode();
-            Debug.Log("철거모드 off");
-            return;
-        }
-
         if (!isDemolishMode)
         {
             return;
