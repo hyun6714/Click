@@ -38,6 +38,23 @@ public class SaveData
         public string tileName;
     }
 
+    [System.Serializable]
+    public struct SerializableVector3Int
+    {
+        public int x;
+        public int y;
+        public int z;
+
+        public SerializableVector3Int(Vector3Int v)
+        {
+            x = v.x;
+            y = v.y;
+            z = v.z;
+        }
+
+        public Vector3Int ToVector3Int() => new Vector3Int(x, y, z);
+    }
+
     public List<BuildingSaveEntry> savedBuildings = new List<BuildingSaveEntry>();
 
     public bool waveCheckpointActive;
@@ -45,9 +62,14 @@ public class SaveData
 
     public List<string> unlockedBuildingNodes = new List<string>();
 
+    public List<SerializableVector3Int> revealedFogList = new List<SerializableVector3Int>();
+
     public void InitWithDatabase(CurrencyDatabase db)
     {
-        if (db == null || db.currencies == null) return;
+        if (db == null || db.currencies == null)
+        {
+            return;
+        }
 
         foreach (var data in db.currencies)
         {

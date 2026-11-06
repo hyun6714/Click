@@ -1,9 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
-using System.Collections;
+using static SaveData;
 
 public class ResourceGatherer : MonoBehaviour
 {
@@ -38,12 +39,14 @@ public class ResourceGatherer : MonoBehaviour
     {
         EventManager.OnGameModeChanged += HandleGameModeChanged;
         EventManager.OnWeatherChanged += HandleWeatherChanged;
+        EventManager.OnRequestRevealedFogList += GetRevealedFogList;
     }
 
     private void OnDisable()
     {
         EventManager.OnGameModeChanged -= HandleGameModeChanged;
         EventManager.OnWeatherChanged -= HandleWeatherChanged;
+        EventManager.OnRequestRevealedFogList -= GetRevealedFogList;
     }
 
     private void HandleGameModeChanged(GameMode newMode)
@@ -162,6 +165,8 @@ public class ResourceGatherer : MonoBehaviour
                 Debug.Log("안개를 걷어낼 클릭 횟수 부족");
                 return;
             }
+
+            EventManager.TriggerRequestSaveGame();
         }
 
         StartCoroutine(ClearFogPlusThenDiagonals(centerCell));
@@ -184,6 +189,8 @@ public class ResourceGatherer : MonoBehaviour
             {
                 plusCells.Add(cell);
                 StartCoroutine(FadeOutFogTile(cell, 0f));
+
+
             }
         }
 
@@ -237,6 +244,7 @@ public class ResourceGatherer : MonoBehaviour
             if (fogTilemap.HasTile(cell))
             {
                 yield return StartCoroutine(FadeOutFogTile(cell, 0f));
+
             }
         }
     }
@@ -292,4 +300,13 @@ public class ResourceGatherer : MonoBehaviour
         fogTilemap.SetColor(cellPos, Color.white);
     }
 
+    public List<SerializableVector3Int> GetRevealedFogList()
+    {
+        List<SerializableVector3Int> list = new List<SerializableVector3Int>();
+        foreach (var pos in revealedFogPositions)
+        {
+            list.Add(new SerializableVector3Int(pos));
+        }
+        return list;
+    }
 }

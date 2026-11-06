@@ -45,6 +45,7 @@ public class CurrencyManager : MonoBehaviour
         else
         {
             InitializeCurrencies();
+            EventManager.TriggerMaxClickChanged(maxClickLimit);
         }
     }
 
@@ -166,6 +167,12 @@ public class CurrencyManager : MonoBehaviour
 
         maxClickLimit = data.savedMaxClickLimit;
         dailyProductionBonus = data.savedDailyProductionBonus;
+
+        EventManager.CurrencyChanged(CurrencyType.Click, currentCurrencies[CurrencyType.Click]);
+        EventManager.CurrencyChanged(CurrencyType.Tree, currentCurrencies[CurrencyType.Tree]);
+        EventManager.CurrencyChanged(CurrencyType.Rock, currentCurrencies[CurrencyType.Rock]);
+        EventManager.CurrencyChanged(CurrencyType.Gold, currentCurrencies[CurrencyType.Gold]);
+
         EventManager.TriggerMaxClickChanged(maxClickLimit);
 
         Debug.Log("[CurrencyManager] 재화 데이터 복원 완료");

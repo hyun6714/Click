@@ -1,28 +1,28 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using System.Collections;
 using System.Threading.Tasks;
 
 public class GameTimeManager : MonoBehaviour
 {
-    [Header("½Ã°£ ¼³Á¤")]
-    [SerializeField] private int currentDay = 1; // ÀÏ 
-    [SerializeField] private float currentHour = 7f; // ½Ã
-    [SerializeField] private float currentMinute = 0f; // ºĞ
-    [SerializeField] private float currentSecond = 0f; // ÃÊ
+    [Header("ì‹œê°„ ì„¤ì •")]
+    [SerializeField] private int currentDay = 1; // ì¼ 
+    [SerializeField] private float currentHour = 7f; // ì‹œ
+    [SerializeField] private float currentMinute = 0f; // ë¶„
+    [SerializeField] private float currentSecond = 0f; // ì´ˆ
 
     public int CurrentDay => currentDay;
     public float CurrentHour => currentHour;
     public float CurrentMinute => currentMinute;
     public float CurrentSecond => currentSecond;
 
-    [Header("¼Óµµ Á¶Àı")]
+    [Header("ì†ë„ ì¡°ì ˆ")]
     [SerializeField] private float realSecondsPerSecond = 1f;
     private float timer = 0f;
 
-    [Header("½Ã°£ ½ºÅµ ¼³Á¤")]
+    [Header("ì‹œê°„ ìŠ¤í‚µ ì„¤ì •")]
     [SerializeField] private float targetMorningHour = 8f;
 
-    [Header("½ºÅµ ¿¬Ãâ ¼³Á¤")]
+    [Header("ìŠ¤í‚µ ì—°ì¶œ ì„¤ì •")]
     [SerializeField] private float skipAnimationDuration = 0.5f;
     private bool isSkipping = false;
 
@@ -58,7 +58,7 @@ public class GameTimeManager : MonoBehaviour
 
         if (saveData != null)
         {
-            LoadTimeData(saveData.day, saveData.hour, saveData.minute, saveData.second);
+            LoadTimeDataQuietly(saveData.day, saveData.hour, saveData.minute, saveData.second);
         }
         else
         {
@@ -113,7 +113,7 @@ public class GameTimeManager : MonoBehaviour
     private void AdvanceDay()
     {
         currentDay++;
-        Debug.Log($"[³¯Â¥ º¯°æ] ÇÏ·ç Áö³² ÇöÀç {currentDay}ÀÏÂ÷");
+        Debug.Log($"[ë‚ ì§œ ë³€ê²½] í•˜ë£¨ ì§€ë‚¨ í˜„ì¬ {currentDay}ì¼ì°¨");
 
         EventManager.TriggerDayChanged(currentDay);
 
@@ -124,7 +124,7 @@ public class GameTimeManager : MonoBehaviour
     {
         if (EventManager.IsWaveInProgress)
         {
-            Debug.Log("¿şÀÌºê ÁøÇà Áß¿¡´Â ³¯Â¥¸¦ ³Ñ±æ ¼ö ¾ø½À´Ï´Ù.");
+            Debug.Log("ì›¨ì´ë¸Œ ì§„í–‰ ì¤‘ì—ëŠ” ë‚ ì§œë¥¼ ë„˜ê¸¸ ìˆ˜ ì—†ìŠµë‹ˆë‹¤.");
             return;
         }
 
@@ -173,7 +173,7 @@ public class GameTimeManager : MonoBehaviour
         currentSecond = 0f;
         timer = 0f;
 
-        Debug.Log($"[³¯Â¥ ½ºÅµ] ÇöÀç {currentDay}ÀÏÂ÷, ¿ÀÀü {currentHour}½Ã");
+        Debug.Log($"[ë‚ ì§œ ìŠ¤í‚µ] í˜„ì¬ {currentDay}ì¼ì°¨, ì˜¤ì „ {currentHour}ì‹œ");
 
         EventManager.TriggerDayChanged(currentDay);
         EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
@@ -190,22 +190,23 @@ public class GameTimeManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("[µğ¹ö±×] TriggerSave ÇÔ¼ö ÁøÀÔ ¼º°ø");
+        Debug.Log("[ë””ë²„ê·¸] TriggerSave í•¨ìˆ˜ ì§„ì… ì„±ê³µ");
         GameTimeManager timeMgr = this;
 
         SaveLoadManager.SaveGame(timeMgr, currencyMgr, buildingMgr, weatherMgr, unlockMgr);
     }
 
-    public void LoadTimeData(int loadedDay, float loadedHour, float loadedMinute, float loadedSecond)
+    public void LoadTimeDataQuietly(int loadedDay, float loadedHour, float loadedMinute, float loadedSecond)
     {
         currentDay = loadedDay;
         currentHour = loadedHour;
         currentMinute = loadedMinute;
         currentSecond = loadedSecond;
         timer = 0f;
-        EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
-        EventManager.TriggerDayChanged(currentDay);
 
-        Debug.Log($"[GameTimeManager] µ¥ÀÌÅÍ ·Îµå ¿Ï·á: {currentDay}ÀÏÂ÷, {currentHour}½Ã {currentMinute}ºĞ");
+        EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
+
+        Debug.Log($"[GameTimeManager] ë°ì´í„° ë¡œë“œ ì™„ë£Œ (ì´ë²¤íŠ¸ ìƒëµ): {currentDay}ì¼ì°¨, {currentHour}ì‹œ");
     }
+
 }

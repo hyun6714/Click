@@ -66,6 +66,12 @@ public class MapCreat : MonoBehaviour
     void Start()
     {
         GenerateMap();
+
+        SaveData currentSaveData = SaveLoadManager.LoadGame();
+        if (currentSaveData != null)
+        {
+            LoadFogSaveData(currentSaveData);
+        }
     }
 
     void GenerateMap()
@@ -284,7 +290,6 @@ public class MapCreat : MonoBehaviour
         }
     }
 
-
     private bool CheckIfFogged(Vector3 pos)
     {
         if (fogTilemap == null)
@@ -297,5 +302,26 @@ public class MapCreat : MonoBehaviour
         // 해당 좌표에 fogTile이 있다면 true 없다면 false
         TileBase currentTile = fogTilemap.GetTile(cellPos);
         return currentTile != null;
+    }
+
+    public void LoadFogSaveData(SaveData saveData)
+    {
+        if (saveData == null || fogTilemap == null)
+        {
+            return;
+        }
+
+        if (saveData.revealedFogList != null)
+        {
+            foreach (var savedPos in saveData.revealedFogList)
+            {
+                Vector3Int pos = savedPos.ToVector3Int();
+                // 저장된 위치의 안개 타일을 제거
+                if (fogTilemap.HasTile(pos))
+                {
+                    fogTilemap.SetTile(pos, null);
+                }
+            }
+        }
     }
 }
