@@ -4597,6 +4597,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainBtn
   gameSceneName: GameScene
+  currencyDatabase: {fileID: 11400000, guid: 4bcbd144b9fe2754294138de09d648bd, type: 2}
   startButton: {fileID: 77561689}
   continueButton: {fileID: 884365330}
   quitButton: {fileID: 1109913828}

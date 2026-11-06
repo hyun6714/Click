@@ -1,15 +1,18 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameStatePopup : MonoBehaviour
 {
-    [Header("Buttons")]
+    [Header("ë²„íŠ¼")]
     [SerializeField] private Button restartButton;
     [SerializeField] private Button menuButton;
 
-    [Header("Dim Background")]
+    [Header("Dim")]
     [SerializeField] private GameObject dimObject;
+
+    [Header("ë°ì´í„°ë² ì´ìŠ¤ ì°¸ì¡°")]
+    [SerializeField] private CurrencyDatabase currencyDatabase;
 
 
     void Start()
@@ -37,7 +40,7 @@ public class GameStatePopup : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    // ´Ù½ÃÇÏ±â ¹öÆ°¿¡ ¿¬°áÇÒ ÇÔ¼ö
+    // ë‹¤ì‹œí•˜ê¸° ë²„íŠ¼ì— ì—°ê²°í•  í•¨ìˆ˜
     public void RestartGame()
     {
         ResetGameKeepSettings();
@@ -46,7 +49,7 @@ public class GameStatePopup : MonoBehaviour
         SceneManager.LoadScene(currentSceneName);
     }
 
-    // ¸ŞÀÎ ¸Ş´º ¹öÆ°¿¡ ¿¬°áÇÒ ÇÔ¼ö
+    // ë©”ì¸ ë©”ë‰´ ë²„íŠ¼ì— ì—°ê²°í•  í•¨ìˆ˜
     public void MainMenu()
     {
         ResetGameKeepSettings();
@@ -62,9 +65,15 @@ public class GameStatePopup : MonoBehaviour
 
         SaveLoadManager.DeleteSaveData();
 
+        SaveData newData = new SaveData();
+
+        if (currencyDatabase != null)
+        {
+            newData.InitWithDatabase(currencyDatabase);
+        }
+
         if (oldData != null)
         {
-            SaveData newData = new SaveData();
             newData.sfxVolume = oldData.sfxVolume;
             newData.bgmVolume = oldData.bgmVolume;
             newData.screenWidth = oldData.screenWidth;

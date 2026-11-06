@@ -7,13 +7,15 @@ public class MainBtn : MonoBehaviour
     [Header("씬 이동 설정")]
     [SerializeField] private string gameSceneName = "GameScene";
 
+    [Header("데이터베이스 참조")]
+    [SerializeField] private CurrencyDatabase currencyDatabase;
+
     [Header("버튼 참조")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button continueButton;
     [SerializeField] private Button quitButton;
     [SerializeField] private Button settingsButton;
     [SerializeField] private Button settingsCloseButton;
-
 
     [Header("팝업 참조")]
     [SerializeField] private GameObject settingsPopup;
@@ -82,6 +84,11 @@ public class MainBtn : MonoBehaviour
 
         SaveData newData = new SaveData();
 
+        if (currencyDatabase != null)
+        {
+            newData.InitWithDatabase(currencyDatabase);
+        }
+
         if (oldData != null)
         {
             newData.sfxVolume = oldData.sfxVolume;
@@ -92,6 +99,8 @@ public class MainBtn : MonoBehaviour
 
             SaveLoadManager.SaveRawData(newData);
         }
+
+        SaveLoadManager.SaveRawData(newData);
 
         SceneManager.LoadScene(gameSceneName);
     }
