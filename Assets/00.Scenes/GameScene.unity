@@ -28037,7 +28037,7 @@ MonoBehaviour:
   clickText: {fileID: 2108246742}
   treeText: {fileID: 682628339}
   rockText: {fileID: 1522734694}
-  goldText: {fileID: 0}
+  goldText: {fileID: 1682535155}
 --- !u!1 &1749451601
 GameObject:
   m_ObjectHideFlags: 0
