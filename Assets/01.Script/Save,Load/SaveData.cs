@@ -12,12 +12,13 @@ public class SaveData
 
     public string currentWeather;
 
-    public int clickCurrency = 0;
-    public int treeCurrency = 0;
-    public int rockCurrency = 0;
-    public int goldCurrency = 0;
+    public int clickCurrency;
+    public int treeCurrency;
+    public int rockCurrency;
+    public int goldCurrency;
 
-    public int savedMaxClickLimit;
+
+    public int savedMaxClickLimit = 40;
     public int savedDailyProductionBonus;
 
     public float sfxVolume = 1f;
@@ -43,5 +44,29 @@ public class SaveData
     public List<BuildingSaveEntry> waveStartBuildings = new List<BuildingSaveEntry>();
 
     public List<string> unlockedBuildingNodes = new List<string>();
+
+    public void InitWithDatabase(CurrencyDatabase db)
+    {
+        if (db == null || db.currencies == null) return;
+
+        foreach (var data in db.currencies)
+        {
+            switch (data.type)
+            {
+                case CurrencyType.Click:
+                    clickCurrency = data.initialAmount;
+                    break;
+                case CurrencyType.Tree:
+                    treeCurrency = data.initialAmount;
+                    break;
+                case CurrencyType.Rock:
+                    rockCurrency = data.initialAmount;
+                    break;
+                case CurrencyType.Gold:
+                    goldCurrency = data.initialAmount;
+                    break;
+            }
+        }
+    }
 
 }
