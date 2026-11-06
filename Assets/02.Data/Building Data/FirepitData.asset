@@ -15,8 +15,8 @@ MonoBehaviour:
   buildingName: "\uD654\uB85C"
   buildingTile: {fileID: 11400000, guid: 8aff2461d1051aa4aa8088b66eef23a6, type: 2}
   category: 3
-  treeCost: 0
-  rockCost: 0
+  treeCost: 3
+  rockCost: 3
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 300

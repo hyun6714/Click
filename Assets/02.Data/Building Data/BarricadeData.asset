@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BarricadeData
   m_EditorClassIdentifier: Assembly-CSharp::BarricadeBuildingData
   buildingName: "\uBC14\uB9AC\uAC8C\uC774\uD2B8"
-  buildingTile: {fileID: 11400000, guid: ab118c087bab9134392a57f39252c659, type: 2}
+  buildingTile: {fileID: 11400000, guid: d4c38f16f9fd07042b30ad8f516fd8e2, type: 2}
   category: 1
-  treeCost: 0
+  treeCost: 5
   rockCost: 0
   sizeWidth: 2
   sizeHeight: 2

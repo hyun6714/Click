@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: AttackBuilding
   m_EditorClassIdentifier: Assembly-CSharp::AttackBuildingData
   buildingName: "\uD654\uC0B4\uD0C0\uC6CC"
-  buildingTile: {fileID: 11400000, guid: 0697a6ea931983142acbca21b50fd3e5, type: 2}
+  buildingTile: {fileID: 0}
   category: 2
-  treeCost: 0
-  rockCost: 0
+  treeCost: 5
+  rockCost: 5
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 100
