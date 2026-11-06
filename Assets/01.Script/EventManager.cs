@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static SaveData;
 
 public enum SoundCue
 {
@@ -169,6 +171,9 @@ public static class EventManager
     //사운드 
     public static event Action<SoundCue> OnSoundRequested;
 
+    //안개 지운 목록
+    public static Func<List<SerializableVector3Int>> OnRequestRevealedFogList;
+
 
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);
@@ -206,6 +211,11 @@ public static class EventManager
     public static void TriggerGameCleared() => OnGameCleared?.Invoke();
     public static void TriggerRequestSaveGame() => OnRequestSaveGame?.Invoke();
     public static void PlaySound(SoundCue cue) => OnSoundRequested?.Invoke(cue);
+
+    public static List<SerializableVector3Int> RequestRevealedFogList()
+    {
+        return OnRequestRevealedFogList?.Invoke() ?? new List<SerializableVector3Int>();
+    }
 
     //건물 비용차감 
     public static bool RequestUseCurrency(CurrencyType type, int value)

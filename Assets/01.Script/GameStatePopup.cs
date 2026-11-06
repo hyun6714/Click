@@ -74,12 +74,28 @@ public class GameStatePopup : MonoBehaviour
 
         if (oldData != null)
         {
+            newData.clickCurrency = oldData.clickCurrency;
+            newData.treeCurrency = oldData.treeCurrency;
+            newData.rockCurrency = oldData.rockCurrency;
+            newData.goldCurrency = oldData.goldCurrency;
+
+            newData.savedMaxClickLimit = oldData.savedMaxClickLimit;
+            newData.savedDailyProductionBonus = oldData.savedDailyProductionBonus;
+
             newData.sfxVolume = oldData.sfxVolume;
             newData.bgmVolume = oldData.bgmVolume;
             newData.screenWidth = oldData.screenWidth;
             newData.screenHeight = oldData.screenHeight;
             newData.isFullScreen = oldData.isFullScreen;
 
+            SaveLoadManager.SaveRawData(newData);
+        }
+        else
+        {
+            if (currencyDatabase != null)
+            {
+                newData.InitWithDatabase(currencyDatabase);
+            }
             SaveLoadManager.SaveRawData(newData);
         }
     }

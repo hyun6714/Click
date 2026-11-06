@@ -57,6 +57,8 @@ public class SaveLoadManager : MonoBehaviour
             unlockManager.SaveUnlockData(data);
         }
 
+        data.revealedFogList = EventManager.RequestRevealedFogList();
+
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(SavePath, json);
 
