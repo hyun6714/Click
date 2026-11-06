@@ -58,6 +58,40 @@ public partial class BuildingManager : MonoBehaviour
         if (buildingTilemap != null && data.buildingTile != null)
         {
             buildingTilemap.SetTile(cellPosition, data.buildingTile);
+
+            if (data is BarricadeBuildingData)
+            {
+                Vector3Int mainCell = cellPosition;
+                bool foundMainBuilding = false;
+
+                foreach (var building in buildingDataDictionary)
+                {
+                    if (building.Value != null &&
+                        building.Value.category == BuildingCategory.Main)
+                    {
+                        mainCell = building.Key;
+                        foundMainBuilding = true;
+                        break;
+                    }
+                }
+
+                if (foundMainBuilding)
+                {
+                    int deltaX = Mathf.Abs(cellPosition.x - mainCell.x);
+                    int deltaY = Mathf.Abs(cellPosition.y - mainCell.y);
+
+                    bool flip = deltaY <= deltaX;
+
+                    Vector3 scale = flip
+                        ? new Vector3(-1f, 1f, 1f)
+                        : Vector3.one;
+
+                    buildingTilemap.SetTransformMatrix(
+                        cellPosition,
+                        Matrix4x4.TRS(Vector3.zero, Quaternion.identity, scale)
+                    );
+                }
+            }
         }
 
         int maxHp = data is BarricadeBuildingData barricadeHpData ? barricadeHpData.maxHealth : data.maxBuildingHp;

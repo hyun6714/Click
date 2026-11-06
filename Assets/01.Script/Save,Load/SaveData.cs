@@ -20,6 +20,9 @@ public class SaveData
     public int savedMaxClickLimit;
     public int savedDailyProductionBonus;
 
+    public float sfxVolume = 1f;
+    public float bgmVolume = 1f;
+
     [System.Serializable]
     public struct BuildingSaveEntry
     {

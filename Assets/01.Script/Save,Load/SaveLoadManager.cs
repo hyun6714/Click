@@ -20,6 +20,9 @@ public class SaveLoadManager : MonoBehaviour
         {
             data.waveCheckpointActive = previousData.waveCheckpointActive;
             data.waveStartBuildings = previousData.waveStartBuildings ?? new System.Collections.Generic.List<SaveData.BuildingSaveEntry>();
+
+            data.sfxVolume = previousData.sfxVolume;
+            data.bgmVolume = previousData.bgmVolume;
         }
 
         if (timeManager != null)

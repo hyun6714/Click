@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,6 +8,7 @@ public class EscapeMenuController : MonoBehaviour
 {
     [Header("ÆË¾÷°ú ¸ðµå ÂüÁ¶")]
     [SerializeField] private GameObject pausePopup;
+    [SerializeField] private GameObject soundPopup;
     [SerializeField] private BuildingPlacer buildingPlacer;
     [SerializeField] private BuildingDel buildingDel;
 
@@ -14,6 +16,7 @@ public class EscapeMenuController : MonoBehaviour
     [SerializeField] private Button continueButton;
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button quitButton;
+    [SerializeField] private Button soundButton;
 
     [Header("¾À ¼³Á¤")]
     [SerializeField] private string mainMenuSceneName = "MainScenes";
@@ -25,6 +28,10 @@ public class EscapeMenuController : MonoBehaviour
         if (pausePopup != null)
         {
             pausePopup.SetActive(false);
+        }
+        if (soundPopup != null)
+        {
+            soundPopup.SetActive(false);
         }
     }
 
@@ -45,6 +52,11 @@ public class EscapeMenuController : MonoBehaviour
         if (quitButton != null)
         {
             quitButton.onClick.AddListener(QuitGame);
+        }
+
+        if (soundButton != null)
+        {
+            soundButton.onClick.AddListener(OpenSoundPopup);
         }
     }
 
@@ -67,7 +79,11 @@ public class EscapeMenuController : MonoBehaviour
             quitButton.onClick.RemoveListener(QuitGame);
         }
 
-        Time.timeScale = 1f;
+        if (soundButton != null)
+        {
+            soundButton.onClick.RemoveListener(OpenSoundPopup);
+        }
+
     }
 
     private void HandleGameModeChanged(GameMode newMode)
@@ -103,6 +119,23 @@ public class EscapeMenuController : MonoBehaviour
         OpenPausePopup();
     }
 
+
+    public void OpenSoundPopup()
+    {
+        if (soundPopup != null)
+        {
+            soundPopup.SetActive(true);
+        }
+    }
+
+    public void CloseSoundPopup()
+    {
+        if (soundPopup != null)
+        {
+            soundPopup.SetActive(false);
+        }
+    }
+
     private void OpenPausePopup()
     {
         if (pausePopup == null)
@@ -113,7 +146,6 @@ public class EscapeMenuController : MonoBehaviour
 
         pausePopup.SetActive(true);
         EventManager.ChangeGameMode(GameMode.Paused);
-        Time.timeScale = 0f;
     }
 
     public void ResumeGame()
@@ -123,19 +155,16 @@ public class EscapeMenuController : MonoBehaviour
             pausePopup.SetActive(false);
         }
 
-        Time.timeScale = 1f;
         EventManager.ChangeGameMode(GameMode.Normal);
     }
 
     public void GoToMainMenu()
     {
-        Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
     public void QuitGame()
     {
-        Time.timeScale = 1f;
 
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
