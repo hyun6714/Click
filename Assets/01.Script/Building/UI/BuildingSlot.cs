@@ -6,7 +6,6 @@ public class BuildingSlot : MonoBehaviour
 {
     [Header("UI 컴포넌트 연결")]
     public Button slotButton; // 클릭용 버튼
-    public Image iconImage; // 건물의 타일이나 스프라이트 아이콘을 보여줄 이미지
     public TextMeshProUGUI nameText; // 건물 이름 텍스트
     public TextMeshProUGUI costText; // 건설 비용 텍스트
 

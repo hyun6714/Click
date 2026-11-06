@@ -11,6 +11,12 @@ public class MainBtn : MonoBehaviour
     [SerializeField] private Button startButton;
     [SerializeField] private Button continueButton;
     [SerializeField] private Button quitButton;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] private Button settingsCloseButton;
+
+
+    [Header("팝업 참조")]
+    [SerializeField] private GameObject settingsPopup;
 
     private void Start()
     {
@@ -27,6 +33,16 @@ public class MainBtn : MonoBehaviour
         if (quitButton != null)
         {
             quitButton.onClick.AddListener(GameExit);
+        }
+
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.AddListener(OpenSettings);
+        }
+
+        if (settingsCloseButton != null)
+        {
+            settingsCloseButton.onClick.AddListener(CloseSettings);
         }
     }
 
@@ -46,11 +62,37 @@ public class MainBtn : MonoBehaviour
         {
             quitButton.onClick.RemoveListener(GameExit);
         }
+
+        if (settingsButton != null)
+        {
+            settingsButton.onClick.RemoveListener(OpenSettings);
+        }
+
+        if (settingsCloseButton != null)
+        {
+            settingsCloseButton.onClick.RemoveListener(CloseSettings);
+        }
     }
 
     public void GameStart()
     {
+        SaveData oldData = SaveLoadManager.LoadGame();
+
         SaveLoadManager.DeleteSaveData();
+
+        SaveData newData = new SaveData();
+
+        if (oldData != null)
+        {
+            newData.sfxVolume = oldData.sfxVolume;
+            newData.bgmVolume = oldData.bgmVolume;
+            newData.screenWidth = oldData.screenWidth;
+            newData.screenHeight = oldData.screenHeight;
+            newData.isFullScreen = oldData.isFullScreen;
+
+            SaveLoadManager.SaveRawData(newData);
+        }
+
         SceneManager.LoadScene(gameSceneName);
     }
 
@@ -62,9 +104,21 @@ public class MainBtn : MonoBehaviour
         {
             SceneManager.LoadScene(gameSceneName);
         }
-        else
+    }
+
+    public void OpenSettings()
+    {
+        if (settingsPopup != null)
         {
-            //없을 시 UI 
+            settingsPopup.SetActive(true);
+        }
+    }
+
+    public void CloseSettings()
+    {
+        if (settingsPopup != null)
+        {
+            settingsPopup.SetActive(false);
         }
     }
 

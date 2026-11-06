@@ -23,6 +23,10 @@ public class SaveData
     public float sfxVolume = 1f;
     public float bgmVolume = 1f;
 
+    public int screenWidth = 1920;
+    public int screenHeight = 1080;
+    public bool isFullScreen = true;
+
     [System.Serializable]
     public struct BuildingSaveEntry
     {
