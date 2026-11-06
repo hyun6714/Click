@@ -8,7 +8,6 @@ public class BuildingUnlockSlotUI : MonoBehaviour
     [SerializeField] private BuildingUnlockData nodeData;
 
     [Header("UI 컴포넌트")]
-    public Image iconImage;
     public TMP_Text nameText;
     public TMP_Text costText;
     public Button unlockButton;
@@ -53,12 +52,6 @@ public class BuildingUnlockSlotUI : MonoBehaviour
         if (assignedNode == null)
         {
             return;
-        }
-
-        // 아이콘 셋팅
-        if (iconImage != null && assignedNode.icon != null)
-        {
-            iconImage.sprite = assignedNode.icon;
         }
 
         // 이름 셋팅

@@ -40,9 +40,7 @@ public class GameStatePopup : MonoBehaviour
     // 다시하기 버튼에 연결할 함수
     public void RestartGame()
     {
-        ClosePopupAndDim();
-
-        SaveLoadManager.DeleteSaveData();
+        ResetGameKeepSettings();
 
         string currentSceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(currentSceneName);
@@ -51,10 +49,29 @@ public class GameStatePopup : MonoBehaviour
     // 메인 메뉴 버튼에 연결할 함수
     public void MainMenu()
     {
+        ResetGameKeepSettings();
+
+        SceneManager.LoadScene("MainScenes");
+    }
+
+    private void ResetGameKeepSettings()
+    {
         ClosePopupAndDim();
+
+        SaveData oldData = SaveLoadManager.LoadGame();
 
         SaveLoadManager.DeleteSaveData();
 
-        SceneManager.LoadScene("MainScenes");
+        if (oldData != null)
+        {
+            SaveData newData = new SaveData();
+            newData.sfxVolume = oldData.sfxVolume;
+            newData.bgmVolume = oldData.bgmVolume;
+            newData.screenWidth = oldData.screenWidth;
+            newData.screenHeight = oldData.screenHeight;
+            newData.isFullScreen = oldData.isFullScreen;
+
+            SaveLoadManager.SaveRawData(newData);
+        }
     }
 }

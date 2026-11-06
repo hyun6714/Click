@@ -11,6 +11,9 @@ public class SoundSettingsPopup : MonoBehaviour
     [SerializeField] private Slider sfxVolumeSlider;
     [SerializeField] private Slider bgmVolumeSlider;
 
+
+    [SerializeField] private GameObject targetPopupUI;
+
     [Header("´Ý±â ¹öÆ°")]
     [SerializeField] private Button closeButton;
 
@@ -146,6 +149,9 @@ public class SoundSettingsPopup : MonoBehaviour
 
     private void Close()
     {
-        gameObject.SetActive(false);
+        if (targetPopupUI != null)
+        {
+            targetPopupUI.SetActive(false);
+        }
     }
 }

@@ -19,9 +19,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0d994dc90cda01847813e9281cba4215, type: 2}
   - {fileID: 11400000, guid: 4c9ee066335b18049a8c8f923f436fd7, type: 2}
   isUnlocked: 0
-  isAvailable: 0
+  isAvailable: 1
   isDefaultStartNode: 0
-  upNode: {fileID: 0}
+  upNode: {fileID: 11400000, guid: 99f272390aae7c44cb846f61ed56fb68, type: 2}
   downNode: {fileID: 11400000, guid: 82f7295ffac32b149b1d0a31d6a78607, type: 2}
   leftNode: {fileID: 0}
   rightNode: {fileID: 0}

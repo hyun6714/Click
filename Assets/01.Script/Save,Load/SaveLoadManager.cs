@@ -23,6 +23,10 @@ public class SaveLoadManager : MonoBehaviour
 
             data.sfxVolume = previousData.sfxVolume;
             data.bgmVolume = previousData.bgmVolume;
+            
+            data.screenWidth = previousData.screenWidth;
+            data.screenHeight = previousData.screenHeight;
+            data.isFullScreen = previousData.isFullScreen;
         }
 
         if (timeManager != null)
