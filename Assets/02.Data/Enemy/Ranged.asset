@@ -15,11 +15,11 @@ MonoBehaviour:
   enemyName: Ran
   enemyType: 1
   enemyPrefab: {fileID: 7496486530155227427, guid: 4a3364a31be27f7499765bac6d09c4a8, type: 3}
-  maxHp: 150
-  moveSpeed: 2
-  attackDamage: 10
+  maxHp: 300
+  moveSpeed: 1
+  attackDamage: 100
   attackSpeed: 1
   attackRange: 5
   rewardGold: 10
   projectilePrefab: {fileID: 348859885669305152, guid: 58b5977f9ce6c2e4f9a4924d6060e749, type: 3}
-  projectileSpeed: 10
+  projectileSpeed: 2

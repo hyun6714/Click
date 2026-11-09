@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed28206818203d46ac8c37b92dbbe7f, type: 3}
+  m_Name: Magic
+  m_EditorClassIdentifier: Assembly-CSharp::AttackBuildingData
+  buildingName: "\uB9C8\uBC95\uD0C0\uC6CC"
+  buildingTile: {fileID: 11400000, guid: 9bd05e019d980bc43842c590e73a7ce4, type: 2}
+  category: 2
+  treeCost: 5
+  rockCost: 5
+  sizeWidth: 2
+  sizeHeight: 2
+  maxBuildingHp: 500
+  unlockData: {fileID: 11400000, guid: cfe813ae579c3fc48a9685c15227e643, type: 2}
+  attackRange: 5
+  attackDamage: 150
+  attackSpeed: 0.5
+  projectilePrefab: {fileID: 8764139408524540996, guid: d9f63c2a95e61bf4bb31b356844e0b21, type: 3}
+  towerPrefab: {fileID: 1666207393998688805, guid: df9a78cd48e3cbc44bf1bee78bb6a1b6, type: 3}
+  projectileSpeed: 10

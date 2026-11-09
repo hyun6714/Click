@@ -17,11 +17,13 @@ public class WeatherManager : MonoBehaviour
     private void OnEnable()
     {
         EventManager.OnDayChanged += HandleDayChanged;
+        EventManager.OnRequestCurrentWeather += HandleGetWeather;
     }
 
     private void OnDisable()
     {
         EventManager.OnDayChanged -= HandleDayChanged;
+        EventManager.OnRequestCurrentWeather -= HandleGetWeather;
     }
 
     private void Start()
@@ -116,5 +118,10 @@ public class WeatherManager : MonoBehaviour
             ChangeWeather(loadedWeather);
             Debug.Log($"[WeatherManager] 날씨 데이터 복원 완료: {loadedWeather}");
         }
+    }
+
+    private WeatherType HandleGetWeather()
+    {
+        return CurrentWeather;
     }
 }

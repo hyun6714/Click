@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: CkickMax
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uD074\uB9AD\uC800\uC7A5\uC18C"
-  targetBuildingData: {fileID: 11400000, guid: 122c4cf999646ad4fae0995296ff37c9, type: 2}
   icon: {fileID: 0}
-  unlockCost: 100
+  unlockCost: 300
+  targetBuildingDatas: []
   isUnlocked: 0
   isAvailable: 0
   isDefaultStartNode: 0

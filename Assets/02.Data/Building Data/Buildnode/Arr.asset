@@ -17,11 +17,11 @@ MonoBehaviour:
   unlockCost: 0
   targetBuildingDatas:
   - {fileID: 11400000, guid: 031923afec3e3ca45a890ab98648dd9e, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 521fae74a28aa9b4989feb40b39ea008, type: 2}
   isUnlocked: 1
   isAvailable: 1
   isDefaultStartNode: 1
   upNode: {fileID: 11400000, guid: 47e6d6bbd9530c443a69cc05d11dbb03, type: 2}
-  downNode: {fileID: 0}
+  downNode: {fileID: 11400000, guid: 5272e3c7c886830449b28a1c70320c59, type: 2}
   leftNode: {fileID: 11400000, guid: 99f272390aae7c44cb846f61ed56fb68, type: 2}
   rightNode: {fileID: 11400000, guid: 0a30780567871e249af71a0fbfc4983a, type: 2}

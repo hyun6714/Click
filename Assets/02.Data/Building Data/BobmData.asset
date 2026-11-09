@@ -21,6 +21,6 @@ MonoBehaviour:
   sizeHeight: 2
   maxBuildingHp: 1
   unlockData: {fileID: 11400000, guid: 36b2f6401c6d5f94e9e50280719219a4, type: 2}
-  damage: 100
+  damage: 300
   triggerRange: 3
   trapPrefab: {fileID: 1227771286840129390, guid: b9eed4711ed6983428ab562621ac163e, type: 3}

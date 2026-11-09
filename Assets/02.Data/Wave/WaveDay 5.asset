@@ -15,8 +15,12 @@ MonoBehaviour:
   targetDay: 5
   spawnInfoList:
   - enemyData: {fileID: 11400000, guid: c429e18f06f4a034fad92e4623b087ec, type: 2}
-    spawnCount: 7
+    spawnCount: 0
   - enemyData: {fileID: 11400000, guid: 4bf3236068cc95f40878e49a155fe95f, type: 2}
-    spawnCount: 3
+    spawnCount: 0
+  - enemyData: {fileID: 11400000, guid: 4fefcb23101c3b4499f0a2803bc15113, type: 2}
+    spawnCount: 10
+  rewardGold: 300
   isBossWave: 0
   bossEnemy: {fileID: 0}
+  isClearWave: 0

@@ -5,6 +5,18 @@ public class RangedEnemy : EnemyBase
     [Header("원거리 발사 위치")]
     [SerializeField] private Transform firePoint;
 
+    protected override void PlayAttackAnimation()
+    {
+        if (animator != null)
+        {
+            animator.SetTrigger("Attack");
+        }
+
+        EventManager.PlaySound(SoundCue.EnemyAttack);
+
+        Attack();
+    }
+
     protected override void Attack()
     {
         if (enemyData == null || enemyData.projectilePrefab == null)
@@ -13,13 +25,13 @@ public class RangedEnemy : EnemyBase
         }
 
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
-
         int finalDamage = GetCurrentAttackDamage();
+
+        Debug.Log($"[원거리 공격] 계산된 최종 데미지: {finalDamage}");
 
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
-            Vector3 buildingWorldPos =
-                sharedBuildingTilemap.GetCellCenterWorld(currentBuildingCell);
+            Vector3 buildingWorldPos = sharedBuildingTilemap.GetCellCenterWorld(currentBuildingCell);
 
             EventManager.TriggerRequestSpawnBuildingProjectile(
                 enemyData.projectilePrefab,
@@ -29,11 +41,6 @@ public class RangedEnemy : EnemyBase
                 finalDamage,
                 enemyData.projectileSpeed
             );
-
-            Debug.Log(
-                $"[{enemyData.enemyName}] 건물 {currentBuildingCell}을 향해 투사체 발사"
-            );
-
             return;
         }
 

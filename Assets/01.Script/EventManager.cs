@@ -60,6 +60,9 @@ public static class EventManager
     //Ã¶°Å ¹öÆ° ´©¸¦ ¶§
     public static event Action OnDemolishButtonClicked;
 
+    //Ã¶°Å ¸ðµå È®ÀÎ¿ë
+    public static Func<bool> OnRequestIsDemolishMode;
+
     //°Ç¹° Ã¶°Å ÆË¾÷
     public static event Action OnBuildMenuPopupToggle;
 
@@ -147,6 +150,9 @@ public static class EventManager
 
     //³¯¾¾ ¹Ù²ð ‹š
     public static event Action<WeatherType> OnWeatherChanged;
+
+    //³¯¾¾ °¡Á®¿À´Â ¿ë
+    public static Func<WeatherType> OnRequestCurrentWeather;
 
     //°ÔÀÓ ¸ðµå ¹Ù²ð ‹š
     public static Action<GameMode> OnGameModeChanged;

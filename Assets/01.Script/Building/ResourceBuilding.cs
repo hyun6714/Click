@@ -31,6 +31,11 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
         treeTilemap = treeMap;
         stoneTilemap = stoneMap;
 
+        if (EventManager.OnRequestCurrentWeather != null)
+        {
+            currentWeather = EventManager.OnRequestCurrentWeather.Invoke();
+        }
+
         // 채집 루프 시작
         StartCoroutine(GatherRoutine());
     
@@ -118,7 +123,13 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
                     if (ellipticalValue <= 1.0f)
                     {
-                        int rewardAmount = (currentWeather == WeatherType.Rain) ? 2 : 1;
+                        WeatherType liveWeather = currentWeather;
+                        if (EventManager.OnRequestCurrentWeather != null)
+                        {
+                            liveWeather = EventManager.OnRequestCurrentWeather.Invoke();
+                        }
+
+                        int rewardAmount = (liveWeather == WeatherType.Rain) ? 2 : 1;
 
                         Sprite icon = rewardType == CurrencyType.Tree ? treeIcon : rockIcon;
 

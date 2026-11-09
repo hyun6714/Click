@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: Fire
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uD654\uB85C"
-  targetBuildingData: {fileID: 11400000, guid: d6cac76cefa2d5b4cac1fcc1dc548db5, type: 2}
   icon: {fileID: 0}
-  unlockCost: 100
+  unlockCost: 250
+  targetBuildingDatas: []
   isUnlocked: 0
-  isAvailable: 0
+  isAvailable: 1
   isDefaultStartNode: 0
   upNode: {fileID: 0}
-  downNode: {fileID: 0}
+  downNode: {fileID: 11400000, guid: cfe813ae579c3fc48a9685c15227e643, type: 2}
   leftNode: {fileID: 11400000, guid: 982b1d78526c5ca4faa30ddfd4168fd0, type: 2}
   rightNode: {fileID: 0}

@@ -93,9 +93,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b00035e6a82bda469cd11937f735f1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TankerEnemy
-  searchRadius: 10
+  spriteRenderer: {fileID: 0}
+  poisonEffectPrefab: {fileID: 0}
+  iceEffectPrefab: {fileID: 0}
   animator: {fileID: 6308890592510687318}
-  armor: 5
+  searchRadius: 10
+  armor: 50
 --- !u!212 &1146913719549671731
 SpriteRenderer:
   serializedVersion: 2
@@ -143,7 +146,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 1463634898532301014, guid: eb0286d7f4c2a404fa37e84fcf638af0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

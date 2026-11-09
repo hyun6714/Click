@@ -18,10 +18,20 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private BuildingManager buildingManager;
 
+    private void Awake()
+    {
+        isWaveInProgress = false;
+        remainingEnemyCount = 0;
+        currentActiveWave = null;
+    }
+
     private void OnEnable()
     {
         EventManager.OnDayChanged += HandleDayChanged;
         EventManager.OnRequestReturnPool += HandleEnemyReturnPool;
+
+        isWaveInProgress = false;
+        remainingEnemyCount = 0;
     }
 
     private void OnDisable()
@@ -107,7 +117,7 @@ public class EnemySpawner : MonoBehaviour
                         Debug.LogError("[EnemySpawner] 적 오브젝트 생성 또는 EnemyBase 초기화 실패");
                     }
 
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(0.2f);
                 }
             }
         }
@@ -165,6 +175,11 @@ public class EnemySpawner : MonoBehaviour
 
         Debug.Log($"[스포너] {currentActiveWave.targetDay}일차 웨이브 클리어 보상 골드: {currentActiveWave.rewardGold}");
 
+        if (currentActiveWave.rewardGold > 0)
+        {
+            EventManager.CurrencyAdded(CurrencyType.Gold, currentActiveWave.rewardGold);
+        }
+
         EventManager.OnWaveCleared?.Invoke(currentActiveWave);
         buildingManager.EndWaveBuildingCheckpoint();
 
@@ -178,5 +193,16 @@ public class EnemySpawner : MonoBehaviour
     public void SetMainCastleTarget(Transform castleTransform)
     {
         mainCastleTarget = castleTransform;
+    }
+
+
+    //패배 후 or 재시작 시 초기화 함수
+    public void ForceResetWaveState()
+    {
+        StopAllCoroutines();
+        isWaveInProgress = false;
+        remainingEnemyCount = 0;
+        currentActiveWave = null;
+        Debug.Log("[EnemySpawner] 웨이브 상태가 강제로 초기화되었습니다.");
     }
 }

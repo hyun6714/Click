@@ -22,5 +22,7 @@ MonoBehaviour:
     spawnCount: 5
   - enemyData: {fileID: 11400000, guid: 40989210727e8cf4d987e6d1fef2005b, type: 2}
     spawnCount: 2
+  rewardGold: 1000
   isBossWave: 0
   bossEnemy: {fileID: 0}
+  isClearWave: 0

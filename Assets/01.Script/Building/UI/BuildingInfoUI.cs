@@ -83,8 +83,28 @@ public class BuildingInfoUI : MonoBehaviour
         }
         else if (data is AttackBuildingData attackData)
         {
-            detailStatText.text = $"공격력: {attackData.attackDamage}\n" +
-                                  $"공격 속도: {attackData.attackSpeed}초\n" +
+            WeatherType currentWeather = WeatherType.Sunny;
+            if (EventManager.OnRequestCurrentWeather != null)
+            {
+                currentWeather = EventManager.OnRequestCurrentWeather.Invoke();
+            }
+
+            Vector3 worldPos = referenceTilemap != null ? referenceTilemap.GetCellCenterWorld(cellPos) : Vector3.zero;
+            bool isInFirepit = Firepit.IsPositionInAnyFirepitRange(worldPos);
+
+            float multiplier = 1.0f;
+            if (currentWeather == WeatherType.Snow)
+            {
+                multiplier = isInFirepit ? 1.0f : 0.8f;
+            }
+
+            float finalAttackSpeed = attackData.attackSpeed * multiplier;
+            float finalAttackDamage = attackData.attackDamage * multiplier;
+
+            string snowStatus = (currentWeather == WeatherType.Snow) ? (isInFirepit ? " (화로 온기 보호)" : " (눈으로 감속됨)") : "";
+
+            detailStatText.text = $"공격력: {finalAttackDamage:F1}{snowStatus}\n" +
+                                  $"공격 속도: {finalAttackSpeed:F1}초{snowStatus}\n" +
                                   $"사거리: {attackData.attackRange}";
 
             rangeValue = attackData.attackRange;

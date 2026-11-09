@@ -61,6 +61,12 @@ public class GameStatePopup : MonoBehaviour
     {
         ClosePopupAndDim();
 
+        EnemySpawner spawner = FindFirstObjectByType<EnemySpawner>();
+        if (spawner != null)
+        {
+            spawner.ForceResetWaveState();
+        }
+
         SaveData oldData = SaveLoadManager.LoadGame();
 
         SaveLoadManager.DeleteSaveData();
@@ -74,14 +80,6 @@ public class GameStatePopup : MonoBehaviour
 
         if (oldData != null)
         {
-            newData.clickCurrency = oldData.clickCurrency;
-            newData.treeCurrency = oldData.treeCurrency;
-            newData.rockCurrency = oldData.rockCurrency;
-            newData.goldCurrency = oldData.goldCurrency;
-
-            newData.savedMaxClickLimit = oldData.savedMaxClickLimit;
-            newData.savedDailyProductionBonus = oldData.savedDailyProductionBonus;
-
             newData.sfxVolume = oldData.sfxVolume;
             newData.bgmVolume = oldData.bgmVolume;
             newData.screenWidth = oldData.screenWidth;
