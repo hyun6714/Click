@@ -14,6 +14,17 @@ public class BuildingSelector : MonoBehaviour
 
     private void Update()
     {
+        bool isDelMode = false;
+        if (EventManager.OnRequestIsDemolishMode != null)
+        {
+            isDelMode = EventManager.OnRequestIsDemolishMode.Invoke();
+        }
+
+        if (isDelMode)
+        {
+            return;
+        }
+
         // 마우스 좌클릭
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {

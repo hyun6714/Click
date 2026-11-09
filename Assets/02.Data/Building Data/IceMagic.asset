@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed28206818203d46ac8c37b92dbbe7f, type: 3}
+  m_Name: IceMagic
+  m_EditorClassIdentifier: Assembly-CSharp::AttackBuildingData
+  buildingName: "\uC5BC\uC74C\uD0C0\uC6CC"
+  buildingTile: {fileID: 11400000, guid: 2bacdaa328d907640bc42ff597d3d461, type: 2}
+  category: 2
+  treeCost: 5
+  rockCost: 5
+  sizeWidth: 2
+  sizeHeight: 2
+  maxBuildingHp: 500
+  unlockData: {fileID: 11400000, guid: 561ef0ca56710b0479c616e6e363ec9c, type: 2}
+  attackRange: 10
+  attackDamage: 50
+  attackSpeed: 0.1
+  projectilePrefab: {fileID: 9063706274392468544, guid: 2c7fcb1c7da26fa40b93a9d1e543b018, type: 3}
+  towerPrefab: {fileID: 1666207393998688805, guid: 619f752216fb7f949880a5a409c1489a, type: 3}
+  projectileSpeed: 1

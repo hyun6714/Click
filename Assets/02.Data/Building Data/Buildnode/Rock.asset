@@ -17,8 +17,8 @@ MonoBehaviour:
   unlockCost: 50
   targetBuildingDatas:
   - {fileID: 11400000, guid: c8268e945b38c4f478147c23df53d236, type: 2}
-  isUnlocked: 0
-  isAvailable: 0
+  isUnlocked: 1
+  isAvailable: 1
   isDefaultStartNode: 0
   upNode: {fileID: 0}
   downNode: {fileID: 11400000, guid: 99f272390aae7c44cb846f61ed56fb68, type: 2}

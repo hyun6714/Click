@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed28206818203d46ac8c37b92dbbe7f, type: 3}
+  m_Name: PoMagic
+  m_EditorClassIdentifier: Assembly-CSharp::AttackBuildingData
+  buildingName: "\uB3C5\uD0C0\uC6CC"
+  buildingTile: {fileID: 11400000, guid: a122daf2e76c86c43a75b64b2a5252af, type: 2}
+  category: 2
+  treeCost: 5
+  rockCost: 5
+  sizeWidth: 2
+  sizeHeight: 2
+  maxBuildingHp: 500
+  unlockData: {fileID: 11400000, guid: ca98f3d3f5ad9844e8d5ad7738aac8fe, type: 2}
+  attackRange: 10
+  attackDamage: 50
+  attackSpeed: 0.1
+  projectilePrefab: {fileID: 4069212976055402638, guid: 15c9e750bd3fe1c48a494bfa6f820b4b, type: 3}
+  towerPrefab: {fileID: 4996380459291251356, guid: 6a3dbea1caf581a46a00c2607786d49b, type: 3}
+  projectileSpeed: 1

@@ -59,6 +59,14 @@ public class ResourceGatherer : MonoBehaviour
         currentWeather = newWeather;
     }
 
+    private void Start()
+    {
+        if (EventManager.OnRequestCurrentWeather != null)
+        {
+            currentWeather = EventManager.OnRequestCurrentWeather.Invoke();
+        }
+    }
+
     void Update()
     {
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
@@ -107,8 +115,14 @@ public class ResourceGatherer : MonoBehaviour
             return;
         }
 
-        int finalHarvestAmount = (currentWeather == WeatherType.Rain) ? harvestAmount * 2 : harvestAmount;
-       
+        WeatherType liveWeather = currentWeather;
+        if (EventManager.OnRequestCurrentWeather != null)
+        {
+            liveWeather = EventManager.OnRequestCurrentWeather.Invoke();
+        }
+
+        int finalHarvestAmount = (liveWeather == WeatherType.Rain) ? harvestAmount * 2 : harvestAmount;
+
         if (treeTilemap.HasTile(cellPos))
         {
             EventManager.CurrencyAdded(CurrencyType.Tree, finalHarvestAmount);

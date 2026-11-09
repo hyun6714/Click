@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class AttackBuilding : MonoBehaviour, IDamageable
+public abstract class AttackBuilding : MonoBehaviour, IDamageable
 {
     [SerializeField] private Transform firePoint;
 
@@ -20,6 +20,8 @@ public class AttackBuilding : MonoBehaviour, IDamageable
     public AttackBuildingData TowerData => towerData;
     public int CurrentHealth => currentHealth;
     public Vector3Int CellPosition => cellPosition;
+    protected Transform FirePoint => firePoint;
+    protected Animator Animator => animator;
 
     private void OnEnable()
     {
@@ -60,7 +62,7 @@ public class AttackBuilding : MonoBehaviour, IDamageable
             return;
         }
 
-        Transform target = FindNearestEnemy(towerData.attackRange);
+        Transform target = FindTarget(towerData.attackRange);
         if (target != null)
         {
             float attackSpeed = GetCurrentAttackSpeed();
@@ -75,7 +77,7 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         }
     }
 
-    Transform FindNearestEnemy(float range)
+    protected virtual Transform FindTarget(float range)
     {
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, range, LayerMask.GetMask("Enemy"));
         Transform nearest = null;
@@ -93,7 +95,7 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         return nearest;
     }
 
-    void Attack(Transform target)
+    protected virtual void Attack(Transform target)
     {
         if (target == null || towerData.projectilePrefab == null)
         {
@@ -140,7 +142,7 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         EventManager.TriggerRequestDamageBuilding(cellPosition, damage);
     }
 
-    private float GetCurrentAttackSpeed()
+    protected float GetCurrentAttackSpeed()
     {
         bool isInFirepit = Firepit.IsPositionInAnyFirepitRange(transform.position);
         float multiplier = 1.0f;
@@ -153,7 +155,7 @@ public class AttackBuilding : MonoBehaviour, IDamageable
         return baseAttackSpeed * multiplier;
     }
 
-    private float GetCurrentAttackDamage()
+    protected float GetCurrentAttackDamage()
     {
         bool isInFirepit = Firepit.IsPositionInAnyFirepitRange(transform.position);
 

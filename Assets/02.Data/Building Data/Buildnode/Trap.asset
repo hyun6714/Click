@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uAC00\uC2DC\uD568\uC815"
   icon: {fileID: 0}
-  unlockCost: 100
+  unlockCost: 150
   targetBuildingDatas:
   - {fileID: 11400000, guid: 4c9ee066335b18049a8c8f923f436fd7, type: 2}
   isUnlocked: 0
-  isAvailable: 0
+  isAvailable: 1
   isDefaultStartNode: 0
   upNode: {fileID: 0}
   downNode: {fileID: 11400000, guid: 36b2f6401c6d5f94e9e50280719219a4, type: 2}

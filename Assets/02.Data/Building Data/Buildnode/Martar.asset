@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1745478bc65d5e41bf0f5399769e5d4, type: 3}
+  m_Name: Martar
+  m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
+  nodeName: "\uBC15\uACA9\uD3EC"
+  icon: {fileID: 0}
+  unlockCost: 250
+  targetBuildingDatas:
+  - {fileID: 11400000, guid: 18edc9591fafd1943bedc7bd540b842b, type: 2}
+  isUnlocked: 0
+  isAvailable: 1
+  isDefaultStartNode: 0
+  upNode: {fileID: 11400000, guid: 982b1d78526c5ca4faa30ddfd4168fd0, type: 2}
+  downNode: {fileID: 0}
+  leftNode: {fileID: 11400000, guid: 3718dd0ce6483d144bf11409338ddd7b, type: 2}
+  rightNode: {fileID: 11400000, guid: cfe813ae579c3fc48a9685c15227e643, type: 2}

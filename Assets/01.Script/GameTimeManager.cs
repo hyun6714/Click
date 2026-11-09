@@ -205,6 +205,7 @@ public class GameTimeManager : MonoBehaviour
         timer = 0f;
 
         EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
+        EventManager.TriggerDayChanged(currentDay);
 
         Debug.Log($"[GameTimeManager] 데이터 로드 완료 (이벤트 생략): {currentDay}일차, {currentHour}시");
     }

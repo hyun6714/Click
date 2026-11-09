@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Bobm
   m_EditorClassIdentifier: Assembly-CSharp::BuildingUnlockData
   nodeName: "\uD3ED\uD0C4"
-  targetBuildingData: {fileID: 11400000, guid: 662f8c0108782d94f97fcda211699893, type: 2}
   icon: {fileID: 0}
-  unlockCost: 100
+  unlockCost: 150
+  targetBuildingDatas: []
   isUnlocked: 0
   isAvailable: 0
   isDefaultStartNode: 0
