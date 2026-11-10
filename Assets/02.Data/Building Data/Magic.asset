@@ -21,8 +21,8 @@ MonoBehaviour:
   sizeHeight: 2
   maxBuildingHp: 500
   unlockData: {fileID: 11400000, guid: cfe813ae579c3fc48a9685c15227e643, type: 2}
-  attackRange: 5
-  attackDamage: 150
+  attackRange: 6
+  attackDamage: 100
   attackSpeed: 0.5
   projectilePrefab: {fileID: 8764139408524540996, guid: d9f63c2a95e61bf4bb31b356844e0b21, type: 3}
   towerPrefab: {fileID: 1666207393998688805, guid: df9a78cd48e3cbc44bf1bee78bb6a1b6, type: 3}

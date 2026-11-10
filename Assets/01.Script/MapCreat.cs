@@ -47,7 +47,7 @@ public class MapCreat : MonoBehaviour
     public int stoneClearance = 1;
 
     [Range(0f, 1f)]
-    public float treeDensity = 0.0f;
+    public float treeDensity = 0.1f;
 
     [SerializeField] private BuildingManager buildingManager;
 
@@ -65,16 +65,45 @@ public class MapCreat : MonoBehaviour
 
     void Start()
     {
-        GenerateMap();
-
         SaveData currentSaveData = SaveLoadManager.LoadGame();
+
+        int seed;
+        bool needsSave = false;
+
+        if (currentSaveData == null)
+        {
+            currentSaveData = new SaveData();
+            needsSave = true;
+        }
+
+        if (currentSaveData.mapSeed != 0)
+        {
+            seed = currentSaveData.mapSeed;
+        }
+        else
+        {
+            seed = System.Environment.TickCount;
+            currentSaveData.mapSeed = seed;
+            needsSave = true;
+        }
+
+        Random.InitState(seed);
+
+        GenerateMap(currentSaveData);
+
         if (currentSaveData != null)
         {
             LoadFogSaveData(currentSaveData);
         }
+
+        if (needsSave)
+        {
+            SaveLoadManager.SaveRawData(currentSaveData);
+            Debug.Log($"[MapCreat] 초기 맵 시드({seed}) 저장 완료.");
+        }
     }
 
-    void GenerateMap()
+    void GenerateMap(SaveData saveData)
     {
         // 기존에 그려진 것 초기화
         groundTilemap.ClearAllTiles();
@@ -177,6 +206,18 @@ public class MapCreat : MonoBehaviour
             }
         }
 
+        HashSet<Vector3Int> removedStoneSet = new HashSet<Vector3Int>();
+        if (saveData != null && saveData.removedStones != null)
+        {
+            foreach (var pos in saveData.removedStones) removedStoneSet.Add(pos.ToVector3Int());
+        }
+
+        HashSet<Vector3Int> removedTreeSet = new HashSet<Vector3Int>();
+        if (saveData != null && saveData.removedTrees != null)
+        {
+            foreach (var pos in saveData.removedTrees) removedTreeSet.Add(pos.ToVector3Int());
+        }
+
 
         //돌 심기
         HashSet<Vector3Int> stonePositions = new HashSet<Vector3Int>(); //돌 설치 구간 저장
@@ -210,7 +251,7 @@ public class MapCreat : MonoBehaviour
                 continue;
             }
 
-            int clusterSize = Random.Range(3, 5);
+            int clusterSize = Random.Range(5, 7);
             bool clusterCreated = false;
 
             for (int j = 0; j < clusterSize; j++)
@@ -228,6 +269,12 @@ public class MapCreat : MonoBehaviour
                     }
 
                     Vector3Int stonePos = new Vector3Int(nx, ny, 0);
+
+                    if (removedStoneSet.Contains(stonePos))
+                    {
+                        continue;
+                    }
+
                     stonePositions.Add(stonePos);
 
                     for (int dx = -stoneClearance; dx <= stoneClearance; dx++)
@@ -275,7 +322,14 @@ public class MapCreat : MonoBehaviour
                     continue;
                 }
 
-                if (Random.value < treeDensity)
+                bool isSpawned = (Random.value < treeDensity);
+
+                if (removedTreeSet.Contains(cellPos))
+                {
+                    continue;
+                }
+
+                if (isSpawned)
                 {
                     treePositionsList.Add(cellPos);
                     treeTilesList.Add(treeTile);
@@ -283,7 +337,6 @@ public class MapCreat : MonoBehaviour
             }
         }
 
-        // 나무 타일도 일괄 적용
         if (treePositionsList.Count > 0)
         {
             treeTilemap.SetTiles(treePositionsList.ToArray(), treeTilesList.ToArray());

@@ -125,8 +125,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a06ef93c15d86df469c97f40b2e05ce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RangedEnemy
-  searchRadius: 10
+  spriteRenderer: {fileID: 0}
+  poisonEffectPrefab: {fileID: 112513443009294510, guid: e7fb8fbf254a99e4f81064beac02f9a1, type: 3}
+  iceEffectPrefab: {fileID: 5200798290102948355, guid: 6694ebb37ed926d46805f4a575ac242a, type: 3}
   animator: {fileID: 1458076545822389685}
+  searchRadius: 10
   firePoint: {fileID: 140201384018047415}
 --- !u!212 &4181069838527341643
 SpriteRenderer:

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static SaveData;
 
 public class ResourceBuilding : MonoBehaviour, IDamageable
 {
@@ -145,6 +146,28 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
                         targetTilemap.SetTile(targetPos, null);
                         EventManager.CurrencyAdded(rewardType, rewardAmount);
                         EventManager.PlaySound(SoundCue.ResourceBuildingGather);
+
+                        SaveData currentSaveData = SaveLoadManager.LoadGame() ?? new SaveData();
+                        SerializableVector3Int wrappedPos = new SerializableVector3Int(targetPos);
+
+                        if (rewardType == CurrencyType.Tree)
+                        {
+                            if (currentSaveData.removedTrees == null) currentSaveData.removedTrees = new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+                            if (!currentSaveData.removedTrees.Contains(wrappedPos))
+                            {
+                                currentSaveData.removedTrees.Add(wrappedPos);
+                                SaveLoadManager.SaveRawData(currentSaveData);
+                            }
+                        }
+                        else if (rewardType == CurrencyType.Rock)
+                        {
+                            if (currentSaveData.removedStones == null) currentSaveData.removedStones = new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+                            if (!currentSaveData.removedStones.Contains(wrappedPos))
+                            {
+                                currentSaveData.removedStones.Add(wrappedPos);
+                                SaveLoadManager.SaveRawData(currentSaveData);
+                            }
+                        }
 
                         Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} ({rewardType})");
                         return;

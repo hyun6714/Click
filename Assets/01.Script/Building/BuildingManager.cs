@@ -154,7 +154,7 @@ public partial class BuildingManager : MonoBehaviour
 
         if (remainingHp <= 0)
         {
-            HandleDemolishRequest(cellPosition);
+            HandleDemolishRequestInternal(cellPosition, false);
         }
     }
 
@@ -165,6 +165,11 @@ public partial class BuildingManager : MonoBehaviour
 
     //건물 철거,파괴 시 호출
     private void HandleDemolishRequest(Vector3Int cellPosition)
+    {
+        HandleDemolishRequestInternal(cellPosition, true);
+    }
+
+    private void HandleDemolishRequestInternal(Vector3Int cellPosition, bool refund)
     {
         if (buildingDataDictionary.ContainsKey(cellPosition))
         {
@@ -180,7 +185,7 @@ public partial class BuildingManager : MonoBehaviour
                 EventManager.TriggerCastleDestroyed();
             }
 
-            else
+            else if(refund)
             {
                 int refundWood = Mathf.FloorToInt(data.treeCost * 0.5f);
                 int refundStone = Mathf.FloorToInt(data.rockCost * 0.5f);

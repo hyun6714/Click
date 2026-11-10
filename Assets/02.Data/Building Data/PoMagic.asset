@@ -23,7 +23,7 @@ MonoBehaviour:
   unlockData: {fileID: 11400000, guid: ca98f3d3f5ad9844e8d5ad7738aac8fe, type: 2}
   attackRange: 10
   attackDamage: 50
-  attackSpeed: 0.1
+  attackSpeed: 0.3
   projectilePrefab: {fileID: 4069212976055402638, guid: 15c9e750bd3fe1c48a494bfa6f820b4b, type: 3}
   towerPrefab: {fileID: 4996380459291251356, guid: 6a3dbea1caf581a46a00c2607786d49b, type: 3}
   projectileSpeed: 1

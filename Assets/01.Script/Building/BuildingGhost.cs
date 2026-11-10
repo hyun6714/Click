@@ -1,32 +1,45 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 
 public class BuildingGhost : MonoBehaviour
 {
-    [Header("¹Ì¸®º¸±â Àü¿ë Å¸ÀÏ¸Ê")]
+    [Header("ë¯¸ë¦¬ë³´ê¸° ì „ìš© íƒ€ì¼ë§µ")]
     public Tilemap previewTilemap;
-    public Tilemap referenceTilemap; // ÁÂÇ¥ º¯È¯À» À§ÇÑ ±âÁØ Å¸ÀÏ¸Ê (buildingTilemap µî)
+    public Tilemap referenceTilemap; // ì¢Œí‘œ ë³€í™˜ì„ ìœ„í•œ ê¸°ì¤€ íƒ€ì¼ë§µ (buildingTilemap ë“±)
 
-    [Header("°í½ºÆ® ½Ã°¢Àû ÇÇµå¹é »ö»ó")]
-    public Color availableColor = new Color(0f, 1f, 0f, 0.6f); //¼³Ä¡ °¡´É: ÃÊ·Ï»ö
-    public Color blockedColor = new Color(1f, 0f, 0f, 0.6f); //¼³Ä¡ ºÒ°¡´É : »¡°£»ö
+    [Header("ê³ ìŠ¤íŠ¸ ì‹œê°ì  í”¼ë“œë°± ìƒ‰ìƒ")]
+    public Color availableColor = new Color(0f, 1f, 0f, 0.6f); //ì„¤ì¹˜ ê°€ëŠ¥: ì´ˆë¡ìƒ‰
+    public Color blockedColor = new Color(1f, 0f, 0f, 0.6f); //ì„¤ì¹˜ ë¶ˆê°€ëŠ¥ : ë¹¨ê°„ìƒ‰
 
-    [Header("Áßº¹ ¼³Ä¡ ¹æÁö ¹× Àå¾Ö¹° Ã¼Å©¿ë Å¸ÀÏ¸Êµé")]
+    [Header("ì¤‘ë³µ ì„¤ì¹˜ ë°©ì§€ ë° ì¥ì• ë¬¼ ì²´í¬ìš© íƒ€ì¼ë§µë“¤")]
     public Tilemap buildingTilemap;
     public Tilemap stoneTilemap;
     public Tilemap treeTilemap;
     public Tilemap groundTilemap;
 
-    [Header("°Ç¼³ ¹üÀ§ Á¦ÇÑ ¼³Á¤")]
+    [Header("ê±´ì„¤ ë²”ìœ„ ì œí•œ ì„¤ì •")]
     public int requiredBuildingRange = 3;
 
-    [Header("°Ç¼³ ¹üÀ§ ½Ã°¢È­¿ë Å¸ÀÏ¸Ê")]
+    [Header("ê±´ì„¤ ë²”ìœ„ ì‹œê°í™”ìš© íƒ€ì¼ë§µ")]
     public Tilemap rangeTilemap; 
     public Tile ofRangeTile;
 
+    [Header("íƒ€ì›Œ/ê±´ë¬¼ ì‚¬ê±°ë¦¬ ì‹œê°í™” í”„ë¦¬íŒ¹")]
+    public GameObject rangeIndicatorPrefab;
+    private GameObject currentRangeIndicator;
+
     private BuildingData currentBuilding;
-    private Vector3Int lastCellPos = new Vector3Int(-999, -999, -999); 
+    private Vector3Int lastCellPos = new Vector3Int(-999, -999, -999);
+
+    private void Awake()
+    {
+        if (rangeIndicatorPrefab != null && currentRangeIndicator == null)
+        {
+            currentRangeIndicator = Instantiate(rangeIndicatorPrefab);
+            currentRangeIndicator.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -86,6 +99,8 @@ public class BuildingGhost : MonoBehaviour
 
 
             DrawBuildRange(cellPos);
+
+            UpdateBuildingRangeIndicator(cellPos);
         }
     }
 
@@ -144,7 +159,7 @@ public class BuildingGhost : MonoBehaviour
             {
                 if (buildingTilemap.HasTile(pos))
                 {
-                    // Åõ¸í ºí·ÎÅ· Å¸ÀÏ µî ¿¹¿Ü Ã³¸®°¡ ÇÊ¿äÇÏ´Ù¸é ¿©±â¿¡ Ãß°¡ °¡´É
+                    // íˆ¬ëª… ë¸”ë¡œí‚¹ íƒ€ì¼ ë“± ì˜ˆì™¸ ì²˜ë¦¬ê°€ í•„ìš”í•˜ë‹¤ë©´ ì—¬ê¸°ì— ì¶”ê°€ ê°€ëŠ¥
                     int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y - pos.y);
 
                     if (distance <= requiredBuildingRange)
@@ -179,5 +194,47 @@ public class BuildingGhost : MonoBehaviour
         {
             rangeTilemap.ClearAllTiles();
         }
+
+        if (currentRangeIndicator != null)
+        {
+            currentRangeIndicator.SetActive(false);
+        }
+    }
+
+    private void UpdateBuildingRangeIndicator(Vector3Int cellPos)
+    {
+        if (currentRangeIndicator == null || referenceTilemap == null || currentBuilding == null)
+        {
+            return;
+        }
+
+        float rangeValue = 0f;
+
+        if (currentBuilding is AttackBuildingData attackData)
+        {
+            rangeValue = attackData.attackRange;
+        }
+        else if (currentBuilding is ProductionBuildingData prodData)
+        {
+            rangeValue = prodData.gatherRange;
+        }
+        else if (currentBuilding is FirepitData fireData)
+        {
+            rangeValue = fireData.effectRadius;
+        }
+
+        if (rangeValue <= 0)
+        {
+            currentRangeIndicator.SetActive(false);
+            return;
+        }
+
+        Vector3 worldPos = referenceTilemap.GetCellCenterWorld(cellPos);
+        currentRangeIndicator.transform.position = worldPos;
+
+        float scaleSize = rangeValue * 2f;
+        currentRangeIndicator.transform.localScale = new Vector3(scaleSize, scaleSize * 0.5f, 1f);
+
+        currentRangeIndicator.SetActive(true);
     }
 }

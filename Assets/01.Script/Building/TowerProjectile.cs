@@ -152,7 +152,11 @@ public class TowerProjectile : MonoBehaviour
         }
         else if (target != null)
         {
-            ApplyEffects(target);
+            EnemyBase enemy = target.GetComponent<EnemyBase>();
+            if (enemy != null && enemy.gameObject.activeInHierarchy)
+            {
+                ApplyEffects(target);
+            }
         }
 
         Destroy(gameObject);

@@ -7,6 +7,12 @@ public class RangedEnemy : EnemyBase
 
     protected override void PlayAttackAnimation()
     {
+        if (!HasValidTarget())
+        {
+            SetMoveAnimation(true);
+            return;
+        }
+
         if (animator != null)
         {
             animator.SetTrigger("Attack");
@@ -31,6 +37,12 @@ public class RangedEnemy : EnemyBase
 
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
+            if (!activeBuildingPositions.Contains(currentBuildingCell))
+            {
+                hasBuildingTarget = false;
+                return;
+            }
+
             Vector3 buildingWorldPos = sharedBuildingTilemap.GetCellCenterWorld(currentBuildingCell);
 
             EventManager.TriggerRequestSpawnBuildingProjectile(
@@ -60,4 +72,14 @@ public class RangedEnemy : EnemyBase
 
         Debug.Log($"[{enemyData.enemyName}] {target.name}을 향해 투사체 발사");
     }
+    private bool HasValidTarget()
+    {
+        if (hasBuildingTarget && sharedBuildingTilemap != null)
+        {
+            return activeBuildingPositions.Contains(currentBuildingCell);
+        }
+
+        return target != null && target.gameObject.activeInHierarchy;
+    }
+
 }

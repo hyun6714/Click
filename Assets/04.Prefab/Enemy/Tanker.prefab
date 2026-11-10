@@ -94,11 +94,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TankerEnemy
   spriteRenderer: {fileID: 0}
-  poisonEffectPrefab: {fileID: 0}
-  iceEffectPrefab: {fileID: 0}
+  poisonEffectPrefab: {fileID: 112513443009294510, guid: e7fb8fbf254a99e4f81064beac02f9a1, type: 3}
+  iceEffectPrefab: {fileID: 5200798290102948355, guid: 6694ebb37ed926d46805f4a575ac242a, type: 3}
   animator: {fileID: 6308890592510687318}
   searchRadius: 10
-  armor: 50
+  armor: 25
 --- !u!212 &1146913719549671731
 SpriteRenderer:
   serializedVersion: 2

@@ -18,7 +18,7 @@ MonoBehaviour:
   maxHp: 300
   moveSpeed: 1
   attackDamage: 100
-  attackSpeed: 1
+  attackSpeed: 0.5
   attackRange: 5
   rewardGold: 10
   projectilePrefab: {fileID: 348859885669305152, guid: 58b5977f9ce6c2e4f9a4924d6060e749, type: 3}

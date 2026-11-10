@@ -15,7 +15,7 @@ MonoBehaviour:
   buildingName: "\uCC44\uC11D\uC7A5"
   buildingTile: {fileID: 11400000, guid: d6028ead0d2ef9140b81560364aee1ac, type: 2}
   category: 1
-  treeCost: 2
+  treeCost: 0
   rockCost: 2
   sizeWidth: 2
   sizeHeight: 2
@@ -23,5 +23,5 @@ MonoBehaviour:
   unlockData: {fileID: 11400000, guid: f074021f2977d144b9e5242b68fbd624, type: 2}
   targetResourceType: 1
   gatherInterval: 2
-  gatherRange: 5
+  gatherRange: 6
   productionPrefab: {fileID: 2598363814112138791, guid: 7afb6156b31d7cb42ba04e44baf789e3, type: 3}

@@ -93,8 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eba5610c1a7754e4689e94360eae722a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossEnemy
-  searchRadius: 10
+  spriteRenderer: {fileID: 0}
+  poisonEffectPrefab: {fileID: 112513443009294510, guid: e7fb8fbf254a99e4f81064beac02f9a1, type: 3}
+  iceEffectPrefab: {fileID: 5200798290102948355, guid: 6694ebb37ed926d46805f4a575ac242a, type: 3}
   animator: {fileID: -9186100879524142981}
+  searchRadius: 10
 --- !u!212 &5370370904330657110
 SpriteRenderer:
   serializedVersion: 2
