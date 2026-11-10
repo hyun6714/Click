@@ -18,6 +18,10 @@ public class SaveLoadManager : MonoBehaviour
 
         if (previousData != null)
         {
+            data.mapSeed = previousData.mapSeed;
+            data.removedTrees = previousData.removedTrees ?? new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+            data.removedStones = previousData.removedStones ?? new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+
             data.waveCheckpointActive = previousData.waveCheckpointActive;
             data.waveStartBuildings = previousData.waveStartBuildings ?? new System.Collections.Generic.List<SaveData.BuildingSaveEntry>();
 

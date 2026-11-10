@@ -152,8 +152,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45334b1cafe098a4b8bed1811dd879c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FastEnemy
-  searchRadius: 10
+  spriteRenderer: {fileID: 0}
+  poisonEffectPrefab: {fileID: 112513443009294510, guid: e7fb8fbf254a99e4f81064beac02f9a1, type: 3}
+  iceEffectPrefab: {fileID: 5200798290102948355, guid: 6694ebb37ed926d46805f4a575ac242a, type: 3}
   animator: {fileID: -2766418588184987531}
+  searchRadius: 10
   speedMultiplier: 1.5
 --- !u!95 &-2766418588184987531
 Animator:

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerProjectile
   projectileType: 2
-  explosionEffectPrefab: {fileID: 0}
+  explosionEffectPrefab: {fileID: 2194569635747929836, guid: b84a7fd329aed474898e0075eb23f2b0, type: 3}
 --- !u!212 &5343321851463893197
 SpriteRenderer:
   serializedVersion: 2

@@ -15,13 +15,13 @@ MonoBehaviour:
   targetDay: 25
   spawnInfoList:
   - enemyData: {fileID: 11400000, guid: c429e18f06f4a034fad92e4623b087ec, type: 2}
-    spawnCount: 10
+    spawnCount: 20
   - enemyData: {fileID: 11400000, guid: 4bf3236068cc95f40878e49a155fe95f, type: 2}
-    spawnCount: 5
+    spawnCount: 10
   - enemyData: {fileID: 11400000, guid: 4fefcb23101c3b4499f0a2803bc15113, type: 2}
-    spawnCount: 7
+    spawnCount: 10
   - enemyData: {fileID: 11400000, guid: 40989210727e8cf4d987e6d1fef2005b, type: 2}
-    spawnCount: 3
+    spawnCount: 5
   - enemyData: {fileID: 11400000, guid: 6d54e94f4febb514898eca59543ec031, type: 2}
     spawnCount: 5
   rewardGold: 1500

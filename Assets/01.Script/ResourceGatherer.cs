@@ -122,6 +122,7 @@ public class ResourceGatherer : MonoBehaviour
         }
 
         int finalHarvestAmount = (liveWeather == WeatherType.Rain) ? harvestAmount * 2 : harvestAmount;
+        SaveData currentSaveData = SaveLoadManager.LoadGame() ?? new SaveData();
 
         if (treeTilemap.HasTile(cellPos))
         {
@@ -132,14 +133,20 @@ public class ResourceGatherer : MonoBehaviour
             if (gainPopupPrefab != null)
             {
                 Vector3 popupPosition = treeTilemap.GetCellCenterWorld(cellPos);
-
                 ResourceGainPopup popup = Instantiate(gainPopupPrefab, popupPosition, Quaternion.identity);
-
                 popup.Initialize(finalHarvestAmount, treeIcon);
             }
 
-
             treeTilemap.SetTile(cellPos, null);
+
+            if (currentSaveData.removedTrees == null) currentSaveData.removedTrees = new List<SerializableVector3Int>();
+            SerializableVector3Int wrappedPos = new SerializableVector3Int(cellPos);
+
+            if (!currentSaveData.removedTrees.Contains(wrappedPos))
+            {
+                currentSaveData.removedTrees.Add(wrappedPos);
+                SaveLoadManager.SaveRawData(currentSaveData); // 즉시 저장
+            }
             return;
         }
 
@@ -152,13 +159,21 @@ public class ResourceGatherer : MonoBehaviour
             if (gainPopupPrefab != null)
             {
                 Vector3 popupPosition = stoneTilemap.GetCellCenterWorld(cellPos);
-
                 ResourceGainPopup popup = Instantiate(gainPopupPrefab, popupPosition, Quaternion.identity);
-
                 popup.Initialize(finalHarvestAmount, rockIcon);
             }
 
             stoneTilemap.SetTile(cellPos, null);
+
+            if (currentSaveData.removedStones == null) currentSaveData.removedStones = new List<SerializableVector3Int>();
+            SerializableVector3Int wrappedPos = new SerializableVector3Int(cellPos);
+
+            if (!currentSaveData.removedStones.Contains(wrappedPos))
+            {
+                currentSaveData.removedStones.Add(wrappedPos);
+                SaveLoadManager.SaveRawData(currentSaveData); // 즉시 저장
+            }
+
             return;
         }
     }

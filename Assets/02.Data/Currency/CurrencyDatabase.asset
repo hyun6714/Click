@@ -16,15 +16,15 @@ MonoBehaviour:
   - type: 0
     currencyName: "\uACE8\uB4DC"
     icon: {fileID: -3988769855312385993, guid: 3a1286a37b6cdef47ae475cf8517f457, type: 3}
-    initialAmount: 10000
+    initialAmount: 0
   - type: 1
     currencyName: "\uB098\uBB34"
     icon: {fileID: 6853316077166303748, guid: c0382eca0835cce479c25110d4d7a40d, type: 3}
-    initialAmount: 1000
+    initialAmount: 0
   - type: 2
     currencyName: "\uB3CC"
     icon: {fileID: 8399011212269539787, guid: 269db7eb20b5ff6429057b9da876f12a, type: 3}
-    initialAmount: 1000
+    initialAmount: 0
   - type: 3
     currencyName: "\uD074\uB9AD"
     icon: {fileID: 5534413525631299974, guid: 11324441b477ebe4694af7db47cc31da, type: 3}

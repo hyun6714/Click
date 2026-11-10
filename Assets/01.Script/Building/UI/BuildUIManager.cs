@@ -9,11 +9,6 @@ public class BuildUIManager : MonoBehaviour
     public GameObject buildDelPopup; //철거 팝업
     public GameObject buildAddPopup; //설치 팝업
 
-    [Header("프리팹 연결")]
-    public GameObject attackTowerPrefab;
-    public GameObject resourceBuildingPrefab; 
-    public GameObject barricadePrefab;
-
     private void Awake()
     {
         if (buildDelPopup != null)

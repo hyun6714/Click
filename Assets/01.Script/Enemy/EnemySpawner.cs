@@ -117,7 +117,7 @@ public class EnemySpawner : MonoBehaviour
                         Debug.LogError("[EnemySpawner] 적 오브젝트 생성 또는 EnemyBase 초기화 실패");
                     }
 
-                    yield return new WaitForSeconds(0.2f);
+                    yield return new WaitForSeconds(0.1f);
                 }
             }
         }

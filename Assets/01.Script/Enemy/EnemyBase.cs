@@ -119,6 +119,28 @@ public class EnemyBase : MonoBehaviour, IDamageable
             spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         }
 
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColor;
+        }
+
+        StopAllCoroutines();
+        isDoTActive = false;
+        slowMultiplier = 1.0f;
+        slowTimer = 0f;
+
+        if (activePoisonEffect != null)
+        {
+            Destroy(activePoisonEffect);
+            activePoisonEffect = null;
+        }
+
+        if (activeIceEffect != null)
+        {
+            Destroy(activeIceEffect);
+            activeIceEffect = null;
+        }
+
         if (animator == null)
         {
             animator = GetComponent<Animator>();
@@ -397,6 +419,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public virtual void ApplyDoT(float dDamage, float duration)
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
+
         isDoTActive = true;
         dotTickDamage = dDamage;
         dotTimer = duration;

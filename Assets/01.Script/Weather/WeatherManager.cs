@@ -92,6 +92,7 @@ public class WeatherManager : MonoBehaviour
         CurrentWeather = newWeather;
 
         EventManager.TriggerWeatherChanged(newWeather);
+        EventManager.TriggerRequestSaveGame();
 
         Debug.Log($"[WeatherManager] ³¯¾¾ º¯°æµÊ: {newWeather}");
     }

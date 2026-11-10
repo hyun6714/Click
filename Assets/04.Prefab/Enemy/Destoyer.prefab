@@ -93,8 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a106877ce90e7a4c85adc9c216ef0c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingDestroyerEnemy
-  searchRadius: 10
+  spriteRenderer: {fileID: 0}
+  poisonEffectPrefab: {fileID: 112513443009294510, guid: e7fb8fbf254a99e4f81064beac02f9a1, type: 3}
+  iceEffectPrefab: {fileID: 5200798290102948355, guid: 6694ebb37ed926d46805f4a575ac242a, type: 3}
   animator: {fileID: 9082088560517207955}
+  searchRadius: 10
   extraDamageMultiplier: 2
 --- !u!212 &-7272450195891486564
 SpriteRenderer:

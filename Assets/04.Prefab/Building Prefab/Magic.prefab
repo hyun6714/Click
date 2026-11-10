@@ -52,7 +52,7 @@ MonoBehaviour:
   isSlowMagic: 0
   isDotMagic: 0
   isHeavyAreaMagic: 1
-  magicSplashRadius: 2
+  magicSplashRadius: 1
   slowAmount: 0
   slowDuration: 0
   dotDamage: 0

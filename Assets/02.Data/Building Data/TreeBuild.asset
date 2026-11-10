@@ -16,12 +16,12 @@ MonoBehaviour:
   buildingTile: {fileID: 11400000, guid: 1f67046560e7d8c44a320a356ed534dc, type: 2}
   category: 1
   treeCost: 2
-  rockCost: 2
+  rockCost: 0
   sizeWidth: 2
   sizeHeight: 2
   maxBuildingHp: 300
   unlockData: {fileID: 11400000, guid: 99f272390aae7c44cb846f61ed56fb68, type: 2}
   targetResourceType: 0
   gatherInterval: 2
-  gatherRange: 5
+  gatherRange: 6
   productionPrefab: {fileID: 2598363814112138791, guid: 0b005b34e46b687459c2a1553fc86645, type: 3}

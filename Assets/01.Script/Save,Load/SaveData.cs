@@ -38,6 +38,10 @@ public class SaveData
         public string tileName;
     }
 
+    public int mapSeed;
+    public List<SerializableVector3Int> removedTrees = new List<SerializableVector3Int>();
+    public List<SerializableVector3Int> removedStones = new List<SerializableVector3Int>();
+
     [System.Serializable]
     public struct SerializableVector3Int
     {
