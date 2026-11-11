@@ -10,6 +10,9 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
     [SerializeField] private Sprite treeIcon;
     [SerializeField] private Sprite rockIcon;
 
+    [Header("Ã¤Áý·®")]
+    int rewardAmount = 1;
+
     private ProductionBuildingData buildingData;
     private Vector3Int cellPosition;
     private Tilemap treeTilemap;
@@ -124,13 +127,6 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
                     if (ellipticalValue <= 1.0f)
                     {
-                        WeatherType liveWeather = currentWeather;
-                        if (EventManager.OnRequestCurrentWeather != null)
-                        {
-                            liveWeather = EventManager.OnRequestCurrentWeather.Invoke();
-                        }
-
-                        int rewardAmount = (liveWeather == WeatherType.Rain) ? 2 : 1;
 
                         Sprite icon = rewardType == CurrencyType.Tree ? treeIcon : rockIcon;
 

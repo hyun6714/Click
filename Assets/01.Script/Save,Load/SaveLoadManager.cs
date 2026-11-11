@@ -77,11 +77,26 @@ public class SaveLoadManager : MonoBehaviour
             return null;
         }
 
+
         string json = File.ReadAllText(SavePath);
         SaveData data = JsonUtility.FromJson<SaveData>(json);
 
         Debug.Log("[SaveLoadManager] 게임 로드 성공!");
         return data;
+    }
+
+    public static void ApplyLoadedWaveState()
+    {
+        SaveData data = LoadGame();
+        if (data != null)
+        {
+            EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
+            if (spawner != null)
+            {
+                spawner.CheckAndResumeWaveOnLoad(data.day);
+                Debug.Log($"[SaveLoadManager] 저장된 {data.day}일차 웨이브 상태 연동 완료");
+            }
+        }
     }
 
     public static void SaveRawData(SaveData data)

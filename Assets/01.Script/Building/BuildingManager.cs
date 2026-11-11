@@ -10,6 +10,15 @@ public partial class BuildingManager : MonoBehaviour
     private Dictionary<Vector3Int, int> buildingHpDictionary = new Dictionary<Vector3Int, int>();
     private Dictionary<Vector3Int, BuildingData> buildingDataDictionary = new Dictionary<Vector3Int, BuildingData>();
 
+    [Header("초기 메인 성 및 투명벽 설정")]
+    public TileBase mainBuildingTile;
+    public Tile transparentBlockingTile;
+    public Vector3Int mainBuildingCellPos = Vector3Int.zero;
+    public int rangeLeft = 2;
+    public int rangeRight = 2;
+    public int rangeUp = 2;
+    public int rangeDown = 4;
+
     [Header("메인 건물 전용 데이터")]
     public BuildingData mainBuildingData;
 
@@ -44,6 +53,45 @@ public partial class BuildingManager : MonoBehaviour
         weatherMgr = Object.FindFirstObjectByType<WeatherManager>();
         unlockMgr = Object.FindFirstObjectByType<BuildingUnlockManager>();
         buildingPlacer = Object.FindFirstObjectByType<BuildingPlacer>();
+    }
+
+    public void InitMainBuildingAndBarriers()
+    {
+        if (buildingTilemap == null || mainBuildingData == null)
+        {
+            Debug.LogError("[BuildingManager] BuildingTilemap 또는 mainBuildingData가 없습니다.");
+            return;
+        }
+
+        for (int dx = -rangeLeft; dx <= rangeRight; dx++)
+        {
+            for (int dy = -rangeDown; dy <= rangeUp; dy++)
+            {
+                Vector3Int targetPos = new Vector3Int(mainBuildingCellPos.x + dx, mainBuildingCellPos.y + dy, 0);
+
+                if (dx == 0 && dy == 0)
+                {
+                    if (mainBuildingTile != null)
+                    {
+                        buildingTilemap.SetTile(targetPos, mainBuildingTile);
+                    }
+
+                    buildingDataDictionary[targetPos] = mainBuildingData;
+                    buildingHpDictionary[targetPos] = mainBuildingData.maxBuildingHp;
+
+                    EventManager.TriggerBuildingRegistered(targetPos);
+                    Debug.Log($"[메인 성 설치 완료] 좌표: {targetPos} | HP: {mainBuildingData.maxBuildingHp}");
+                }
+                else
+                {
+                    if (transparentBlockingTile != null)
+                    {
+                        buildingTilemap.SetTile(targetPos, transparentBlockingTile);
+                    }
+                }
+            }
+        }
+        isInitialized = true;
     }
 
     public List<Vector3Int> GetAllBuildingPositions()
@@ -235,6 +283,7 @@ public partial class BuildingManager : MonoBehaviour
 
         buildingDataDictionary[cellPos] = data;
         buildingHpDictionary[cellPos] = data.maxBuildingHp;
+        EventManager.TriggerBuildingRegistered(cellPos);
     }
 
     private void HandleSyncBuildings()

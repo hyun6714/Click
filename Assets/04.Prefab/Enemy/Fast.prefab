@@ -157,7 +157,7 @@ MonoBehaviour:
   iceEffectPrefab: {fileID: 5200798290102948355, guid: 6694ebb37ed926d46805f4a575ac242a, type: 3}
   animator: {fileID: -2766418588184987531}
   searchRadius: 10
-  speedMultiplier: 1.5
+  speedMultiplier: 1.2
 --- !u!95 &-2766418588184987531
 Animator:
   serializedVersion: 7

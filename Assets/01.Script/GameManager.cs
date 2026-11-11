@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour
         EventManager.OnGameCleared -= HandleGameClear;
     }
 
+    private void Start()
+    {
+        SaveLoadManager.ApplyLoadedWaveState();
+    }
+
     private void HandleGameOver()
     {
         if (dimObject != null)

@@ -99,7 +99,7 @@ MonoBehaviour:
   animator: {fileID: 1488348702727976393}
   searchRadius: 10
   bounceSpeed: 8
-  bounceAmount: 0.08
+  bounceAmount: 0.2
   moveThreshold: 0.0001
 --- !u!212 &6625706154283963706
 SpriteRenderer:

@@ -20,18 +20,18 @@ public class EnemySpawner : MonoBehaviour
 
     private void Awake()
     {
-        isWaveInProgress = false;
-        remainingEnemyCount = 0;
-        currentActiveWave = null;
+        ForceResetWaveState();
     }
 
     private void OnEnable()
     {
+        EventManager.OnDayChanged -= HandleDayChanged;
         EventManager.OnDayChanged += HandleDayChanged;
+
+        EventManager.OnRequestReturnPool -= HandleEnemyReturnPool;
         EventManager.OnRequestReturnPool += HandleEnemyReturnPool;
 
-        isWaveInProgress = false;
-        remainingEnemyCount = 0;
+        ForceResetWaveState();
     }
 
     private void OnDisable()
@@ -204,5 +204,19 @@ public class EnemySpawner : MonoBehaviour
         remainingEnemyCount = 0;
         currentActiveWave = null;
         Debug.Log("[EnemySpawner] 웨이브 상태가 강제로 초기화되었습니다.");
+    }
+
+    public void CheckAndResumeWaveOnLoad(int currentDay)
+    {
+        if (isWaveInProgress) return;
+
+        if (waveDataList == null) return;
+
+        WaveData matchingWave = waveDataList.Find(wave => wave != null && wave.targetDay == currentDay);
+        if (matchingWave != null)
+        {
+            Debug.Log($"[EnemySpawner] 이어하기 감지: {currentDay}일차 웨이브 재개 시도");
+            StartCoroutine(SpawnSpecificWaveRoutine(matchingWave));
+        }
     }
 }

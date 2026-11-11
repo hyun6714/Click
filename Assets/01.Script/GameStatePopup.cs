@@ -40,7 +40,7 @@ public class GameStatePopup : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    // 다시하기 버튼에 연결할 함수
+    // 새게임 버튼에 연결할 함수
     public void RestartGame()
     {
         ResetGameKeepSettings();
