@@ -8913,6 +8913,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BuildingManager
   buildingTilemap: {fileID: 906542252}
+  mainBuildingTile: {fileID: 11400000, guid: 14e3b6d9c77c3624091c5b0fed502cff, type: 2}
+  transparentBlockingTile: {fileID: 11400000, guid: 1d3680be74ba8ef488b0f262ffecc41f, type: 2}
+  mainBuildingCellPos: {x: 0, y: 0, z: 0}
+  rangeLeft: 3
+  rangeRight: 2
+  rangeUp: 2
+  rangeDown: 1
   mainBuildingData: {fileID: 11400000, guid: 00be10d7ae567764981916616f0b8cb8, type: 2}
   demolitionEffectPrefab: {fileID: 8452567397119800262, guid: ed01d93a8e58be548bdf45711c7cc7ba, type: 3}
   demolitionEffectDuration: 1
@@ -26751,19 +26758,12 @@ MonoBehaviour:
   treeTilemap: {fileID: 897295100}
   buildingTilemap: {fileID: 906542252}
   fogTilemap: {fileID: 1262155528}
-  transparentBlockingTile: {fileID: 11400000, guid: 1d3680be74ba8ef488b0f262ffecc41f, type: 2}
   groundTile: {fileID: 11400000, guid: 082f0dcac37598e4096540796501709e, type: 2}
   stoneTile: {fileID: 11400000, guid: 64e63a46057d38b4ab028f4f54af3bbf, type: 2}
   treeTile: {fileID: 11400000, guid: dd1a1eed8d307b143a7b123fc714f9b3, type: 2}
-  mainBuildingTile: {fileID: 11400000, guid: 14e3b6d9c77c3624091c5b0fed502cff, type: 2}
   fogTile: {fileID: 11400000, guid: 5014ca26407450c42a15d6e5694ffbf6, type: 2}
   initialFogRevealRadius: 20
   mainBuildingCellPos: {x: 0, y: 0, z: 0}
-  mainBuildingData: {fileID: 11400000, guid: 00be10d7ae567764981916616f0b8cb8, type: 2}
-  rangeLeft: 4
-  rangeRight: 2
-  rangeUp: 3
-  rangeDown: 2
   width: 150
   height: 150
   centerSafeRadius: 10

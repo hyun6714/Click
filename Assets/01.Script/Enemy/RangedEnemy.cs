@@ -5,6 +5,14 @@ public class RangedEnemy : EnemyBase
     [Header("원거리 발사 위치")]
     [SerializeField] private Transform firePoint;
 
+    public override void Initialize(EnemyData data, Vector3 spawnPosition, Transform castleTarget)
+    {
+        base.Initialize(data, spawnPosition, castleTarget);
+
+        hasBuildingTarget = false;
+        currentBuildingCell = Vector3Int.zero;
+    }
+
     protected override void PlayAttackAnimation()
     {
         if (!HasValidTarget())

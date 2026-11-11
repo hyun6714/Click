@@ -78,11 +78,18 @@ public class MainBtn : MonoBehaviour
 
     public void GameStart()
     {
+        EnemyBase.ClearStaticData();
+        EventManager.ForceResetWaveProgress();
         SaveData oldData = SaveLoadManager.LoadGame();
 
         SaveLoadManager.DeleteSaveData();
 
         SaveData newData = new SaveData();
+
+        newData.day = 1;
+        newData.hour = 0;
+        newData.minute = 0;
+        newData.second = 0;
 
         if (currencyDatabase != null)
         {

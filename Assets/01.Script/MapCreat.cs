@@ -10,27 +10,16 @@ public class MapCreat : MonoBehaviour
     public Tilemap treeTilemap; // 나무 타일맵 연결
     public Tilemap buildingTilemap;
     public Tilemap fogTilemap;
-    public Tile transparentBlockingTile;
 
     [Header("사용할 타일 asset")]
     public TileBase groundTile; // 사용할 잔디 바닥 타일
     public TileBase stoneTile; // 사용할 돌 타일
     public TileBase treeTile;
-    public TileBase mainBuildingTile;
     public TileBase fogTile;
 
     [Header("안개 설정")]
     public int initialFogRevealRadius = 5;
-
-    [Header("메인 성 설정")]
     public Vector3Int mainBuildingCellPos = Vector3Int.zero;
-    public BuildingData mainBuildingData;
-
-    [Header("건물 차단 영역 오프셋 (비율 조절)")]
-    public int rangeLeft = 2;
-    public int rangeRight = 2; 
-    public int rangeUp = 2; 
-    public int rangeDown = 4;
 
     [Header("맵 크기 (중앙 0,0 기준)")]
     public int width = 150; // 맵 가로 크기
@@ -94,6 +83,15 @@ public class MapCreat : MonoBehaviour
         if (currentSaveData != null)
         {
             LoadFogSaveData(currentSaveData);
+        }
+
+        if (buildingManager != null)
+        {
+            buildingManager.InitMainBuildingAndBarriers();
+        }
+        else
+        {
+            Debug.LogError("[MapCreat] buildingManager가 연결되지 않았습니다!");
         }
 
         if (needsSave)
@@ -164,48 +162,6 @@ public class MapCreat : MonoBehaviour
         }
 
         HashSet<Vector3Int> forbiddenForTrees = new HashSet<Vector3Int>();
-        if (buildingTilemap != null && mainBuildingTile != null)
-        {
-            buildingTilemap.SetTile(mainBuildingCellPos, mainBuildingTile);
-
-            if (buildingManager != null && mainBuildingData != null)
-            {
-                buildingManager.RegisterMainBuilding(mainBuildingCellPos, mainBuildingData);
-            }
-            else
-            {
-                Debug.LogError("[MapCreat] BuildingManager 또는 mainBuildingData가 연결되지 않았습니다.");
-            }
-        }
-
-        if (buildingTilemap != null)
-        {
-            for (int dx = -rangeLeft; dx <= rangeRight; dx++)
-            {
-                for (int dy = -rangeDown; dy <= rangeUp; dy++)
-                {
-                    Vector3Int targetPos = new Vector3Int(mainBuildingCellPos.x + dx, mainBuildingCellPos.y + dy, 0);
-
-                    forbiddenForTrees.Add(targetPos);
-
-                    if (dx == 0 && dy == 0)
-                    {
-                        if (mainBuildingTile != null)
-                        {
-                            buildingTilemap.SetTile(targetPos, mainBuildingTile);
-                        }
-                    }
-                    else
-                    {
-                        if (transparentBlockingTile != null)
-                        {
-                            buildingTilemap.SetTile(targetPos, transparentBlockingTile);
-                        }
-                    }
-                }
-            }
-        }
-
         HashSet<Vector3Int> removedStoneSet = new HashSet<Vector3Int>();
         if (saveData != null && saveData.removedStones != null)
         {

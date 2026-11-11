@@ -296,5 +296,10 @@ public static class EventManager
         IsWaveInProgress = false;
         OnWaveEnded?.Invoke(wave);
     }
+
+    public static void ForceResetWaveProgress()
+    {
+        IsWaveInProgress = false;
+    }
 }
 

@@ -276,6 +276,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         foreach (var pos in activeBuildingPositions)
         {
+            TileBase tile = sharedBuildingTilemap.GetTile(pos);
+
+            if (tile != null && tile.name.Contains("Transparent"))
+            {
+                continue;
+            }
+
             Vector3 worldPos = sharedBuildingTilemap.GetCellCenterWorld(pos);
             float distanceToBuilding = Vector2.Distance(transform.position, worldPos);
 
@@ -310,9 +317,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (hasBuildingTarget)
         {
-            EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
-            Debug.Log($"[{enemyData.enemyName}] 타일 건물 {currentBuildingCell} 공격 데미지: {enemyData.attackDamage}");
-
+            if (activeBuildingPositions.Contains(currentBuildingCell))
+            {
+                EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
+                Debug.Log($"[{enemyData.enemyName}] 타일 건물 {currentBuildingCell} 공격 데미지: {finalDamage}");
+            }
+            else
+            {
+                hasBuildingTarget = false;
+            }
         }
         else if (target != null)
         {
@@ -358,6 +371,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         isDead = true;
 
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColor;
+        }
+
+        if (animator != null)
+        {
+            animator.ResetTrigger("Attack");
+            animator.ResetTrigger("Hit");
+            animator.SetBool("Move", false);
+            animator.Play("EnemyIdle", 0, 0f);
+        }
 
         EventManager.CurrencyAdded(CurrencyType.Gold, enemyData.rewardGold);
         EventManager.TriggerRequestReturnPool(enemyData.enemyType, gameObject);
@@ -481,5 +506,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             Destroy(activePoisonEffect);
         }
+    }
+
+    public static void ClearStaticData()
+    {
+        activeBuildingPositions.Clear();
+        sharedBuildingTilemap = null;
     }
 }

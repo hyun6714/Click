@@ -13,7 +13,8 @@ public class BuildingDestroyerEnemy : EnemyBase
             return;
         }
 
-        float distance = Vector2.Distance(transform.position, target.position);
+        Vector3 targetWorldPos = target.position;
+        float distance = Vector2.Distance(transform.position, targetWorldPos);
 
         if (distance <= enemyData.attackRange)
         {
@@ -21,8 +22,7 @@ public class BuildingDestroyerEnemy : EnemyBase
 
             if (attackCooldown <= 0)
             {
-                float speedMultiplier = (currentWeather == WeatherType.Storm) ? 1.2f : (currentWeather == WeatherType.Snow ? 0.8f : 1.0f);
-                float currentAttackSpeed = baseAttackSpeed * speedMultiplier;
+                float currentAttackSpeed = baseAttackSpeed;
 
                 if (currentAttackSpeed <= 0f)
                 {
@@ -30,29 +30,37 @@ public class BuildingDestroyerEnemy : EnemyBase
                     return;
                 }
 
-                FaceDirection(target.position - transform.position);
+                FaceDirection(targetWorldPos - transform.position);
                 PlayAttackAnimation();
                 attackCooldown = 1f / currentAttackSpeed;
             }
         }
-
         else
         {
             SetMoveAnimation(true);
-            Move(target.position);
-        }
-    }
-    protected override void Attack()
-    {
-        if (target != null)
-        {
-            if (target.TryGetComponent<IDamageable>(out var damageable))
-            {
-                int finalDamage = enemyData.attackDamage * extraDamageMultiplier;
-                damageable.TakeDamage(finalDamage);
-                Debug.Log($"[건물 파괴자] 공격 데미지: {finalDamage}");
-            }
+            Move(targetWorldPos);
         }
     }
 
+    protected override void Attack()
+    {
+        int finalDamage = Mathf.RoundToInt(baseAttackDamage);
+
+        if (target != null)
+        {
+            if (sharedBuildingTilemap != null)
+            {
+                Vector3Int cellPos = sharedBuildingTilemap.WorldToCell(target.position);
+
+
+                EventManager.TriggerRequestDamageBuilding(cellPos, finalDamage);
+                Debug.Log($"[건물 파괴자] 메인 성 좌표 {cellPos}에 {finalDamage} 데미지 타격!");
+            }
+            else if (target.TryGetComponent<IDamageable>(out var damageable))
+            {
+                damageable.TakeDamage(finalDamage);
+                Debug.Log($"[건물 파괴자] 메인 성 오브젝트 공격 데미지: {finalDamage}");
+            }
+        }
+    }
 }
