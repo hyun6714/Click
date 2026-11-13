@@ -132,7 +132,6 @@ public class SoundSettingsPopup : MonoBehaviour
         }
 
         SaveLoadManager.SaveRawData(data);
-        Debug.Log($"[SoundSettings] 볼륨 JSON 저장 완료 - SFX: {data.sfxVolume}, BGM: {data.bgmVolume}");
     }
 
     private void ApplyVolume(string parameterName, float value)

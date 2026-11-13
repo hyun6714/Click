@@ -65,8 +65,6 @@ public class SaveLoadManager : MonoBehaviour
 
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(SavePath, json);
-
-        Debug.Log($"[SaveLoadManager] 게임 저장 완료: {SavePath}");
     }
 
     // 게임 불러오기
@@ -80,8 +78,6 @@ public class SaveLoadManager : MonoBehaviour
 
         string json = File.ReadAllText(SavePath);
         SaveData data = JsonUtility.FromJson<SaveData>(json);
-
-        Debug.Log("[SaveLoadManager] 게임 로드 성공!");
         return data;
     }
 
@@ -94,7 +90,6 @@ public class SaveLoadManager : MonoBehaviour
             if (spawner != null)
             {
                 spawner.CheckAndResumeWaveOnLoad(data.day);
-                Debug.Log($"[SaveLoadManager] 저장된 {data.day}일차 웨이브 상태 연동 완료");
             }
         }
     }
@@ -103,8 +98,6 @@ public class SaveLoadManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(data, true);
         File.WriteAllText(SavePath, json);
-
-        Debug.Log($"[SaveLoadManager] 체크포인트 저장 완료: {SavePath}");
     }
 
     public static void DeleteSaveData()
@@ -112,7 +105,6 @@ public class SaveLoadManager : MonoBehaviour
         if (File.Exists(SavePath))
         {
             File.Delete(SavePath);
-            Debug.Log("[SaveLoadManager] 저장 파일 삭제 완료");
         }
     }
 }

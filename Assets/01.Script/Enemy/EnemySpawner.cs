@@ -44,7 +44,6 @@ public class EnemySpawner : MonoBehaviour
     {
         if (waveDataList == null)
         {
-            Debug.LogError("[EnemySpawner] waveDataList가 연결이 안됨");
             return;
         }
 
@@ -56,7 +55,6 @@ public class EnemySpawner : MonoBehaviour
 
         if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            Debug.LogError($"[EnemySpawner] {day}일차 웨이브: spawnPoints가 비어 있음");
             return;
         }
 
@@ -67,13 +65,11 @@ public class EnemySpawner : MonoBehaviour
     {
         if (isWaveInProgress)
         {
-            Debug.LogWarning("[EnemySpawner] 기존 웨이브가 진행 중 새 웨이브 시작 안함");
             yield break;
         }
 
         if (buildingManager == null)
         {
-            Debug.LogError("[EnemySpawner] BuildingManager가 연결되지 않았습니다.");
             yield break;
         }
 
@@ -95,7 +91,9 @@ public class EnemySpawner : MonoBehaviour
             foreach (var spawnInfo in wave.spawnInfoList)
             {
                 if (spawnInfo.enemyData == null || spawnInfo.spawnCount <= 0)
+                {
                     continue;
+                }
 
                 for (int i = 0; i < spawnInfo.spawnCount; i++)
                 {
@@ -111,10 +109,6 @@ public class EnemySpawner : MonoBehaviour
                     {
                         enemy.Initialize(spawnInfo.enemyData, spawnPos, mainCastleTarget);
                         remainingEnemyCount++;
-                    }
-                    else
-                    {
-                        Debug.LogError("[EnemySpawner] 적 오브젝트 생성 또는 EnemyBase 초기화 실패");
                     }
 
                     yield return new WaitForSeconds(0.1f);
@@ -160,7 +154,6 @@ public class EnemySpawner : MonoBehaviour
         }
 
         remainingEnemyCount--;
-        Debug.Log($"[스포너] 적 처치(풀 반환)! 남은 적: {remainingEnemyCount}마리");
 
         if (remainingEnemyCount <= 0)
         {
@@ -173,8 +166,6 @@ public class EnemySpawner : MonoBehaviour
         isWaveInProgress = false;
         EventManager.TriggerWaveEnded(currentActiveWave);
 
-        Debug.Log($"[스포너] {currentActiveWave.targetDay}일차 웨이브 클리어 보상 골드: {currentActiveWave.rewardGold}");
-
         if (currentActiveWave.rewardGold > 0)
         {
             EventManager.CurrencyAdded(CurrencyType.Gold, currentActiveWave.rewardGold);
@@ -185,7 +176,6 @@ public class EnemySpawner : MonoBehaviour
 
         if (currentActiveWave.isClearWave)
         {
-            Debug.Log("[스포너] 최종 클리어 웨이브 달성");
             EventManager.TriggerGameCleared();
         }
     }
@@ -203,19 +193,23 @@ public class EnemySpawner : MonoBehaviour
         isWaveInProgress = false;
         remainingEnemyCount = 0;
         currentActiveWave = null;
-        Debug.Log("[EnemySpawner] 웨이브 상태가 강제로 초기화되었습니다.");
     }
 
     public void CheckAndResumeWaveOnLoad(int currentDay)
     {
-        if (isWaveInProgress) return;
+        if (isWaveInProgress)
+        {
+            return;
+        }
 
-        if (waveDataList == null) return;
+        if (waveDataList == null)
+        {
+            return;
+        }
 
         WaveData matchingWave = waveDataList.Find(wave => wave != null && wave.targetDay == currentDay);
         if (matchingWave != null)
         {
-            Debug.Log($"[EnemySpawner] 이어하기 감지: {currentDay}일차 웨이브 재개 시도");
             StartCoroutine(SpawnSpecificWaveRoutine(matchingWave));
         }
     }

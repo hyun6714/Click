@@ -84,7 +84,6 @@ public class WeatherManager : MonoBehaviour
         }
 
         ChangeWeather(selectedWeather);
-        Debug.Log($"[WeatherManager] {day}일차 날씨 결정: {selectedWeather}");
     }
 
     public void ChangeWeather(WeatherType newWeather)
@@ -93,8 +92,6 @@ public class WeatherManager : MonoBehaviour
 
         EventManager.TriggerWeatherChanged(newWeather);
         EventManager.TriggerRequestSaveGame();
-
-        Debug.Log($"[WeatherManager] 날씨 변경됨: {newWeather}");
     }
 
     public void SaveWeatherData(SaveData data)
@@ -117,7 +114,6 @@ public class WeatherManager : MonoBehaviour
         if (Enum.TryParse(data.currentWeather, out WeatherType loadedWeather))
         {
             ChangeWeather(loadedWeather);
-            Debug.Log($"[WeatherManager] 날씨 데이터 복원 완료: {loadedWeather}");
         }
     }
 

@@ -72,11 +72,6 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
-        if (currentBuildingToPlace == null)
-        {
-            Debug.Log("설치모드 OFF");
-        }
-
             // 마우스 좌클릭 시 설치 시도
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
@@ -88,7 +83,6 @@ public class BuildingPlacer : MonoBehaviour
     private void HandleBuildingSelected(BuildingData selectedBuilding)
     {
         currentBuildingToPlace = selectedBuilding;
-        Debug.Log($"설치 대기 중: {currentBuildingToPlace.buildingName}");
 
         EventManager.ChangeGameMode(GameMode.Build);
         EventManager.TriggerBuildAddPopupToggle(true);
@@ -99,21 +93,17 @@ public class BuildingPlacer : MonoBehaviour
     {
         if (availableBuildings == null || index < 0 || index >= availableBuildings.Count)
         {
-            Debug.LogWarning("잘못된 건물 인덱스입니다!");
             currentBuildingToPlace = null;
             return;
         }
 
         currentBuildingToPlace = availableBuildings[index];
-        Debug.Log($"건물 선택됨: {currentBuildingToPlace.buildingName} (인덱스: {index})");
 
         EventManager.ChangeGameMode(GameMode.Build);
     }
 
     void TryPlaceBuilding()
     {
-        Debug.Log("설치모드 ON");
-
         Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
         Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
         Vector3Int cellPos = buildingTilemap.WorldToCell(mouseWorldPos);
@@ -121,7 +111,6 @@ public class BuildingPlacer : MonoBehaviour
 
         if (!CheckCanBuildAt(cellPos))
         {
-            Debug.Log("이곳에는 건물을 지을 수 없습니다!");
             return;
         }
 
@@ -135,7 +124,6 @@ public class BuildingPlacer : MonoBehaviour
         if (!hasEnoughTree || !hasEnoughRock)
         {
             EventManager.PlaySound(SoundCue.ResourceInsufficient);
-            Debug.Log("자원이 부족합니다.");
             return;
         }
 
@@ -144,7 +132,6 @@ public class BuildingPlacer : MonoBehaviour
 
         if (!treeSpent)
         {
-            Debug.Log("나무 재화 차감에 실패");
             return;
         }
 
@@ -157,7 +144,6 @@ public class BuildingPlacer : MonoBehaviour
                 EventManager.CurrencyAdded(CurrencyType.Tree, treeCost);
             }
 
-            Debug.Log("돌 재화 차감에 실패 나무 재화 복구");
             return;
         }
 
@@ -165,26 +151,42 @@ public class BuildingPlacer : MonoBehaviour
         hasMainBuilding = true;
     }
 
-    private bool CheckCanBuildAt(Vector3Int cellPos)
+    private bool CheckCanBuildAt(Vector3Int startCellPos)
     {
-        if (groundTilemap != null && !groundTilemap.HasTile(cellPos))
+        if (currentBuildingToPlace == null)
         {
             return false;
         }
 
-        if (buildingTilemap != null && buildingTilemap.HasTile(cellPos))
-        {
-            return false;
-        }
+        int width = currentBuildingToPlace.sizeWidth > 0 ? currentBuildingToPlace.sizeWidth : 1;
+        int height = currentBuildingToPlace.sizeHeight > 0 ? currentBuildingToPlace.sizeHeight : 1;
 
-        if (stoneTilemap != null && stoneTilemap.HasTile(cellPos))
+        for (int x = 0; x < width; x++)
         {
-            return false;
-        }
+            for (int y = 0; y < height; y++)
+            {
+                Vector3Int cellPos = new Vector3Int(startCellPos.x + x, startCellPos.y + y, startCellPos.z);
 
-        if (treeTilemap != null && treeTilemap.HasTile(cellPos))
-        {
-            return false;
+                if (groundTilemap != null && !groundTilemap.HasTile(cellPos))
+                {
+                    return false;
+                }
+
+                if (buildingTilemap != null && buildingTilemap.HasTile(cellPos))
+                {
+                    return false;
+                }
+
+                if (stoneTilemap != null && stoneTilemap.HasTile(cellPos))
+                {
+                    return false;
+                }
+
+                if (treeTilemap != null && treeTilemap.HasTile(cellPos))
+                {
+                    return false;
+                }
+            }
         }
 
         if (buildingTilemap != null)
@@ -195,14 +197,30 @@ public class BuildingPlacer : MonoBehaviour
             {
                 if (buildingTilemap.HasTile(pos))
                 {
-                    // 투명 블로킹 타일 등 예외 처리가 필요하다면 여기에 추가 가능
-                    int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y  - pos.y);
-
-                    if (distance <= requiredBuildingRange)
+                    for (int x = 0; x < width; x++)
                     {
-                        isNearAnyBuilding = true;
-                        break;
+                        for (int y = 0; y < height; y++)
+                        {
+                            Vector3Int cellPos = new Vector3Int(startCellPos.x + x, startCellPos.y + y, startCellPos.z);
+                            int distance = Mathf.Abs(cellPos.x - pos.x) + Mathf.Abs(cellPos.y - pos.y);
+
+                            if (distance <= requiredBuildingRange)
+                            {
+                                isNearAnyBuilding = true;
+                                break;
+                            }
+                        }
+
+                        if (isNearAnyBuilding)
+                        {
+                            break;
+                        }
                     }
+                }
+
+                if (isNearAnyBuilding)
+                {
+                    break;
                 }
             }
 

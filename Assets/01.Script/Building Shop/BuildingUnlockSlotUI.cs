@@ -92,7 +92,7 @@ public class BuildingUnlockSlotUI : MonoBehaviour
 
             if (costText != null)
             {
-                costText.text = $"{assignedNode.unlockCost} G";
+                costText.text = $"{assignedNode.unlockCost}G";
             }
         }
         else
@@ -109,7 +109,7 @@ public class BuildingUnlockSlotUI : MonoBehaviour
 
             if (costText != null)
             {
-                costText.text = $"{assignedNode.unlockCost} G";
+                costText.text = $"{assignedNode.unlockCost}G";
             }
         }
     }

@@ -39,8 +39,6 @@ public class BuildingSlot : MonoBehaviour
     //슬롯을 클릭했을 때 실행되는 함수
     void OnSlotClicked()
     {
-        Debug.Log($"선택된 건물: {assignedBuilding.buildingName} (인덱스: {buildingIndex})");
-
         EventManager.TriggerBuildingSelected(assignedBuilding);
     }
 }

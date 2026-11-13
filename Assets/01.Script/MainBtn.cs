@@ -87,7 +87,7 @@ public class MainBtn : MonoBehaviour
         SaveData newData = new SaveData();
 
         newData.day = 1;
-        newData.hour = 0;
+        newData.hour = 7;
         newData.minute = 0;
         newData.second = 0;
 

@@ -30,7 +30,6 @@ public class MortarTower : AttackBuilding
         }
         else
         {
-            Debug.LogError($"[{TowerData.buildingName}] 프리팹에 TowerProjectile 스크립트가 없습니다!");
             Destroy(projObj);
         }
     }

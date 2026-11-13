@@ -54,12 +54,10 @@ public class BuildingDestroyerEnemy : EnemyBase
 
 
                 EventManager.TriggerRequestDamageBuilding(cellPos, finalDamage);
-                Debug.Log($"[건물 파괴자] 메인 성 좌표 {cellPos}에 {finalDamage} 데미지 타격!");
             }
             else if (target.TryGetComponent<IDamageable>(out var damageable))
             {
                 damageable.TakeDamage(finalDamage);
-                Debug.Log($"[건물 파괴자] 메인 성 오브젝트 공격 데미지: {finalDamage}");
             }
         }
     }

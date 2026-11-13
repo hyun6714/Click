@@ -5,12 +5,34 @@ public class RangedEnemy : EnemyBase
     [Header("원거리 발사 위치")]
     [SerializeField] private Transform firePoint;
 
+    [SerializeField] private float floatSpeed = 5f;
+    [SerializeField] private float floatAmount = 0.1f;
+
+
     public override void Initialize(EnemyData data, Vector3 spawnPosition, Transform castleTarget)
     {
         base.Initialize(data, spawnPosition, castleTarget);
 
         hasBuildingTarget = false;
         currentBuildingCell = Vector3Int.zero;
+    }
+
+    private void LateUpdate()
+    {
+        if (enemyData == null || !gameObject.activeSelf)
+        {
+            return;
+        }
+
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.transform.localRotation = Quaternion.identity;
+
+            float floatOffset = Mathf.Sin(Time.time * floatSpeed) * floatAmount;
+            Vector3 localPos = spriteRenderer.transform.localPosition;
+
+            spriteRenderer.transform.localPosition = new Vector3(localPos.x, floatOffset, localPos.z);
+        }
     }
 
     protected override void PlayAttackAnimation()
@@ -40,8 +62,6 @@ public class RangedEnemy : EnemyBase
 
         Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
         int finalDamage = GetCurrentAttackDamage();
-
-        Debug.Log($"[원거리 공격] 계산된 최종 데미지: {finalDamage}");
 
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
@@ -78,7 +98,6 @@ public class RangedEnemy : EnemyBase
             enemyData.projectileSpeed
         );
 
-        Debug.Log($"[{enemyData.enemyName}] {target.name}을 향해 투사체 발사");
     }
     private bool HasValidTarget()
     {

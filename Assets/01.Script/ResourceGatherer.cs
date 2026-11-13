@@ -111,7 +111,6 @@ public class ResourceGatherer : MonoBehaviour
         if (!canUseClick)
         {
             EventManager.PlaySound(SoundCue.ResourceInsufficient);
-            Debug.Log("Å¬¸¯ È½¼ö ºÎÁ·");
             return;
         }
 
@@ -128,7 +127,6 @@ public class ResourceGatherer : MonoBehaviour
         {
             EventManager.CurrencyAdded(CurrencyType.Tree, finalHarvestAmount);
             EventManager.PlaySound(SoundCue.ResourceGather);
-            Debug.Log("³ª¹« È¹µæ");
 
             if (gainPopupPrefab != null)
             {
@@ -154,7 +152,6 @@ public class ResourceGatherer : MonoBehaviour
         {
             EventManager.CurrencyAdded(CurrencyType.Rock, finalHarvestAmount);
             EventManager.PlaySound(SoundCue.ResourceGather);
-            Debug.Log("µ¹ È¹µæ");
 
             if (gainPopupPrefab != null)
             {
@@ -191,7 +188,6 @@ public class ResourceGatherer : MonoBehaviour
             bool canUseClick = EventManager.RequestUseCurrency(CurrencyType.Click, fogClickCost);
             if (!canUseClick)
             {
-                Debug.Log("¾È°³¸¦ °È¾î³¾ Å¬¸¯ È½¼ö ºÎÁ·");
                 return;
             }
 
@@ -200,7 +196,6 @@ public class ResourceGatherer : MonoBehaviour
 
         StartCoroutine(ClearFogPlusThenDiagonals(centerCell));
 
-        Debug.Log("¾È°³°¡ °ÈÇû½À´Ï´Ù!");
     }
 
     private IEnumerator ClearFogPlusThenDiagonals(Vector3Int centerCell)

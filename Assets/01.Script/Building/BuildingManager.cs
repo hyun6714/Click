@@ -59,7 +59,6 @@ public partial class BuildingManager : MonoBehaviour
     {
         if (buildingTilemap == null || mainBuildingData == null)
         {
-            Debug.LogError("[BuildingManager] BuildingTilemap 또는 mainBuildingData가 없습니다.");
             return;
         }
 
@@ -80,7 +79,6 @@ public partial class BuildingManager : MonoBehaviour
                     buildingHpDictionary[targetPos] = mainBuildingData.maxBuildingHp;
 
                     EventManager.TriggerBuildingRegistered(targetPos);
-                    Debug.Log($"[메인 성 설치 완료] 좌표: {targetPos} | HP: {mainBuildingData.maxBuildingHp}");
                 }
                 else
                 {
@@ -103,56 +101,61 @@ public partial class BuildingManager : MonoBehaviour
     //건물 설치 신호 받을 시 설치 
     private void PlaceBuildingSilently(Vector3Int cellPosition, BuildingData data)
     {
-        if (buildingTilemap != null && data.buildingTile != null)
+        if (buildingTilemap == null || data.buildingTile == null)
         {
-            buildingTilemap.SetTile(cellPosition, data.buildingTile);
+            return;
+        }
 
-            if (data is BarricadeBuildingData)
+        int width = data.sizeWidth > 0 ? data.sizeWidth : 1;
+        int height = data.sizeHeight > 0 ? data.sizeHeight : 1;
+        int maxHp = data is BarricadeBuildingData barricadeHpData ? barricadeHpData.maxHealth : data.maxBuildingHp;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
             {
-                Vector3Int mainCell = cellPosition;
-                bool foundMainBuilding = false;
+                Vector3Int targetPos = new Vector3Int(cellPosition.x + x, cellPosition.y + y, cellPosition.z);
 
-                foreach (var building in buildingDataDictionary)
+                buildingTilemap.SetTile(targetPos, data.buildingTile);
+
+                buildingHpDictionary[targetPos] = maxHp;
+                buildingDataDictionary[targetPos] = data;
+
+                if (!(data is TrapBuildingData))
                 {
-                    if (building.Value != null &&
-                        building.Value.category == BuildingCategory.Main)
-                    {
-                        mainCell = building.Key;
-                        foundMainBuilding = true;
-                        break;
-                    }
-                }
-
-                if (foundMainBuilding)
-                {
-                    int deltaX = Mathf.Abs(cellPosition.x - mainCell.x);
-                    int deltaY = Mathf.Abs(cellPosition.y - mainCell.y);
-
-                    bool flip = deltaY <= deltaX;
-
-                    Vector3 scale = flip
-                        ? new Vector3(-1f, 1f, 1f)
-                        : Vector3.one;
-
-                    buildingTilemap.SetTransformMatrix(
-                        cellPosition,
-                        Matrix4x4.TRS(Vector3.zero, Quaternion.identity, scale)
-                    );
+                    EventManager.TriggerBuildingRegistered(targetPos);
                 }
             }
         }
 
-        int maxHp = data is BarricadeBuildingData barricadeHpData ? barricadeHpData.maxHealth : data.maxBuildingHp;
-
-        buildingHpDictionary[cellPosition] = maxHp;
-        buildingDataDictionary[cellPosition] = data;
-
-        if (!(data is TrapBuildingData))
+        if (data is BarricadeBuildingData)
         {
-            EventManager.TriggerBuildingRegistered(cellPosition);
-        }
+            Vector3Int mainCell = cellPosition;
+            bool foundMainBuilding = false;
 
-        Debug.Log($"[설치 완료] 좌표 {cellPosition} | 건물: {data.buildingName} | HP: {maxHp}");
+            foreach (var building in buildingDataDictionary)
+            {
+                if (building.Value != null && building.Value.category == BuildingCategory.Main)
+                {
+                    mainCell = building.Key;
+                    foundMainBuilding = true;
+                    break;
+                }
+            }
+
+            if (foundMainBuilding)
+            {
+                int deltaX = Mathf.Abs(cellPosition.x - mainCell.x);
+                int deltaY = Mathf.Abs(cellPosition.y - mainCell.y);
+                bool flip = deltaY <= deltaX;
+                Vector3 scale = flip ? new Vector3(-1f, 1f, 1f) : Vector3.one;
+
+                buildingTilemap.SetTransformMatrix(
+                    cellPosition,
+                    Matrix4x4.TRS(Vector3.zero, Quaternion.identity, scale)
+                );
+            }
+        }
 
         if (data is AttackBuildingData attackData)
         {
@@ -198,7 +201,6 @@ public partial class BuildingManager : MonoBehaviour
         buildingHpDictionary[cellPosition] = remainingHp;
         PlayTileHitEffect(cellPosition);
         EventManager.PlaySound(SoundCue.BuildingDemolish);
-        Debug.Log($"[건물 피격] 좌표 {cellPosition} | 남은 HP: {remainingHp}");
 
         if (remainingHp <= 0)
         {
@@ -228,8 +230,6 @@ public partial class BuildingManager : MonoBehaviour
 
             if (data.category == BuildingCategory.Main)
             {
-                Debug.Log("[게임 오버] 메인 성이 파괴");
-
                 EventManager.TriggerCastleDestroyed();
             }
 
@@ -262,13 +262,7 @@ public partial class BuildingManager : MonoBehaviour
             buildingDataDictionary.Remove(cellPosition);
             EventManager.TriggerBuildingUnregistered(cellPosition);
 
-            Debug.Log($"[건물 파괴,철거 성공] 좌표 {cellPosition} 철거 및 데이터 삭제 완료");
-
             TriggerSave();
-        }
-        else
-        {
-            Debug.Log("철거할 건물의 데이터가 존재하지 않습니다.");
         }
     }
 
@@ -277,7 +271,6 @@ public partial class BuildingManager : MonoBehaviour
     {
         if (data == null)
         {
-            Debug.LogError("mainBuildingData가 비어 있습니다.");
             return;
         }
 
@@ -348,8 +341,6 @@ public partial class BuildingManager : MonoBehaviour
         {
             buildingTilemap.ClearAllTiles();
         }
-
-        Debug.Log($"빌드 타일 Clear ");
     }
 
     private void HandlePlaceBuildingRequest(Vector3Int cellPosition, BuildingData data)

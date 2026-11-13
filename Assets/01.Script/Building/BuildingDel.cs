@@ -21,7 +21,6 @@ public class BuildingDel : MonoBehaviour
 
         if (buildingPlacer == null)
         {
-            Debug.LogWarning("씬에서 BuildingPlacer를 찾지 못했습니다!");
         }
     }
     private void OnEnable()
@@ -65,7 +64,6 @@ public class BuildingDel : MonoBehaviour
 
             if (!buildingTilemap.HasTile(cellPos))
             {
-                Debug.Log("철거할 건물이 없습니다.");
                 return;
             }
 
@@ -76,7 +74,6 @@ public class BuildingDel : MonoBehaviour
     public void ToggleDemolishMode()
     {
         isDemolishMode = !isDemolishMode;
-        Debug.Log(isDemolishMode ? "철거 모드 ON" : "철거 모드 OFF");
 
         if (isDemolishMode)
         {
@@ -100,7 +97,6 @@ public class BuildingDel : MonoBehaviour
         {
             isDemolishMode = false;
             EventManager.TriggerBuildMenuPopupToggle();
-            Debug.Log("건물 선택으로 인해 철거 모드 해제");
         }
     }
 
@@ -109,7 +105,6 @@ public class BuildingDel : MonoBehaviour
         if (newMode != GameMode.Del && isDemolishMode)
         {
             isDemolishMode = false;
-            Debug.Log("모드 전환되어 철거 모드 자동 해제");
             EventManager.TriggerBuildMenuPopupToggle();
         }
     }

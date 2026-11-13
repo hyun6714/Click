@@ -53,7 +53,6 @@ public class CurrencyManager : MonoBehaviour
     {
         if (currencyDatabase == null)
         {
-            Debug.Log("재화 데이터베이스가 없습니다");
             return;
         }
 
@@ -113,7 +112,6 @@ public class CurrencyManager : MonoBehaviour
         int current = GetAmount(type);
         if (current < amount)
         {
-            Debug.Log($"{type} 재화가 부족합니다");
             return false;
         }
 
@@ -175,7 +173,6 @@ public class CurrencyManager : MonoBehaviour
 
         EventManager.TriggerMaxClickChanged(maxClickLimit);
 
-        Debug.Log("[CurrencyManager] 재화 데이터 복원 완료");
     }
 
     public int GetMaxClick()
@@ -196,7 +193,6 @@ public class CurrencyManager : MonoBehaviour
         int totalClickToAdd = baseClick + dailyProductionBonus;
 
         AddCurrency(CurrencyType.Click, totalClickToAdd);
-        Debug.Log($"[일일 생산] 총 {totalClickToAdd}");
     }
 
     public void AddDailyProductionBonus(int amount)

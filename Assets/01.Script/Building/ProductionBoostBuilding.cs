@@ -48,7 +48,6 @@ public class ProductionBoostBuilding : MonoBehaviour, IDamageable
             return;
         }
 
-        Debug.Log($"[건물 효과 적용] {boostData.buildingName} 건설 일일 생산량 보너스 {boostData.dailyProductionBonus} 증가");
         EventManager.TriggerAddDailyProductionBonus(boostData.dailyProductionBonus);
 
         effectApplied = true;
@@ -61,7 +60,6 @@ public class ProductionBoostBuilding : MonoBehaviour, IDamageable
             return;
         }
 
-        Debug.Log($"[건물 효과 해제] {boostData.buildingName} 파괴 일일 생산량 보너스 감소");
         EventManager.TriggerAddDailyProductionBonus(-boostData.dailyProductionBonus);
 
         effectApplied = false;

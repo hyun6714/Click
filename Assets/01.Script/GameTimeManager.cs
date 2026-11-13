@@ -113,7 +113,6 @@ public class GameTimeManager : MonoBehaviour
     private void AdvanceDay()
     {
         currentDay++;
-        Debug.Log($"[날짜 변경] 하루 지남 현재 {currentDay}일차");
 
         EventManager.TriggerDayChanged(currentDay);
 
@@ -124,7 +123,6 @@ public class GameTimeManager : MonoBehaviour
     {
         if (EventManager.IsWaveInProgress)
         {
-            Debug.Log("웨이브 진행 중에는 날짜를 넘길 수 없습니다.");
             return;
         }
 
@@ -173,8 +171,6 @@ public class GameTimeManager : MonoBehaviour
         currentSecond = 0f;
         timer = 0f;
 
-        Debug.Log($"[날짜 스킵] 현재 {currentDay}일차, 오전 {currentHour}시");
-
         EventManager.TriggerDayChanged(currentDay);
         EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
 
@@ -190,7 +186,6 @@ public class GameTimeManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("[디버그] TriggerSave 함수 진입 성공");
         GameTimeManager timeMgr = this;
 
         SaveLoadManager.SaveGame(timeMgr, currencyMgr, buildingMgr, weatherMgr, unlockMgr);
@@ -205,8 +200,6 @@ public class GameTimeManager : MonoBehaviour
         timer = 0f;
 
         EventManager.TriggerTimeDetailedChanged(currentDay, currentHour, currentMinute, currentSecond);
-
-        Debug.Log($"[GameTimeManager] 데이터 로드 완료 (이벤트 생략): {currentDay}일차, {currentHour}시");
     }
 
 }

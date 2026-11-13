@@ -28,7 +28,10 @@ public class SaveData
     public int screenHeight = 1080;
     public bool isFullScreen = true;
 
-    [System.Serializable]
+    public bool hasSeenTutorial = false;
+
+
+[System.Serializable]
     public struct BuildingSaveEntry
     {
         public int x;

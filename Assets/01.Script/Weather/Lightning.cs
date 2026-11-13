@@ -89,13 +89,11 @@ public class LightningManager : MonoBehaviour
 
             ApplyLightningDamageAt(strikePos);
 
-            Debug.Log($"[번개] 시야 내 낙하! 위치: {strikePos}");
         }
         else
         {
             //안개 속이거나 화면 밖: 웅장한 천둥 소리만 재생 
             audioSource.PlayOneShot(thunderSound, 0.4f);
-            Debug.Log("[번개] 시야 밖/안개 속 낙하 (소리만 재생)");
         }
     }
 
@@ -117,8 +115,6 @@ public class LightningManager : MonoBehaviour
             if (target != null)
             {
                 target.TakeDamage(20);
-
-                Debug.Log($"{hit.gameObject.name}에게 낙뢰 데미지 20 적용!");
             }
         }
     }
