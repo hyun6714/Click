@@ -44,7 +44,6 @@ public class ResourceBuildingSpawner : MonoBehaviour
 
         if (buildingTilemap == null)
         {
-            Debug.LogError("[ResourceBuildingSpawner] buildingTilemap이 연결되지 않았습니다.");
             return;
         }
 

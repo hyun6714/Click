@@ -49,7 +49,6 @@ public class AttackBuildingSpawner : MonoBehaviour
         if (controller != null)
         {
             controller.Initialize(attackData, cellPos);
-            Debug.Log($"[공격 타워 생성 완료] 위치: {cellPos}");
         }
     }
 

@@ -59,7 +59,6 @@ public class CilckSpawner : MonoBehaviour
             if (clickBuilding != null)
             {
                 clickBuilding.Initialize(clickData, cellPos);
-                Debug.Log($"[클릭 건물 생성 완료] 위치: {cellPos}");
             }
         }
         else if (buildingData is ProductionBoostBuildingData boostData)
@@ -78,7 +77,6 @@ public class CilckSpawner : MonoBehaviour
             if (boostBuilding != null)
             {
                 boostBuilding.Initialize(boostData, cellPos);
-                Debug.Log($"[생산 보너스 건물 생성 완료] 위치: {cellPos}");
             }
         }
     }

@@ -46,10 +46,6 @@ public class BuildUIManager : MonoBehaviour
             demolishButton.onClick.RemoveAllListeners();
             demolishButton.onClick.AddListener(OnDemolishButtonClicked);
         }
-        else
-        {
-            Debug.LogWarning("철거 버튼 null");
-        }
     }
 
     // 철거 버튼을 눌렀을 때 실행되는 함수

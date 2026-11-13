@@ -140,7 +140,6 @@ public class EscapeMenuController : MonoBehaviour
     {
         if (pausePopup == null)
         {
-            Debug.LogError("Pause Popup이 연결되지 않음");
             return;
         }
 

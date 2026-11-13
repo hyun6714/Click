@@ -30,7 +30,6 @@ public partial class BuildingManager
             {
                 loadedData.savedBuildings = new List<SaveData.BuildingSaveEntry>(loadedData.waveStartBuildings);
 
-                Debug.Log("[BuildingManager] 웨이브 시작 당시 건물 상태로 복원");
             }
 
             if (buildingPlacer != null)
@@ -43,7 +42,6 @@ public partial class BuildingManager
         EventManager.TriggerRequestSyncBuildings();
 
         isInitialized = true;
-        Debug.Log("[BuildingManager] 비동기 지연 로드 및 초기화 완료");
     }
 
     public void SaveBuildingData(SaveData data)
@@ -89,7 +87,6 @@ public partial class BuildingManager
             {
                 PlaceBuildingSilently(pos, foundData);
 
-                Debug.Log($"[로드 체크] 건물: {entry.buildingName}, 저장된 tileName: '{entry.tileName}'");
 
                 if (buildingTilemap != null && !string.IsNullOrEmpty(entry.tileName))
                 {
@@ -107,20 +104,11 @@ public partial class BuildingManager
                     if (targetTile != null)
                     {
                         buildingTilemap.SetTile(pos, targetTile);
-                        Debug.Log($"[타일 꽂기 성공] 좌표 {pos}에 타일 [{targetTile.name}] 꽂음!");
-                    }
-                    else
-                    {
-                        Debug.LogWarning($"[타일 찾기 실패] availableBuildings 목록에서 '{entry.tileName}' 이름을 가진 타일을 못 찾았습니다!");
                     }
                 }
             }
-            else
-            {
-                Debug.LogWarning($"[Load] 저장된 건물의 ScriptableObject = Null: {entry.buildingName}");
-            }
+
         }
-        Debug.Log("[BuildingManager] 건물 데이터 복원 완료");
     }
 
     public void BeginWaveBuildingCheckpoint()
@@ -131,7 +119,6 @@ public partial class BuildingManager
         SaveBuildingData(snapshot);
 
         data.waveStartBuildings = new List<SaveData.BuildingSaveEntry>(snapshot.savedBuildings);
-        Debug.Log($"[웨이브 체크포인트 저장] 건물 수: {data.waveStartBuildings.Count}");
 
         data.waveCheckpointActive = true;
 
@@ -143,7 +130,9 @@ public partial class BuildingManager
         SaveData data = SaveLoadManager.LoadGame();
 
         if (data == null)
+        {
             return;
+        }
 
         data.waveCheckpointActive = false;
         data.waveStartBuildings.Clear();
@@ -159,11 +148,9 @@ public partial class BuildingManager
             return;
         }
 
-        Debug.Log("[디버그] TriggerSave 함수 진입 성공");
         BuildingManager buildingMgr = this;
 
         SaveLoadManager.SaveGame(timeMgr, currencyMgr, buildingMgr, weatherMgr, unlockMgr);
-        Debug.Log("[BuildingManager] 건물 변경으로 인한 자동 저장 완료");
     }
 
 }

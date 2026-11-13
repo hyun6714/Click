@@ -78,32 +78,19 @@ public class EnemyProjectile : MonoBehaviour
 
     private void HitTarget()
     {
-        Debug.Log($"[디버그] 투사체 타격 발생 데미지 값: {damage}, 건물타겟여부: {targetsBuilding}");
-
         if (targetsBuilding)
         {
-            Debug.Log($"[디버그] 건물 셀({targetBuildingCell})에 데미지 이벤트 요청 전송");
             EventManager.TriggerRequestDamageBuilding(targetBuildingCell, damage);
         }
         else
         {
             if (target != null)
             {
-                Debug.Log($" 타겟팅됨 타겟 이름: {target.name}");
 
                 if (target.TryGetComponent<IDamageable>(out var damageable))
                 {
-                    Debug.Log($"성에 {damage} 데미지 적용 함수 호출");
                     damageable.TakeDamage(damage);
                 }
-                else
-                {
-                    Debug.LogWarning($"타겟({target.name})에 IDamageable 컴포넌트 없음");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("투사체가 타겟 없음");
             }
         }
         

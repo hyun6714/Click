@@ -6,7 +6,7 @@ using System.Collections;
 public class EnemyBase : MonoBehaviour, IDamageable
 {
     [Header("시각 효과 관련")]
-    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] protected SpriteRenderer spriteRenderer;
     [SerializeField] private GameObject poisonEffectPrefab;
     [SerializeField] private GameObject iceEffectPrefab;
     [SerializeField] protected Animator animator;
@@ -92,6 +92,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (activeBuildingPositions.Contains(pos))
         {
             activeBuildingPositions.Remove(pos);
+        }
+
+        if (hasBuildingTarget && currentBuildingCell == pos)
+        {
+            hasBuildingTarget = false;
+            FindNearestBuilding();
         }
     }
 
@@ -278,7 +284,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             TileBase tile = sharedBuildingTilemap.GetTile(pos);
 
-            if (tile != null && tile.name.Contains("Transparent"))
+            if (tile != null && tile.name.Contains("Gost"))
             {
                 continue;
             }
@@ -320,7 +326,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (activeBuildingPositions.Contains(currentBuildingCell))
             {
                 EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
-                Debug.Log($"[{enemyData.enemyName}] 타일 건물 {currentBuildingCell} 공격 데미지: {finalDamage}");
             }
             else
             {
@@ -332,7 +337,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (target.TryGetComponent<IDamageable>(out var damageable))
             {
                 damageable.TakeDamage(finalDamage);
-                Debug.Log($"[{enemyData.enemyName}] 메인 성 공격 데미지: {finalDamage}");
             }
         }
     }

@@ -53,14 +53,10 @@ public class TrapBuilding : MonoBehaviour
 
         EventManager.PlaySound(SoundCue.TrapActivate);
         target.TakeDamage(trapData.damage);
-
-        Debug.Log($"[함정 발동] {trapData.buildingName} 피해량: {trapData.damage}");
     }
 
     public void DestroyTrap()
     {
-        Debug.Log($"[함정 철거] {trapData.buildingName} 회수 및 타일 제거");
-
         EventManager.TriggerRequestDemolish(cellPosition);
 
         Destroy(gameObject);

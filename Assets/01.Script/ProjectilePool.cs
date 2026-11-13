@@ -69,7 +69,6 @@ public class ProjectilePool : MonoBehaviour
     {
         if (prefab == null)
         {
-            Debug.LogError("[ProjectilePool] 투사체 프리팹이 null입니다.");
             return;
         }
 
@@ -107,10 +106,6 @@ public class ProjectilePool : MonoBehaviour
         }
         else
         {
-            Debug.LogError(
-                $"투사체 프리팹에 EnemyProjectile이 없습니다: {prefab.name}"
-            );
-
             Destroy(projectileObj);
         }
     }

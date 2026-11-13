@@ -57,8 +57,6 @@ public class GlobalSettingsApplier : MonoBehaviour
 
             ApplyVolume(SfxParameter, data.sfxVolume);
             ApplyVolume(BgmParameter, data.bgmVolume);
-
-            Debug.Log($"[GlobalSettings] 씬 전환 감지 - 설정 적용 완료 (해상도: {width}x{height}, BGM: {data.bgmVolume}, SFX: {data.sfxVolume})");
         }
         else
         { 

@@ -9,8 +9,6 @@ public class BossEnemy : EnemyBase
 
     protected override void Die()
     {
-        Debug.Log($"[보스 처치 완료]");
-
         base.Die();
     }
 }

@@ -17,8 +17,8 @@ MonoBehaviour:
   category: 1
   treeCost: 5
   rockCost: 5
-  sizeWidth: 2
-  sizeHeight: 2
+  sizeWidth: 1
+  sizeHeight: 1
   maxBuildingHp: 300
   unlockData: {fileID: 11400000, guid: 82f7295ffac32b149b1d0a31d6a78607, type: 2}
   maxClickBonus: 10

@@ -44,7 +44,6 @@ public class TrapBuildingSpawner : MonoBehaviour
 
         if (targetPrefab == null)
         {
-            Debug.LogWarning($"[TrapBuildingSpawner] {trapData.buildingName} 프리팹이 연결되지 않음");
             return;
         }
 
@@ -63,8 +62,6 @@ public class TrapBuildingSpawner : MonoBehaviour
         {
             bombBuilding.Initialize(trapData, cellPos);
         }
-
-        Debug.Log($"[함정/폭탄 생성 완료] 위치: {cellPos}");
     }
 
     private void HandleBuildingUnregistered(Vector3Int cellPos)

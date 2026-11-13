@@ -125,7 +125,6 @@ public class ScreenSettings : MonoBehaviour
         data.isFullScreen = isFullScreen;
         SaveLoadManager.SaveRawData(data);
 
-        Debug.Log($"[설정] 전체 화면 모드: {isFullScreen}");
     }
 
     // 해상도 변경 함수
@@ -139,7 +138,6 @@ public class ScreenSettings : MonoBehaviour
         Resolution resolution = filteredResolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         SetResolution(resolution.width, resolution.height, Screen.fullScreen);
-        Debug.Log($"[설정] 해상도 변경: {resolution.width} x {resolution.height}");
     }
 
     public void SetResolution(int width, int height, bool isFullScreen)
@@ -152,7 +150,6 @@ public class ScreenSettings : MonoBehaviour
         data.isFullScreen = isFullScreen;
 
         SaveLoadManager.SaveRawData(data);
-        Debug.Log($"[ScreenSettings] 해상도 저장 완료 - {width}x{height}, 전체화면: {isFullScreen}");
     }
 
     private void LoadAndApplyAllSettings()
@@ -166,8 +163,6 @@ public class ScreenSettings : MonoBehaviour
             bool isFullScreen = data.isFullScreen;
 
             Screen.SetResolution(width, height, isFullScreen);
-
-            Debug.Log($"[ScreenSettings] 저장된 설정 불러오기 및 적용 성공 - 해상도: {width}x{height}, 전체화면: {isFullScreen}");
         }
         else
         {

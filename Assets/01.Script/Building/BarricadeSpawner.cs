@@ -46,7 +46,6 @@ public class BarricadeSpawner : MonoBehaviour
 
             if (targetPrefab == null)
             {
-                Debug.LogWarning($"[BarricadeSpawner] {barricadeData.barriPrefab} 프리팹이 연결되지 않음");
                 return;
             }
 
@@ -58,7 +57,6 @@ public class BarricadeSpawner : MonoBehaviour
             if (barricadeBuilding != null)
             {
                 barricadeBuilding.Initialize(barricadeData, cellPos);
-                Debug.Log($"[바리케이트 생성 완료] 위치: {cellPos}");
             }
         }
     }

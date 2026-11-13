@@ -20,8 +20,6 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
     private int currentHealth;
 
-    private WeatherType currentWeather = WeatherType.Sunny;
-
     public ProductionBuildingData BuildingData => buildingData;
     public int CurrentHealth => currentHealth;
     public Vector3Int CellPosition => cellPosition;
@@ -35,23 +33,9 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
         treeTilemap = treeMap;
         stoneTilemap = stoneMap;
 
-        if (EventManager.OnRequestCurrentWeather != null)
-        {
-            currentWeather = EventManager.OnRequestCurrentWeather.Invoke();
-        }
-
         // 채집 루프 시작
         StartCoroutine(GatherRoutine());
     
-    }
-    private void OnEnable()
-    {
-        EventManager.OnWeatherChanged += HandleWeatherChanged;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.OnWeatherChanged -= HandleWeatherChanged;
     }
 
     public void TakeDamage(int damage)
@@ -83,8 +67,6 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
     private void TryGatherResource()
     {
-        Debug.Log($"[채집 시도] 건물 이름: {buildingData?.buildingName}, 타겟 자원 타입: {buildingData?.targetResourceType}");
-
         int range = buildingData.gatherRange;
         Tilemap targetTilemap = null;
         CurrencyType rewardType = CurrencyType.Tree;
@@ -103,7 +85,6 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
         if (targetTilemap == null)
         {
-            Debug.LogWarning("채집할 타일맵이 없음");
             return;
         }
 
@@ -148,7 +129,11 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
 
                         if (rewardType == CurrencyType.Tree)
                         {
-                            if (currentSaveData.removedTrees == null) currentSaveData.removedTrees = new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+                            if (currentSaveData.removedTrees == null)
+                            {
+                                currentSaveData.removedTrees = new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+                            }
+
                             if (!currentSaveData.removedTrees.Contains(wrappedPos))
                             {
                                 currentSaveData.removedTrees.Add(wrappedPos);
@@ -157,24 +142,21 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
                         }
                         else if (rewardType == CurrencyType.Rock)
                         {
-                            if (currentSaveData.removedStones == null) currentSaveData.removedStones = new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+                            if (currentSaveData.removedStones == null)
+                            {
+                                currentSaveData.removedStones = new System.Collections.Generic.List<SaveData.SerializableVector3Int>();
+                            }
+
                             if (!currentSaveData.removedStones.Contains(wrappedPos))
                             {
                                 currentSaveData.removedStones.Add(wrappedPos);
                                 SaveLoadManager.SaveRawData(currentSaveData);
                             }
                         }
-
-                        Debug.Log($"[{buildingData.buildingName}] 채집 성공 좌표: {targetPos} ({rewardType})");
                         return;
                     }
                 }
             }
         }
-    }
-
-    private void HandleWeatherChanged(WeatherType newWeather)
-    {
-        currentWeather = newWeather;
     }
 }

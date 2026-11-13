@@ -72,14 +72,12 @@ public class BuildingUnlockManager : MonoBehaviour
     {
         if (node.isUnlocked || !node.isAvailable)
         {
-            Debug.Log("[해금 실패]");
             return;
         }
 
         bool hasEnough = EventManager.RequestCheckCurrency(CurrencyType.Gold, node.unlockCost);
         if (!hasEnough)
         {
-            Debug.Log("[해금 실패] 재화가 부족합니다!");
             return;
         }
 
@@ -91,7 +89,6 @@ public class BuildingUnlockManager : MonoBehaviour
 
         node.isUnlocked = true;
         EventManager.PlaySound(SoundCue.BuildingUnlock);
-        Debug.Log($"[해금 성공] {node.nodeName} 해금 완료");
 
         UnlockAdjacentNodes(node);
         EventManager.TriggerBuildingUnlockUpdated();
@@ -166,7 +163,6 @@ public class BuildingUnlockManager : MonoBehaviour
         }
 
         InitializeNodes();
-        Debug.Log("[BuildingUnlockManager] 테크트리 해금 데이터 복원 완료");
     }
 
     public void TriggerSave()
@@ -175,8 +171,6 @@ public class BuildingUnlockManager : MonoBehaviour
         {
             return;
         }
-
-        Debug.Log("[unlock] 저장");
 
         BuildingUnlockManager unlockMgr = this;
 

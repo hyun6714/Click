@@ -17,8 +17,8 @@ MonoBehaviour:
   category: 2
   treeCost: 5
   rockCost: 5
-  sizeWidth: 2
-  sizeHeight: 2
+  sizeWidth: 1
+  sizeHeight: 1
   maxBuildingHp: 500
   unlockData: {fileID: 11400000, guid: 5272e3c7c886830449b28a1c70320c59, type: 2}
   attackRange: 7

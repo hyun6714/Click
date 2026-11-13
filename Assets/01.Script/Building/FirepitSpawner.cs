@@ -29,7 +29,6 @@ public class FirepitSpawner : MonoBehaviour
         }
         if (firepitData.firepitPrefab == null) 
         {
-            Debug.LogWarning("[화로 스폰 실패] 화로 프리팹이 지정되지 않았습니다.");
             return;
         }
 
@@ -43,7 +42,6 @@ public class FirepitSpawner : MonoBehaviour
         if (controller != null)
         {
             controller.Initialize(firepitData, cellPos);
-            Debug.Log($"[화로 생성 완료] 위치: {cellPos}");
         }
     }
 

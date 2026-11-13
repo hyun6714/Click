@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7898506353455385429}
   - component: {fileID: 5370370904330657110}
   - component: {fileID: -9186100879524142981}
+  - component: {fileID: -2882937900870457704}
   m_Layer: 6
   m_Name: Boss
   m_TagString: Untagged
@@ -29,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 1557501106946874412}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1950.9462, y: 70.87897, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -179,3 +180,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-2882937900870457704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557501106946874412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b8a16f5b1399234f977889d8a82e3a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WalkerEnemy
+  spriteRenderer: {fileID: 0}
+  poisonEffectPrefab: {fileID: 0}
+  iceEffectPrefab: {fileID: 0}
+  animator: {fileID: 0}
+  searchRadius: 5
+  swaySpeed: 10
+  swayAmount: 5

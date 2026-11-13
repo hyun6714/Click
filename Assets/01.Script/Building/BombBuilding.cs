@@ -33,7 +33,6 @@ public class BombBuilding : MonoBehaviour
     private void Explode()
     {
         EventManager.PlaySound(SoundCue.BombExplode);
-        Debug.Log($"[폭발!] {trapData.buildingName}이(가) 발동 데미지: {trapData.damage}");
 
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(transform.position, explosionRadius, enemyLayer);
 

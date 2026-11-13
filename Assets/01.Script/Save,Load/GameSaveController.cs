@@ -11,6 +11,5 @@ public class GameSaveController : MonoBehaviour
     public void TriggerSave()
     {
         SaveLoadManager.SaveGame(timeMgr, currencyMgr, buildingMgr, weatherMgr, unlockMgr);
-        Debug.Log("[GameSaveController] 게임 저장");
     }
 }

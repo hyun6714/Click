@@ -89,15 +89,10 @@ public class MapCreat : MonoBehaviour
         {
             buildingManager.InitMainBuildingAndBarriers();
         }
-        else
-        {
-            Debug.LogError("[MapCreat] buildingManager가 연결되지 않았습니다!");
-        }
 
         if (needsSave)
         {
             SaveLoadManager.SaveRawData(currentSaveData);
-            Debug.Log($"[MapCreat] 초기 맵 시드({seed}) 저장 완료.");
         }
     }
 

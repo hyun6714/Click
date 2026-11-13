@@ -118,18 +118,13 @@ public abstract class AttackBuilding : MonoBehaviour, IDamageable
 
         if (projectile == null)
         {
-            Debug.LogError($"[{towerData.buildingName}] projectilePrefab에 TowerProjectile 스크립트가 없어 발사체를 제거합니다.");
-
             Destroy(projectileObject);
             return;
         }
 
         int damage = Mathf.RoundToInt(GetCurrentAttackDamage());
 
-        projectile.Initialize(target, damage, towerData.projectileSpeed
-        );
-
-        Debug.Log($"[{towerData.buildingName}] 투사체 발사! 데미지: {damage}");
+        projectile.Initialize(target, damage, towerData.projectileSpeed);
     }
 
     public void TakeDamage(int damage)
