@@ -25810,7 +25810,7 @@ MonoBehaviour:
   fogTilemap: {fileID: 1262155528}
   fogRevealRadius: 3
   fogClickCost: 1
-  fogFadeDuration: 0.12
+  fogFadeDuration: 0.00001
   harvestAmount: 1
   clickCost: 1
   gainPopupPrefab: {fileID: 8599588534052455297, guid: 299f8b9d5ec30b64e892e3a52d3bca64, type: 3}

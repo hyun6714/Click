@@ -26,11 +26,18 @@ public abstract class AttackBuilding : MonoBehaviour, IDamageable
     private void OnEnable()
     {
         EventManager.OnWeatherChanged += HandleWeatherChanged;
+        EventManager.OnWaveStarted += HandleWaveStarted; 
     }
 
     private void OnDisable()
     {
         EventManager.OnWeatherChanged -= HandleWeatherChanged;
+        EventManager.OnWaveStarted -= HandleWaveStarted; 
+    }
+
+    private void HandleWaveStarted(WaveData wave)
+    {
+        cooldown = 0f;
     }
 
     public void Initialize(AttackBuildingData data, Vector3Int pos)
