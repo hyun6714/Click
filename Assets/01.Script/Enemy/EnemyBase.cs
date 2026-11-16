@@ -97,6 +97,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (hasBuildingTarget && currentBuildingCell == pos)
         {
             hasBuildingTarget = false;
+            attackCooldown = 0f;
+
+            if (animator != null)
+            {
+                animator.ResetTrigger("Attack");
+            }
+
             FindNearestBuilding();
         }
     }
@@ -206,17 +213,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void MoveOrAttack()
     {
-        FindNearestBuilding();
-
-        Vector3 targetWorldPos;
-
-        if (hasBuildingTarget && sharedBuildingTilemap != null)
+        if (hasBuildingTarget)
         {
-            if (!activeBuildingPositions.Contains(currentBuildingCell))
+            if (!activeBuildingPositions.Contains(currentBuildingCell) || sharedBuildingTilemap == null)
             {
                 hasBuildingTarget = false;
+                attackCooldown = 0f;
+                FindNearestBuilding();
             }
         }
+        else
+        {
+            FindNearestBuilding();
+        }
+
+        Vector3 targetWorldPos;
 
         if (hasBuildingTarget && sharedBuildingTilemap != null)
         {
@@ -234,7 +245,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         float distance = Vector2.Distance(transform.position, targetWorldPos);
 
-        if (distance <= enemyData.attackRange)
+        if (distance > enemyData.attackRange)
+        {
+            SetMoveAnimation(true);
+            Move(targetWorldPos);
+        }
+        else
         {
             SetMoveAnimation(false);
 
@@ -252,11 +268,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 PlayAttackAnimation();
                 attackCooldown = 1f / currentAttackSpeed;
             }
-        }
-        else
-        {
-            SetMoveAnimation(true);
-            Move(targetWorldPos);
         }
     }
 
@@ -323,13 +334,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (hasBuildingTarget)
         {
-            if (activeBuildingPositions.Contains(currentBuildingCell))
+            if (activeBuildingPositions.Contains(currentBuildingCell) && sharedBuildingTilemap != null)
             {
                 EventManager.TriggerRequestDamageBuilding(currentBuildingCell, finalDamage);
             }
             else
             {
                 hasBuildingTarget = false;
+                FindNearestBuilding();
             }
         }
         else if (target != null)

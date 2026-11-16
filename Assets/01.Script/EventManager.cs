@@ -180,6 +180,10 @@ public static class EventManager
     //안개 지운 목록
     public static Func<List<SerializableVector3Int>> OnRequestRevealedFogList;
 
+    //자원 세이브
+    public static event Action<SaveData> OnRequestSaveCurrencyData;
+
+    public static void TriggerRequestSaveCurrencyData(SaveData saveData) => OnRequestSaveCurrencyData?.Invoke(saveData);
 
     public static void RequestCurrencyValue(CurrencyType type) => OnRequestCurrencyValue?.Invoke(type);
     public static void TriggerBuildingSelected(BuildingData buildingData) => OnBuildingSelected?.Invoke(buildingData);

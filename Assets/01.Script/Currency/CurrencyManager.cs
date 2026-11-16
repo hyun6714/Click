@@ -22,6 +22,7 @@ public class CurrencyManager : MonoBehaviour
         EventManager.OnAddMaxClick += AddMaxClick;
         EventManager.OnAddDailyProductionBonus += AddDailyProductionBonus;
         EventManager.OnDayChanged += HandleDayChanged;
+        EventManager.OnRequestSaveCurrencyData += SaveCurrencyData;
     }
 
     private void OnDisable()
@@ -33,6 +34,7 @@ public class CurrencyManager : MonoBehaviour
         EventManager.OnAddMaxClick -= AddMaxClick;
         EventManager.OnAddDailyProductionBonus -= AddDailyProductionBonus;
         EventManager.OnDayChanged -= HandleDayChanged;
+        EventManager.OnRequestSaveCurrencyData -= SaveCurrencyData;
     }
 
     void Start()
