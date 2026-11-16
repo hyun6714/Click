@@ -350,4 +350,30 @@ public partial class BuildingManager : MonoBehaviour
         TriggerSave();
     }
 
+
+    public void ClearAllBuildingsOnRestart()
+    {
+        buildingHpDictionary.Clear();
+        buildingDataDictionary.Clear();
+
+        if (buildingTilemap != null)
+        {
+            buildingTilemap.ClearAllTiles();
+        }
+
+        ResourceBuilding[] resourceBuildings = FindObjectsByType<ResourceBuilding>(FindObjectsSortMode.None);
+        foreach (var b in resourceBuildings)
+        {
+            if (b != null && b.gameObject != null) Destroy(b.gameObject);
+        }
+
+        AttackBuilding[] attackBuildings = FindObjectsByType<AttackBuilding>(FindObjectsSortMode.None);
+        foreach (var b in attackBuildings)
+        {
+            if (b != null && b.gameObject != null) Destroy(b.gameObject);
+        }
+
+
+        isInitialized = false;
+    }
 }

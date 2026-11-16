@@ -14,6 +14,7 @@ public abstract class AttackBuilding : MonoBehaviour, IDamageable
 
     private float baseAttackSpeed;
     private float baseAttackDamage;
+    private float waveStartDelayTimer = 0f;
 
     [SerializeField] private Animator animator;
 
@@ -38,6 +39,7 @@ public abstract class AttackBuilding : MonoBehaviour, IDamageable
     private void HandleWaveStarted(WaveData wave)
     {
         cooldown = 0f;
+        waveStartDelayTimer = 0.5f;
     }
 
     public void Initialize(AttackBuildingData data, Vector3Int pos)
@@ -58,8 +60,15 @@ public abstract class AttackBuilding : MonoBehaviour, IDamageable
         {
             return;
         }
+
         if (towerData == null)
         {
+            return;
+        }
+
+        if (waveStartDelayTimer > 0f)
+        {
+            waveStartDelayTimer -= Time.deltaTime;
             return;
         }
 

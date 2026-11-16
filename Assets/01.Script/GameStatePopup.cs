@@ -67,6 +67,12 @@ public class GameStatePopup : MonoBehaviour
             spawner.ForceResetWaveState();
         }
 
+        BuildingManager buildingManager = FindFirstObjectByType<BuildingManager>();
+        if (buildingManager != null)
+        {
+            buildingManager.ClearAllBuildingsOnRestart();
+        }
+
         SaveData oldData = SaveLoadManager.LoadGame();
 
         SaveLoadManager.DeleteSaveData();
