@@ -68,6 +68,8 @@ public class ScreenSettings : MonoBehaviour
 
         if (resolutionDropdown != null)
         {
+            int minWidth = 1280;
+            int minHeight = 720;
             resolutions = Screen.resolutions;
             filteredResolutions = new List<Resolution>();
 
@@ -81,6 +83,11 @@ public class ScreenSettings : MonoBehaviour
 
             for (int i = 0; i < resolutions.Length; i++)
             {
+                if (resolutions[i].width < minWidth || resolutions[i].height < minHeight)
+                {
+                    continue;
+                }
+
                 string option = resolutions[i].width + " x " + resolutions[i].height;
                 if (!options.Contains(option))
                 {

@@ -65,6 +65,15 @@ public class ResourceGatherer : MonoBehaviour
         {
             currentWeather = EventManager.OnRequestCurrentWeather.Invoke();
         }
+
+        SaveData loadedData = SaveLoadManager.LoadGame();
+        if (loadedData != null && loadedData.revealedFogList != null)
+        {
+            foreach (var savedPos in loadedData.revealedFogList)
+            {
+                revealedFogPositions.Add(savedPos.ToVector3Int());
+            }
+        }
     }
 
     void Update()
@@ -190,8 +199,13 @@ public class ResourceGatherer : MonoBehaviour
             bool canUseClick = EventManager.RequestUseCurrency(CurrencyType.Click, fogClickCost);
             if (!canUseClick)
             {
+                EventManager.PlaySound(SoundCue.ResourceInsufficient);
                 return;
             }
+
+            SaveData tempSave = SaveLoadManager.LoadGame() ?? new SaveData();
+            EventManager.TriggerRequestSaveCurrencyData(tempSave);
+            SaveLoadManager.SaveRawData(tempSave);
         }
 
         StartCoroutine(ClearFogPlusThenDiagonals(centerCell));
@@ -272,7 +286,21 @@ public class ResourceGatherer : MonoBehaviour
 
         SaveData currentSaveData = SaveLoadManager.LoadGame() ?? new SaveData();
         EventManager.TriggerRequestSaveCurrencyData(currentSaveData);
-        currentSaveData.revealedFogList = GetRevealedFogList();
+
+        if (currentSaveData.revealedFogList == null)
+        {
+            currentSaveData.revealedFogList = new List<SerializableVector3Int>();
+        }
+
+        foreach (var pos in revealedFogPositions)
+        {
+            SerializableVector3Int wrappedPos = new SerializableVector3Int(pos);
+            if (!currentSaveData.revealedFogList.Contains(wrappedPos))
+            {
+                currentSaveData.revealedFogList.Add(wrappedPos);
+            }
+        }
+
         SaveLoadManager.SaveRawData(currentSaveData);
     }
 
