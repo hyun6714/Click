@@ -137,7 +137,6 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
                             if (!currentSaveData.removedTrees.Contains(wrappedPos))
                             {
                                 currentSaveData.removedTrees.Add(wrappedPos);
-                                SaveLoadManager.SaveRawData(currentSaveData);
                             }
                         }
                         else if (rewardType == CurrencyType.Rock)
@@ -150,9 +149,13 @@ public class ResourceBuilding : MonoBehaviour, IDamageable
                             if (!currentSaveData.removedStones.Contains(wrappedPos))
                             {
                                 currentSaveData.removedStones.Add(wrappedPos);
-                                SaveLoadManager.SaveRawData(currentSaveData);
                             }
                         }
+
+                        EventManager.TriggerRequestSaveCurrencyData(currentSaveData);
+
+                        SaveLoadManager.SaveRawData(currentSaveData);
+
                         return;
                     }
                 }

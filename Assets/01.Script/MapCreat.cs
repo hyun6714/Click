@@ -157,18 +157,6 @@ public class MapCreat : MonoBehaviour
         }
 
         HashSet<Vector3Int> forbiddenForTrees = new HashSet<Vector3Int>();
-        HashSet<Vector3Int> removedStoneSet = new HashSet<Vector3Int>();
-        if (saveData != null && saveData.removedStones != null)
-        {
-            foreach (var pos in saveData.removedStones) removedStoneSet.Add(pos.ToVector3Int());
-        }
-
-        HashSet<Vector3Int> removedTreeSet = new HashSet<Vector3Int>();
-        if (saveData != null && saveData.removedTrees != null)
-        {
-            foreach (var pos in saveData.removedTrees) removedTreeSet.Add(pos.ToVector3Int());
-        }
-
 
         //돌 심기
         HashSet<Vector3Int> stonePositions = new HashSet<Vector3Int>(); //돌 설치 구간 저장
@@ -221,10 +209,6 @@ public class MapCreat : MonoBehaviour
 
                     Vector3Int stonePos = new Vector3Int(nx, ny, 0);
 
-                    if (removedStoneSet.Contains(stonePos))
-                    {
-                        continue;
-                    }
 
                     stonePositions.Add(stonePos);
 
@@ -275,11 +259,6 @@ public class MapCreat : MonoBehaviour
 
                 bool isSpawned = (Random.value < treeDensity);
 
-                if (removedTreeSet.Contains(cellPos))
-                {
-                    continue;
-                }
-
                 if (isSpawned)
                 {
                     treePositionsList.Add(cellPos);
@@ -291,6 +270,25 @@ public class MapCreat : MonoBehaviour
         if (treePositionsList.Count > 0)
         {
             treeTilemap.SetTiles(treePositionsList.ToArray(), treeTilesList.ToArray());
+        }
+
+        if (saveData != null)
+        {
+            if (saveData.removedTrees != null)
+            {
+                foreach (var pos in saveData.removedTrees)
+                {
+                    treeTilemap.SetTile(pos.ToVector3Int(), null);
+                }
+            }
+
+            if (saveData.removedStones != null)
+            {
+                foreach (var pos in saveData.removedStones)
+                {
+                    stoneTilemap.SetTile(pos.ToVector3Int(), null);
+                }
+            }
         }
     }
 

@@ -143,7 +143,8 @@ public class ResourceGatherer : MonoBehaviour
             if (!currentSaveData.removedTrees.Contains(wrappedPos))
             {
                 currentSaveData.removedTrees.Add(wrappedPos);
-                SaveLoadManager.SaveRawData(currentSaveData); // 즉시 저장
+                EventManager.TriggerRequestSaveCurrencyData(currentSaveData);
+                SaveLoadManager.SaveRawData(currentSaveData);
             }
             return;
         }
@@ -168,7 +169,8 @@ public class ResourceGatherer : MonoBehaviour
             if (!currentSaveData.removedStones.Contains(wrappedPos))
             {
                 currentSaveData.removedStones.Add(wrappedPos);
-                SaveLoadManager.SaveRawData(currentSaveData); // 즉시 저장
+                EventManager.TriggerRequestSaveCurrencyData(currentSaveData);
+                SaveLoadManager.SaveRawData(currentSaveData);
             }
 
             return;
@@ -190,8 +192,6 @@ public class ResourceGatherer : MonoBehaviour
             {
                 return;
             }
-
-            EventManager.TriggerRequestSaveGame();
         }
 
         StartCoroutine(ClearFogPlusThenDiagonals(centerCell));
@@ -213,8 +213,6 @@ public class ResourceGatherer : MonoBehaviour
             {
                 plusCells.Add(cell);
                 StartCoroutine(FadeOutFogTile(cell, 0f));
-
-
             }
         }
 
@@ -271,6 +269,11 @@ public class ResourceGatherer : MonoBehaviour
 
             }
         }
+
+        SaveData currentSaveData = SaveLoadManager.LoadGame() ?? new SaveData();
+        EventManager.TriggerRequestSaveCurrencyData(currentSaveData);
+        currentSaveData.revealedFogList = GetRevealedFogList();
+        SaveLoadManager.SaveRawData(currentSaveData);
     }
 
 
